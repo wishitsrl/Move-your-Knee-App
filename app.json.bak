@@ -2,8 +2,6 @@
   "expo": {
     "name": "MoveyourKnew",
     "slug": "MoveyourKnew",
-	"title": "MoveyourKnew",
-	"description": "MoveyourKnew",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/MARCHIO/PNG/MARCHIOVIOLA.png",
