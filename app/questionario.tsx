@@ -41,29 +41,29 @@ export default function Questionario() {
 
   function handleSubmit() {
 
-//attivita intense comprendono le 2 attività (met unità di misura) 
+	//attivita intense comprendono le 2 attività (met unità di misura) 
 	attMetIntense = 8 * domanda2 * domanda1
 	attMetModerate = 4 * domanda3 * domanda4
 	
 	if (domanda7 == 'Intenso')
 	{
-		domanda7 = 3.3
-		attMetCammino = domanda5 * domanda6 * (domanda7)
+		console.log(domanda7); 
+		attMetCammino = domanda5 * domanda6 * 3.3
 	}
 	else if (domanda7 == 'Moderato')
 	{
-		domanda7 = 3
-		attMetCammino = domanda5 * domanda6 * (domanda7)	
+		console.log(domanda7); 
+		attMetCammino = domanda5 * domanda6 * 3	
 	}
 	else if (domanda7 == 'Lento')
 	{
-		domanda7 = 2.5
-		attMetCammino = domanda5 * domanda6 * (domanda7)	
+		console.log(domanda7); 
+		attMetCammino = domanda5 * domanda6 * 2.5	
 	}
 	
 	totAttMet = attMetIntense + attMetModerate + attMetCammino
-	console.log("Totale: " + totAttMet + "Met"); 
-//	console.log("UserID: " + user.$id); 
+	console.log("Totale: " + totAttMet + " Met"); 
+//	console.log("UserID: " + user.$id);  	
 	
 	const questionarioData = [
 	  {
@@ -86,7 +86,7 @@ export default function Questionario() {
 			idPaziente: user.$id,
 		},
 		{
-			punteggio: tot,
+			punteggio: totAttMet,
 		} );
 	  
 		putPunteggio.then(function (response) {
