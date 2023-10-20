@@ -8,9 +8,6 @@ export default function LogoViola({navigation}) {
       <View style={styles.imageContainer}>
         <Image source={Img2} style={styles.image} />
       </View>
-	  <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 2}}>
-		<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
-	  </View>
     </SafeAreaView>
   );
 }
@@ -28,7 +25,7 @@ const styles = StyleSheet.create({
     width: windowWidth - 40,
     borderWidth: 0,
     borderColor: '#000',
-	marginBottom: 30,
+	marginBottom: 5,
 	marginTop: 50,
   },
   image: {

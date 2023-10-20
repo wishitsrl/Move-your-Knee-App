@@ -30,8 +30,8 @@ export default function CONOSCITI() {
 				<LogoViola/>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 				
 			<View>
@@ -62,10 +62,10 @@ export default function CONOSCITI() {
 			<View>
 				<Text style={styles.paragrafo2Text}>
 					Per questo, le domande fanno riferimento 
-					all' attività che hai svolto negli ultimi 7 giorni 
+					all' attività che hai svolto negli<Text style={styles.boldTextBlack}> ultimi 7 giorni </Text> 
 					al lavoro, per spostarti da un posto all'altro,
 					e nel tuo tempo libero, e che ti hanno tenuto impegnato 
-					per almeno 10 minuti consecutivi.
+					per<Text style={styles.boldTextBlack}> almeno 10 minuti consecutivi.</Text>
 				</Text>
 			</View>
 
@@ -97,7 +97,7 @@ export default function CONOSCITI() {
 			</View>		
 						
 			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => router.push('/questionario')}>INIZIO IL QUESTIONARIO</Button>    
+				<Button mode="contained" onPress={() => router.push('/questionario')}>INIZIA IL QUESTIONARIO</Button>    
 			</View>		
 		</ScrollView>
     </SafeAreaView>
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
 	fontFamily: 'roboto-flex-regular',
 	marginTop: 50,
-	fontWeight: 'bold'
+	fontWeight: 'bold',
   },
   paragrafo1Text: {
 	marginHorizontal: 10,
@@ -161,12 +161,20 @@ const styles = StyleSheet.create({
 	marginBottom: 30,
   },
   boldText: {
+    color: '#560CCE',
+    fontSize: 25,
+	fontFamily: 'ultra-black-regular',
+	fontWeight: 'bold',
+  },
+  boldTextBlack: {
+    fontSize: 20,
+	fontFamily: 'ultra-black-regular',
 	fontWeight: 'bold',
   },
   buttonContainer: {
 	flex: 1,
     flexDirection: 'row',    
     justifyContent: 'center',
-  }
+  },
 });
 

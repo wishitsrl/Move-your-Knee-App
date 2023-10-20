@@ -12,22 +12,22 @@ import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
 import client, { databases } from "./lib/appwrite-service";
+import {  Permission, Role } from "appwrite";
 
 export default function Questionario() {
-
-   const [domanda1, setDomanda1] = React.useState('');
-   const [domanda2, setDomanda2] = React.useState('');
-   const [domanda3, setDomanda3] = React.useState('');
-   const [domanda4, setDomanda4] = React.useState('');
-   const [domanda5, setDomanda5] = React.useState('');
-   const [domanda6, setDomanda6] = React.useState('');
-   const [domanda7, setDomanda7] = React.useState('');
-   const [domanda8, setDomanda8] = React.useState('');
-   const [domanda9, setDomanda9] = React.useState('');
-
-   const { user } = useAuth();
-   const router = useRouter();
-   const [loaded] = useFonts({
+  
+  const { user } = useAuth();
+  const router = useRouter();
+  const [domanda1, setDomanda1] = React.useState('');  
+  const [domanda2, setDomanda2] = React.useState('');
+  const [domanda3, setDomanda3] = React.useState('');
+  const [domanda4, setDomanda4] = React.useState('');
+  const [domanda5, setDomanda5] = React.useState('');
+  const [domanda6, setDomanda6] = React.useState('');
+  const [domanda7, setDomanda7] = React.useState('');
+  const [domanda8, setDomanda8] = React.useState('');
+  const [domanda9, setDomanda9] = React.useState('');
+  const [loaded] = useFonts({
 		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
 		"roboto-flex-variable": require('../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
@@ -35,60 +35,52 @@ export default function Questionario() {
 		"ultra-black-regular": require('../assets/fonts/UltraBlackRegular.ttf'),
   });
 
-  //console.log(user.$id);
-
   if (!loaded) {
     return null;
   }
-  
+
   function handleSubmit() {
 
-const questionarioData = [
-  {
-    idPaziente: user.$id,
-  },
-  {
-    anno: domanda1,
-  },
-  {
-	area: domanda2,
-  },
-  {
-	dolore: domanda3,
-  },
-  {
-	rigidita: domanda4,
-  },
-  {
-	debole: domanda5,
-  },
-  {
-	cammino: domanda6,
-  },
-  {
-	vestirsi: domanda7,
-  },
-  {
-	farmaci: domanda8,
-  },
-  {
-	infiltrazioni: domanda9,
-  },
-];
-	
-//	console.log(questionarioData); 
-     
-	//const promise = databases.getDocument('652e39e4abfb8d628d46', '652e39f5db250173e640', '652e73a29c2cf2d06735');
-	const promise = databases.createDocument('[DATABASE_ID]', '[COLLECTION_ID]', '[DOCUMENT_ID]', questionarioData);
+//attivita intense comprendono le 2 attività (met unità di misura) 
+	attMetIntense = 8 * domanda2 * domanda1
+	attMetModerate = 4 * domanda3 * domanda4
+	attMetCammino = domanda5 * domanda6 * (domande7)
+	totAttMet = attMetIntense + attMetModerate + attMetCammino
 
-	promise.then(function (response) {
-    console.log(response); // Success
-}, function (error) {
-    console.log(error); // Failure
-});
+	console.log("Totale: " + totAttMet + "Met"); 
+//	console.log("UserID: " + user.$id); 
 	
+	const questionarioData = [
+	  {
+		idPaziente: user.$id,
+	  },
+	  {
+		punteggio: totAttMet,
+	  },
+	];
+	
+	const promise = databases.getDocument('652e8e4607298ced5902', '652e8e563085d6a5aad0', '6530d8f931c33c57cb82');
+/*		promise.then(function (response) {
+			console.log(response); // Success
+		}, function (error) {
+			console.log(error); // Failure
+	});
+*/
+	const putPunteggio = databases.createDocument('652e8e4607298ced5902', '652e8e563085d6a5aad0', '6530d8f931c33c57cb82', 
+		{
+			idPaziente: user.$id,
+		},
+		{
+			punteggio: tot,
+		} );
+	  
+		putPunteggio.then(function (response) {
+			console.log(response); // Success
+		}, function (error) {
+			console.log(error); // Failure
+		});
 	}
-  
+   
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
@@ -97,8 +89,8 @@ const questionarioData = [
 				<LogoViola/>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+			<View style={{flexDirection: 'row', alignItems: 'center', }}>
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 				
 			<View>
@@ -106,33 +98,33 @@ const questionarioData = [
 					ATTIVITA' INTENSE
 				</Text> 
 			</View>
-			
-			<View style={styles.container}>
-			
+
+			<View style={styles.container}>	
+				
 				<View>
 					<Text style={styles.domande}>
 						DOMANDA 1
 					</Text>
 				</View>
 			
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
-			</View>
+				<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
+					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+				</View>
 
-			<View>
-				<Text style={styles.sottotitoloText}>
-					Negli ultimi 7 giorni, per quanti giorni hai compiuto attività fisiche intense
-				</Text>
-			</View>
+				<View>
+					<Text style={styles.sottotitoloText}>
+						Negli ultimi 7 giorni, per quanti giorni hai compiuto attività fisiche <Text style={styles.boldText}>intense</Text>
+					</Text>
+				</View>
 			
-			<View>
-				<Text style={styles.paragrafo0Text}>	
-				(ad esempio sollevato pesi, fatto lavori pesanti im giardino, o attività aerobiche come corse
-				o un giro in bicicletta a velocità sostenuta?)
-				</Text>
-			</View>
-			
-			<View>
+				<View>
+					<Text style={styles.paragrafo0Text}>	
+						(ad esempio sollevato pesi, fatto lavori pesanti im giardino, o attività aerobiche come corse
+						o un giro in bicicletta a velocità sostenuta?)
+					</Text>
+				</View>
+
+				<View>
 			<Text style={styles.paragrafo1Text}>
 				Giorni alla settimana
 			</Text>
@@ -162,27 +154,33 @@ const questionarioData = [
 			</View>
 
 			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 			
 			<View>
 				<Text style={styles.sottotitoloText}>
-					Quanto tempo in totale dedichi normalmente ad un'attività fisica intensa in uno di questi giorni?
+					Quanto tempo in totale dedichi normalmente ad un'attività fisica <Text style={styles.boldText}>intensa</Text> in uno di questi giorni?
 				</Text>
 			</View>
 
 			<View>
-
-			<Text style={styles.paragrafo1Text}>
-				Minuti					
-			</Text>
-			<TextInput
+				<Text style={styles.paragrafo1Text}>
+					Minuti					
+				</Text>
+				<TextInput
 					style={styles.input}
 					onChangeText={Domanda2 => setDomanda2(Domanda2)}
 					value={domanda2}
 					placeholder=" "
+					keyboardType="phone-pad"
 				/>
 			</View>	
+
+			<View>
+				 <Text style={styles.titoloText}>
+					ATTIVITA' MODERATE
+				</Text> 
+			</View>
 
 			<View>
 				<Text style={styles.domande}>
@@ -191,12 +189,12 @@ const questionarioData = [
 			</View>
 
 			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
 			<View>
 				<Text style={styles.sottotitoloText}>
-					Negli ultimi 7 giorni, per quanti giorni hai compiuto attività fisiche moderate
+					Negli ultimi 7 giorni, per quanti giorni hai compiuto attività fisiche <Text style={styles.boldText}>moderate</Text>
 				</Text>
 			</View>
 
@@ -211,9 +209,9 @@ const questionarioData = [
 			</View>
 				
 			<View>
-			<Text style={styles.paragrafo1Text}>
-				Giorni alla settimana
-			</Text>
+				<Text style={styles.paragrafo1Text}>
+					Giorni alla settimana
+				</Text>
 			<Text style={styles.paragrafo0Text}>
 				(nemmeno 1? Vai alla sezione successiva)					
 			</Text>
@@ -240,12 +238,12 @@ const questionarioData = [
 			</View>
 
 			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
 			<View>
 				<Text style={styles.sottotitoloText}>
-					Quanto tempo in totale hai trascorso normalmente compiendo attività fisiche moderate in uno di questi giorni?
+					Quanto tempo in totale hai trascorso normalmente compiendo attività fisiche <Text style={styles.boldText}>moderate</Text> in uno di questi giorni?
 				</Text>
 			</View>
 
@@ -255,11 +253,18 @@ const questionarioData = [
 			</Text>
 			<TextInput
 					style={styles.input}
-					onChangeText={Domanda4 => setDomanda4(domanda4)}
+					onChangeText={domanda4 => setDomanda4(domanda4)}
 					value={domanda4}
 					placeholder=" "
+					keyboardType="phone-pad"
 			/>
 			</View>	
+
+			<View>
+				 <Text style={styles.titoloText}>
+					CAMMINO
+				</Text> 
+			</View>
 
 			<View>
 				<Text style={styles.domande}>
@@ -268,12 +273,12 @@ const questionarioData = [
 			</View>
 
 			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
 			<View>
 				<Text style={styles.sottotitoloText}>
-					Negli ultimi 7 giorni, per quanti giorni hai camminato per almemo 10 minuti?
+					Negli ultimi 7 giorni, per quanti giorni<Text style={styles.boldText}> hai camminato per almemo 10 minuti?</Text> 
 				</Text>
 			</View>
 			
@@ -284,7 +289,7 @@ const questionarioData = [
 			</View>
 
 			<View>
-			<Text style={styles.paragrafo1Text}>
+				<Text style={styles.paragrafo1Text}>
 					Giorni alla settimana
 			</Text>
 			<Text style={styles.paragrafo0Text}>
@@ -313,7 +318,7 @@ const questionarioData = [
 			</View>
 
 			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
 			<View>
@@ -325,12 +330,13 @@ const questionarioData = [
 			<View>
 				<Text style={styles.paragrafo1Text}>
 					Minuti 					
-			</Text>			
+				</Text>			
 				<TextInput
 					style={styles.input}
 					onChangeText={domanda6 => setDomanda6(domanda6)}
 					value={domanda6}
 					placeholder=" "
+					keyboardType="phone-pad"
 			/>
 			</View>	
 			
@@ -341,7 +347,7 @@ const questionarioData = [
 			</View>
 
 			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
 			<View>
@@ -350,45 +356,72 @@ const questionarioData = [
 				</Text>
 			</View>
 
-			<View>
-			
-			    <RadioButton.Group onValueChange={(value) => setDomanda7(value)} value={domanda7}>
-					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-							<RadioButton value="Intenso" color="blue" />					
-							<View>
-								<Text style={styles.paragrafo0Text}>INTENSO</Text>
-							</View>
-							<View>
-								<Text style={styles.paragrafo0Text}>Ritmo del respiro molto più elevato del normale</Text>
-							</View>
+			<View> 
+			<View style={styles.radioGroup}> 
+                <View style={styles.radioButton}> 
+                    <RadioButton.Android 
+                        value="Intenso"
+                        status={domanda7 === 'Intenso' ?  
+                                'checked' : 'unchecked'} 
+                        onPress={() => setDomanda7('Intenso')} 
+                        color="#007BFF"
+                    /> 
+                    <View>
+						<Text style={styles.boldTextViolet}>INTENSO</Text>
+						<Text style={styles.paragrafo0Text}>Ritmo del respiro molto più elevato del normale</Text>
 					</View>
-					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-							<RadioButton value="Moderato" color="blue" />
-							<Text style={styles.paragrafo0Text}>MODERATO</Text>
-							<Text style={styles.paragrafo0Text}>Ritmo del respiro mormalmente più elevato del normale</Text>
+                </View> 
+  
+  
+                <View style={styles.radioButton}> 
+                    <RadioButton.Android 
+                        value="Moderato"
+                        status={domanda7 === 'Moderato' ?  
+                                 'checked' : 'unchecked'} 
+                        onPress={() => setDomanda7('Moderato')} 
+                        color="#007BFF"
+                    /> 
+                    <View>
+						<Text style={styles.boldTextViolet}>MODERATO</Text>
+						<Text style={styles.paragrafo0Text}>Ritmo del respiro mormalmente più elevato del normale</Text>
 					</View>
-					<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-							<RadioButton value="Lento" />
-							<Text style={styles.paragrafo0Text}>LENTO</Text>
-							<Text style={styles.paragrafo0Text}>Ritmo del respiro normale</Text>
-					</View>
-				</RadioButton.Group>			
+                </View> 
+  
+                <View style={styles.radioButton}> 
+                    <RadioButton.Android 
+                        value="Lento"
+                        status={domanda7 === 'Lento' ?  
+                                'checked' : 'unchecked'} 
+                        onPress={() => setDomanda7('Lento')} 
+                        color="#007BFF"
+                    /> 
+                    <View>
+						<Text style={styles.boldTextViolet}>LENTO</Text>
+						<Text style={styles.paragrafo0Text}>Ritmo del respiro normale</Text>
+					</View>					
+                </View> 
+            </View> 				
 			</View>
-			
+
+			<View>
+				 <Text style={styles.titoloText}>
+					ATTIVITA' DA SEDUTO
+				</Text> 
+			</View>
+
 			<View>
 				<Text style={styles.domande}>
 					DOMANDA 8
 				</Text>
-				
 			</View>
 
 			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
 			<View>
 				<Text style={styles.sottotitoloText}>
-					Negli ultimi 7 giorni, quanto tempo in totale hai trascorso rimanendo seduto, durante un giorno lavorativo?
+					Negli ultimi 7 giorni, quanto tempo in totale hai trascorso <Text style={styles.boldText}>rimanendo seduto</Text>, durante un giorno lavorativo?
 				</Text>
 			</View>
 
@@ -408,6 +441,7 @@ const questionarioData = [
 					onChangeText={domanda8 => setDomanda8(domanda8)}
 					value={domanda8}
 					placeholder=" "
+    				keyboardType="phone-pad"
 			/>
 			</View>
 
@@ -423,7 +457,7 @@ const questionarioData = [
 
 			<View>
 				<Text style={styles.sottotitoloText}>
-					Negli ultimi 7 giorni, quanto tempo in totale hai trascorso rimanendo seduto, durante un giorno del fine settimana?
+					Negli ultimi 7 giorni, quanto tempo in totale hai trascorso <Text style={styles.boldText}>rimanendo seduto, durante un giorno del fine settimana?</Text>
 				</Text>
 			</View>
 
@@ -436,14 +470,15 @@ const questionarioData = [
 					onChangeText={domanda9 => setDomanda9(domanda9)}
 					value={domanda9}
 					placeholder=" "
+					keyboardType="phone-pad"
 			/>
 			</View>
 
 			<View style={styles.buttonContainer}>
 				<Button mode="contained" onPress={() => handleSubmit()}>Vai al punteggio</Button>    
 			</View>
-	 </View>
-	 
+			
+			</View>	
 		</ScrollView>
     </SafeAreaView>
   );
@@ -452,7 +487,7 @@ const questionarioData = [
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'left',
+    alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
@@ -508,20 +543,23 @@ const styles = StyleSheet.create({
   },
   paragrafo1Text: {
     fontSize: 20,
-	color: '#7fffd4',
+	color: '#48d1cc',
 	fontFamily: 'roboto-flex',
 	marginHorizontal: 10,
 	marginTop: 0,
   },
   attenzione: {
-	fontSize: 25,
-	fontFamily: 'roboto-flex',
+	fontSize: 15,
+	fontFamily: 'ultra-black-regular',
 	fontWeight: 'bold',
 	marginHorizontal: 10,
-	marginTop: 0,
-	marginBottom: 0,
+	marginBottom: 5,
+	textDecorationLine: 'underline',
   },
-  boldText: {
+   boldText: {
+    color: '#560CCE',
+    fontSize: 30,
+    fontFamily: 'ultra-black-regular',
 	fontWeight: 'bold',
   },
   buttonContainer: {
@@ -538,10 +576,35 @@ const styles = StyleSheet.create({
     borderColor: "#666",
   },
   input: {
-    height: 40,
-    margin: 12,
+    backgroundColor: "white",
     borderWidth: 2,
+    borderColor: "gray",
+    width: "100%",
+    borderRadius: 10,
     padding: 10,
-  }
+  }, 
+   radioButton: { 
+		marginHorizontal: 10,
+        paddingVertical: 12, 
+        paddingHorizontal: 16, 
+        borderRadius: 8, 
+        marginVertical: 8, 
+        borderWidth: 0, 
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        justifyContent: 'space-between', 
+        width: 300,  
+    }, 
+    radioLabel: { 
+        marginLeft: 8, 
+        fontSize: 16, 
+        color: '#333', 
+    }, 
+	boldTextViolet: {
+    	color: '#560CCE',
+		fontSize: 20,
+		fontFamily: 'ultra-black-regular',
+		fontWeight: 'bold',
+  },	
 });
 

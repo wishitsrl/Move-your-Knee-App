@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     width: windowWidth - 40,
     borderWidth: 0,
     borderColor: '#000',
-	marginBottom: 30,
+	marginBottom: 10,
 	marginTop: 50,
   },
   image: {

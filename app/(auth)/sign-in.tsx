@@ -23,34 +23,33 @@ export default function SignIn() {
   return (
   <Background>
     <SafeAreaView style={styles.container}>
-	    <StatusBar hidden={true} />
-		<ScrollView style={styles.scrollView}>     
+	    <StatusBar hidden={true} />   
 			<View style={styles.container}>
 				<Logo/>
 			</View>
 			<View style={styles.container2}>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            placeholder="Email"
-            autoCapitalize="none"
-            nativeID="email"
-            onChangeText={(text) => {
-              emailRef.current = text;
+			
+			<Text style={styles.label}>Email</Text>
+			<TextInput
+				placeholder="Email"
+				autoCapitalize="none"
+				nativeID="email"
+				onChangeText={(text) => {
+				emailRef.current = text;
+            }}
+			style={styles.textInput}
+			/>
+		    
+			<Text style={styles.label}>Password</Text>
+			<TextInput
+				placeholder="Password"
+				secureTextEntry={true}
+				nativeID="password"
+				onChangeText={(text) => {
+				passwordRef.current = text;
             }}
             style={styles.textInput}
           />
-		    <View>
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            placeholder="Password"
-            secureTextEntry={true}
-            nativeID="password"
-            onChangeText={(text) => {
-              passwordRef.current = text;
-            }}
-            style={styles.textInput}
-          />
-        </View>
 		  <TouchableOpacity
           onPress={async () => {
             const { data, error } = await signIn(
@@ -77,7 +76,6 @@ export default function SignIn() {
           </Text>
         </View>
         </View>
-		</ScrollView>
     </SafeAreaView>
 	 </Background>
   );
@@ -100,9 +98,10 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: 250,
+	backgroundColor: "white",
     borderWidth: 1,
     borderRadius: 4,
-    borderColor: "#455fff",
+    borderColor: "gray",
     paddingHorizontal: 8,
     paddingVertical: 4,
     marginBottom: 16,

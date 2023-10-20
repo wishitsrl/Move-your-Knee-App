@@ -2,7 +2,8 @@ import {
   Account,
   Client,
   ID,
-  Databases, 
+  Databases,
+  Permissions, 
 } from "appwrite";
 // import { useUserStore } from "./userStore";
 
@@ -19,8 +20,4 @@ export const appwrite = {
   client,
   account: new Account(client),
   ID,
-};
-
-export const questionario = {
-	promise
 };
