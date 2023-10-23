@@ -12,7 +12,7 @@ import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
 import client, { databases } from "./lib/appwrite-service";
-import {  Permission, Role } from "appwrite";
+import { Permission, Role,  ID, } from "appwrite";
 
 export default function Questionario() {
   
@@ -41,53 +41,51 @@ export default function Questionario() {
 
   function handleSubmit() {
 
-//attivita intense comprendono le 2 attività (met unità di misura) 
+	//attivita intense comprendono le 2 attività (met unità di misura) 
 	attMetIntense = 8 * domanda2 * domanda1
 	attMetModerate = 4 * domanda3 * domanda4
+	livello = ''
 	
 	if (domanda7 == 'Intenso')
 	{
-		domanda7 = 3.3
-		attMetCammino = domanda5 * domanda6 * (domanda7)
+		console.log(domanda7); 
+		attMetCammino = domanda5 * domanda6 * 3.3
 	}
 	else if (domanda7 == 'Moderato')
 	{
-		domanda7 = 3
-		attMetCammino = domanda5 * domanda6 * (domanda7)	
+		console.log(domanda7); 
+		attMetCammino = domanda5 * domanda6 * 3	
 	}
 	else if (domanda7 == 'Lento')
 	{
-		domanda7 = 2.5
-		attMetCammino = domanda5 * domanda6 * (domanda7)	
+		console.log(domanda7); 
+		attMetCammino = domanda5 * domanda6 * 2.5	
 	}
 	
 	totAttMet = attMetIntense + attMetModerate + attMetCammino
-	console.log("Totale: " + totAttMet + "Met"); 
-//	console.log("UserID: " + user.$id); 
 	
-	const questionarioData = [
-	  {
-		idPaziente: user.$id,
-	  },
-	  {
-		punteggio: totAttMet,
-	  },
-	];
+	if(totAttMet<450)
+		livello = 'Bradipo'
+	else if(totAttMet>=450 && totAttMet<650)
+		livello = 'Tartaruga'
+	else if(totAttMet>=650 && totAttMet<900)
+		livello = 'Toro'
+	else if(totAttMet>=900 && totAttMet<1800)
+		livello = 'Tigre'
+	else if(totAttMet>=1800)
+		livello = 'Falco'
 	
-	const promise = databases.getDocument('652e8e4607298ced5902', '652e8e563085d6a5aad0', '6530d8f931c33c57cb82');
-/*		promise.then(function (response) {
-			console.log(response); // Success
-		}, function (error) {
-			console.log(error); // Failure
-	});
-*/
-	const putPunteggio = databases.createDocument('652e8e4607298ced5902', '652e8e563085d6a5aad0', '6530d8f931c33c57cb82', 
+	console.log("Totale: " + totAttMet + " Met"); 
+	const putPunteggio = databases.createDocument('652e8e4607298ced5902', '652e8e563085d6a5aad0',  ID.unique(),
 		{
-			idPaziente: user.$id,
+			'idPaziente': user.$id, 
+			'punteggio': totAttMet, 
+			'tempoSedutoLavorativo': domanda8,
+			'tempoSedutoFestivo': domanda9,
+			'livello': livello,
 		},
-		{
-			punteggio: tot,
-		} );
+        [Permission.update(Role.any())],				
+	  );	
 	  
 		putPunteggio.then(function (response) {
 			console.log(response); // Success

@@ -1,12 +1,20 @@
-import { StyleSheet, StatusBar, ScrollView, Image, SafeAreaView, } from 'react-native';
+import * as React from 'react';
+import { View, StyleSheet, StatusBar, ScrollView, Image, SafeAreaView, } from 'react-native';
 import LogoViola from '../../components/UX/LogoViola'
-
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { Text,  } from '@/components/Themed';
 import { useFonts } from 'expo-font';
+import { useAuth } from '../context/auth';
+import { Stack, useRouter } from "expo-router";
+import client, { databases } from "../lib/appwrite-service";
+import { Permission, Role,  ID, Query, } from "appwrite";
+import RangeSlider, { Slider } from 'react-native-range-slider-expo';
 
 export default function DATI() {
-
+  const { user } = useAuth();
+  const router = useRouter();
+  const [livelloAttuale, setLivelloAttuale] = React.useState('');  
+  const [livelloImg, setLivelloImg] = React.useState(require("../../assets/ICONE/PNG/BRADIPONEUTRO_1.png"));  
   const [loaded] = useFonts({
 		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
@@ -18,7 +26,37 @@ export default function DATI() {
   if (!loaded) {
     return null;
   }
-
+	const promise = databases.listDocuments('652e8e4607298ced5902', '652e8e563085d6a5aad0',   
+	[
+        Query.equal('idPaziente', user.$id)
+    ]);
+		
+	promise.then(function (response) {			
+		setLivelloAttuale(response.documents[0].livello)
+		console.log("Livello dati: " + livelloAttuale); // Success
+	}, function (error) {
+		console.log(error); // Failure
+	});
+	
+	/*switch (livelloAttuale) {
+		case 'Bradipo':
+			setLivelloImg(require("../../assets/ICONE/PNG/BRADIPONEUTRO_1.png"));
+			break;
+		case 'Tartaruga':
+			setLivelloImg(require("../../assets/ICONE/PNG/TARTARUGASELEZIONATO.png"));
+			break;
+		case 'Toro':
+			setLivelloImg(require("../../assets/ICONE/PNG/TOROSELEZIONATO.png"));
+			break;
+		case 'Tigre':
+			setLivelloImg(require("../../assets/ICONE/PNG/TIGRESELEZIONATO.png"));
+			break;
+		case 'Falco':
+			setLivelloImg(require("../../assets/ICONE/PNG/FALCOSELEZIONATO.png"));
+			break;			
+		  default:
+			alert( "I don't know such values" );
+		}	*/
 
     return (
 	 <SafeAreaView style={styles.container}>
@@ -29,7 +67,7 @@ export default function DATI() {
 			</View>
 
 			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 				
 			<View>
@@ -40,12 +78,6 @@ export default function DATI() {
 
 			<View>
 				<Text style={styles.paragrafo1Text}>
-					Calcola le tue calorie rispondendo a queste semplici domande
-				</Text>
-			</View>
-
-			<View>
-				 <Text style={styles.sottotitoloText}>
 					Segui i tuoi miglioramenti e avanza di livello.
 				</Text>
 			</View>
@@ -56,24 +88,32 @@ export default function DATI() {
 				</Text>
 			</View>	
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
 			<View>
 				<Text style={styles.sottotitoloText}>
-					Il tuo livello è TORO.
+					Il tuo livello è { livelloAttuale }.
 				</Text>
 			</View>	
 			
 			<View>
-				<Image source={require('../../assets/ICONE/PNG/TOROSELEZIONATO.png')} style={styles.image} />
+				<Image source={livelloImg} style={styles.image} />
 			</View>	
 			
 			<View>
 				<Text style={styles.avanzamento}>
 					Avanzamento livello
 				</Text>
+				 <Slider min={0} max={40} step={4}
+                         //valueOnChange={value => setValue(value)}
+                         initialValue={12}
+                         knobColor='red'
+                         valueLabelsBackgroundColor='black'
+                         inRangeBarColor='purple'
+                         outOfRangeBarColor='orange'
+                    />			
 			</View>
 			
 			<View>
@@ -83,7 +123,7 @@ export default function DATI() {
 			</View>
 			
 			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 			
 			<View>
@@ -147,7 +187,7 @@ const styles = StyleSheet.create({
   },
    scrollView: {
 	flex: 1,
-    marginHorizontal: 0,
+    marginHorizontal: 10,
   },
   text: {
     fontSize: 42,
@@ -174,7 +214,6 @@ const styles = StyleSheet.create({
 	color: '#560CCE',
     fontSize: 30,
 	fontFamily: 'roboto-flex-regular',
-	marginTop: 50,
 	fontWeight: 'bold'
   },
   paragrafo1Text: {
@@ -183,6 +222,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
 	fontFamily: 'roboto-flex',
 	marginTop: 10,
+	marginBottom: 20,
   },
   paragrafo2Text: {
 	marginHorizontal: 10,
@@ -194,5 +234,20 @@ const styles = StyleSheet.create({
   boldText: {
 	fontWeight: 'bold',
   },
+  paragrafo1TextColorVerde: {
+    fontSize: 20,
+	color: '#48d1cc',
+	fontFamily: 'roboto-flex',
+	marginHorizontal: 10,
+	marginTop: 0,
+  },
+  avanzamento: {
+    fontSize: 20,
+	color: '#48d1cc',
+	fontFamily: 'roboto-flex',
+	marginHorizontal: 10,
+	marginTop: 0,
+  
+  }
 });
 

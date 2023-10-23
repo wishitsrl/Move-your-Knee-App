@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { View, StyleSheet, FlatList, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Image } from 'react-native';
 import Button from '../../components/UX/Button'
 import Background from '../../components/Background'
@@ -7,8 +8,8 @@ import { Text,  } from '@/components/Themed';
 import { useAuth } from '../context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
-   
-const router = useRouter();
+import client, { databases } from "../lib/appwrite-service";
+import { Permission, Role,  ID, Query, } from "appwrite";
 
 const CardData = [
   {
@@ -75,8 +76,9 @@ const renderItem = ({item}) => (
 );
 
 export default function ALLENATI() {
-   const { signOut, user } = useAuth();
-   
+   const { user } = useAuth();
+   const router = useRouter();
+   const [livelloAttuale, setLivelloAttuale] = React.useState('');  
    const [loaded] = useFonts({
 		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
@@ -88,6 +90,19 @@ export default function ALLENATI() {
   if (!loaded) {
     return null;
   }
+  
+  	const promise = databases.listDocuments('652e8e4607298ced5902', '652e8e563085d6a5aad0',   
+	[
+        Query.equal('idPaziente', user.$id)
+    ]);
+		
+	promise.then(function (response) {			
+		setLivelloAttuale(response.documents[0].livello)
+		console.log("Livello Allenati: " + livelloAttuale); // Success
+	}, function (error) {
+		console.log(error); // Failure
+	});
+  
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
@@ -108,7 +123,7 @@ export default function ALLENATI() {
 
 			<View>
 				<Text style={styles.paragrafo1Text}>
-					Il tuo livello è TORO.
+					Il tuo livello è { livelloAttuale }.
 				</Text>
 			</View>
 

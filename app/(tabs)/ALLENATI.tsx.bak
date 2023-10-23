@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { View, StyleSheet, FlatList, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Image } from 'react-native';
 import Button from '../../components/UX/Button'
 import Background from '../../components/Background'
@@ -7,8 +8,8 @@ import { Text,  } from '@/components/Themed';
 import { useAuth } from '../context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
-   
-const router = useRouter();
+import client, { databases } from "../lib/appwrite-service";
+import { Permission, Role,  ID, Query, } from "appwrite";
 
 const CardData = [
   {
@@ -17,7 +18,7 @@ const CardData = [
 	body: 'MENO DI 450 PUNTI.',
 	avanzamento : 'Inattivo.',
 	img: require('../../assets/ICONE/PNG/BRADIPONEUTRO_1.png'),
-	page: "/eserciziLiv1"
+	page: "/EserciziLiv1"
   },
   {
     livello: 'LIVELLO 2',
@@ -25,7 +26,7 @@ const CardData = [
 	body: 'PIÙ DI 450 PUNTI.',
 	avanzamento : 'Poco attivo.',
 	img: require('../../assets/ICONE/PNG/TARTARUGASELEZIONATO.png'),
-	page: "/eserciziLiv2"
+	page: "/EserciziLiv2"
   },
   {
     livello: 'LIVELLO 3',
@@ -33,7 +34,7 @@ const CardData = [
 	body: 'DA 450 A 900 PUNTI.',
 	avanzamento : 'Mediamente attivo.',
 	img: require('../../assets/ICONE/PNG/TOROSELEZIONATO.png'),
-	page: "/eserciziLiv3"
+	page: "/EserciziLiv3"
   },
     {
     livello: 'LIVELLO 4',
@@ -41,7 +42,7 @@ const CardData = [
 	body: 'DA 900 A 1800 PUNTI.',
 	avanzamento : 'Più che attivo.',
 	img: require('../../assets/ICONE/PNG/TIGRESELEZIONATO.png'),
-	page: "/eserciziLiv4"
+	page: "/EserciziLiv4"
   },
     {
     livello: 'LIVELLO 5',
@@ -49,7 +50,7 @@ const CardData = [
 	body: 'PIÙ DI 1800 PUNTI.',
 	avanzamento : 'Molto attivo.',
 	img: require('../../assets/ICONE/PNG/FALCOSELEZIONATO.png'),
-	page: "/eserciziLiv5"
+	page: "/EserciziLiv5"
   },
 ];
 
@@ -75,8 +76,9 @@ const renderItem = ({item}) => (
 );
 
 export default function ALLENATI() {
-   const { signOut, user } = useAuth();
-   
+   const { user } = useAuth();
+   const router = useRouter();
+   const [livelloAttuale, setLivelloAttuale] = React.useState('');  
    const [loaded] = useFonts({
 		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
@@ -88,6 +90,19 @@ export default function ALLENATI() {
   if (!loaded) {
     return null;
   }
+  
+  	const promise = databases.listDocuments('652e8e4607298ced5902', '652e8e563085d6a5aad0',   
+	[
+        Query.equal('idPaziente', user.$id)
+    ]);
+		
+	promise.then(function (response) {			
+		setLivelloAttuale(response.documents[0].livello)
+		console.log("Livello: " + livelloAttuale); // Success
+	}, function (error) {
+		console.log(error); // Failure
+	});
+  
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
