@@ -66,9 +66,9 @@ export default function Questionario() {
 	
 	if(totAttMet<450)
 		livello = 'Bradipo'
-	else if(totAttMet>=450 && totAttMet<650)
+	else if(totAttMet==450)
 		livello = 'Tartaruga'
-	else if(totAttMet>=650 && totAttMet<900)
+	else if(totAttMet>=450 && totAttMet<900)
 		livello = 'Toro'
 	else if(totAttMet>=900 && totAttMet<1800)
 		livello = 'Tigre'
@@ -76,7 +76,7 @@ export default function Questionario() {
 		livello = 'Falco'
 	
 	console.log("Totale: " + totAttMet + " Met"); 
-	const putPunteggio = databases.createDocument('652e8e4607298ced5902', '652e8e563085d6a5aad0',  ID.unique(),
+	const putPunteggio = databases.createDocument('652e8e4607298ced5902', '652e8e563085d6a5aad0', ID.unique(),
 		{
 			'idPaziente': user.$id, 
 			'punteggio': totAttMet, 
@@ -89,6 +89,7 @@ export default function Questionario() {
 	  
 		putPunteggio.then(function (response) {
 			console.log(response); // Success
+			router.push('/punteggio');   	
 		}, function (error) {
 			console.log(error); // Failure
 		});
