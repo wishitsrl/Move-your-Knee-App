@@ -58,14 +58,14 @@ export default function DATI() {
 		}	*/
 
     return (
-	 <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
 		<ScrollView style={styles.scrollView}>     
 			<View style={styles.container}>
 				<LogoViola/>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 				
@@ -114,7 +114,7 @@ export default function DATI() {
 				</Text>
 			</View>
 			
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 			
@@ -134,8 +134,8 @@ export default function DATI() {
 				</Text>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
 			<View>
@@ -179,15 +179,15 @@ const styles = StyleSheet.create({
   },
    scrollView: {
 	flex: 1,
-    marginHorizontal: 10,
+    marginHorizontal: 0,
   },
   text: {
     fontSize: 42,
   },
-    image: {
+  image: {
     alignSelf: "center",
-	width: 100,
-    height: 100,
+	width: 200,
+    height: 200,
   },
   row: {
     flexDirection: 'row',
@@ -206,7 +206,8 @@ const styles = StyleSheet.create({
 	color: '#560CCE',
     fontSize: 30,
 	fontFamily: 'roboto-flex-regular',
-	fontWeight: 'bold'
+	marginTop: 20,
+	fontWeight: 'bold',
   },
   paragrafo1Text: {
 	marginHorizontal: 10,

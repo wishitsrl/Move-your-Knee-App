@@ -33,7 +33,7 @@ export default function NotFoundScreen() {
 				<ScrollView style={styles.scrollView}>  
 					<Logo/>  
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
-						<View style={{flex: 1, height: 4, backgroundColor: '#FFFFFF'}} />
+						<View style={{flex: 1, height: 2, backgroundColor: '#FFFFFF'}} />
 					</View>
 					
 					<View>
@@ -53,7 +53,7 @@ export default function NotFoundScreen() {
 					</View>
 					
 					<View style={styles.buttonContainer}>
-						<Button mode="contained" onPress={() =>  router.replace("/CONOSCITI")}>AVVIA IL TUTORIAL</Button>    
+						<Button mode="contained" onPress={() =>  router.replace("/tutorial")}>AVVIA IL TUTORIAL</Button>    
 					</View>	
 
 					<View style={styles.buttonContainer}>
@@ -70,9 +70,6 @@ export default function NotFoundScreen() {
 const styles = StyleSheet.create({
  	container: {
 	flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-
   },
   scrollView: {
 	flex: 1,

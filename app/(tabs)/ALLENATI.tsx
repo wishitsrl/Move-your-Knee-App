@@ -112,7 +112,7 @@ export default function ALLENATI() {
 			</View>
 
 			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 				
 			<View>

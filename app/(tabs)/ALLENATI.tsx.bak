@@ -55,6 +55,34 @@ const CardData = [
 ];
 
 const renderItem = ({item}) => (
+
+	<View style={styles.container}>
+				<LogoViola/>
+			</View>
+
+			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+			</View>
+				
+			<View>
+				 <Text style={styles.titoloText}>
+					ALLENATI
+				</Text>
+			</View>
+
+			<View>
+				<Text style={styles.paragrafo1Text}>
+					Il tuo livello è { livelloAttuale }.
+				</Text>
+			</View>
+
+			<View>
+				<Text style={styles.paragrafo1Text}>
+					Svolgi gli esercizi e continua a migliorare.
+				</Text>
+			</View>
+
+
 <TouchableOpacity onPress={() => router.push(item.page)}>
 	<View style={styles.livello}>
 		<Text style={styles.paragrafo1Text}>
@@ -98,7 +126,7 @@ export default function ALLENATI() {
 		
 	promise.then(function (response) {			
 		setLivelloAttuale(response.documents[0].livello)
-		console.log("Livello: " + livelloAttuale); // Success
+		console.log("Livello Allenati: " + livelloAttuale); // Success
 	}, function (error) {
 		console.log(error); // Failure
 	});
@@ -106,42 +134,14 @@ export default function ALLENATI() {
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
-		<ScrollView style={styles.scrollView}>     
-			<View style={styles.container}>
-				<LogoViola/>
-			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
-			</View>
-				
-			<View>
-				 <Text style={styles.titoloText}>
-					ALLENATI
-				</Text>
-			</View>
-
-			<View>
-				<Text style={styles.paragrafo1Text}>
-					Il tuo livello è TORO.
-				</Text>
-			</View>
-
-			<View>
-				<Text style={styles.paragrafo1Text}>
-					Svolgi gli esercizi e continua a migliorare.
-				</Text>
-			</View>
-
-			<View>
+		<View>
 				 <FlatList style={{ marginTop: 15 }}
 					data={CardData}
 					renderItem={ renderItem }
 					keyExtractor={item => item.titolo}			
 				/>
-			</View>		
-			
-		</ScrollView>
+			</View>	
     </SafeAreaView>
   );
 }

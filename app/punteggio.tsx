@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, SafeAreaView, ScrollView, StatusBar, TouchableOpacity } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { RadioButton } from 'react-native-paper';
 import { TextInput } from 'react-native-paper';
@@ -37,25 +37,23 @@ export default function Punteggio() {
     ]);
 		
 	promise.then(function (response) {			
-		setPunteggio(response.documents[0].punteggio)
+		setPunteggio(response.documents[1].punteggio)
 		console.log("Livello Allenati: " + punteggio); // Success
 	}, function (error) {
 		console.log(error); // Failure
 	});
    
   return (
-    <SafeAreaView style={styles.container}>
+	<SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
 		<ScrollView style={styles.scrollView}>     
 			<View style={styles.container}>
 				<LogoViola/>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', }}>
+			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
-				
-			<View style={styles.container}>	
 				
 				<View>
 					<Text style={styles.sottotitoloText}>
@@ -70,9 +68,10 @@ export default function Punteggio() {
 			</View>
 
 			<View>
-				 
-			</View>
-
+				<Image style={styles.image}  
+				source={require('../assets/ICONE/PNG/STATOSUFFICIENTESELEZIONATO.png')} />
+			</View>	
+		
 			<View>
 				 <Text style={styles.titoloText}>
 					BUON LAVORO
@@ -96,14 +95,13 @@ export default function Punteggio() {
 			</TouchableOpacity>
 			</View>
 			
-			</View>	
 		</ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+ container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -165,6 +163,11 @@ const styles = StyleSheet.create({
     fontFamily: 'ultra-black-regular',
 	fontWeight: 'bold',
   },
-	
+  image: {
+    alignSelf: "center",
+	flex: 1,
+    height: 200,
+    width: 200,
+  },	
 });
 

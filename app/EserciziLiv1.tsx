@@ -11,7 +11,7 @@ import { useFonts } from 'expo-font';
 
 export default function EserciziLiv1() {
 
-   const { signOut, user } = useAuth();
+   const { user } = useAuth();
    const router = useRouter();
    const [loaded] = useFonts({
 		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),

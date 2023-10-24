@@ -9,9 +9,9 @@ import Button from '../components/UX/Button';
 import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 
-export default function tutorial() {
+export default function EserciziLiv1() {
 
-   const { signOut, user } = useAuth();
+   const { user } = useAuth();
    const router = useRouter();
    const [loaded] = useFonts({
 		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
@@ -26,10 +26,7 @@ export default function tutorial() {
   }
   return (
     <>
-		<Stack.Screen options={{ title: 'EserciziLiv1' }} />
-		<View style={styles.container}>	
-			<Text style={styles.subtitle}> EserciziLiv1!</Text>
-		</View>
+		
     </>
   );
 }

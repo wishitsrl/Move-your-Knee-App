@@ -33,7 +33,7 @@ export default function NotFoundScreen() {
 				<ScrollView style={styles.scrollView}>  
 					<Logo/>  
 					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
-						<View style={{flex: 1, height: 4, backgroundColor: '#FFFFFF'}} />
+						<View style={{flex: 1, height: 2, backgroundColor: '#FFFFFF'}} />
 					</View>
 					
 					<View>
@@ -70,9 +70,6 @@ export default function NotFoundScreen() {
 const styles = StyleSheet.create({
  	container: {
 	flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-
   },
   scrollView: {
 	flex: 1,
@@ -113,7 +110,7 @@ const styles = StyleSheet.create({
   },
    paragrafo2Text: {
 	color: '#fff',
-	marginTop: 10,
+	marginTop: 20,
     fontSize: 20,
 	fontFamily: 'ultra-black-regular',
 	alignItems: 'center', 

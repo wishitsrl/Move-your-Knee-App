@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput } from 'react-native';
-import Button from '../../components/UX/Button'
-import Background from '../../components/Background'
-import LogoViola from '../../components/UX/LogoViola'
+import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput, TouchableOpacity } from 'react-native';
+import Button from '../components/UX/Button'
+import Background from '../components/Background'
+import LogoViola from '../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
-import { useAuth } from '../context/auth';
+import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
 
@@ -22,11 +22,11 @@ export default function PROFILO() {
    const [altezza, setAltezza] = React.useState(''); 
    
    const [loaded] = useFonts({
-		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
-		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
-		"roboto-flex-variable": require('../../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
-		"ultra-black": require('../../assets/fonts/ultrablackitalic.ttf'),
-		"ultra-black-regular": require('../../assets/fonts/UltraBlackRegular.ttf'),
+		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
+		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
+		"roboto-flex-variable": require('../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
+		"ultra-black": require('../assets/fonts/ultrablackitalic.ttf'),
+		"ultra-black-regular": require('../assets/fonts/UltraBlackRegular.ttf'),
   });
 
   if (!loaded) {
@@ -48,11 +48,14 @@ export default function PROFILO() {
 				 <Text style={styles.titoloText}>
 					PROFILO
 				</Text>
+				<TouchableOpacity onPress={() => router.push('/modal')} >
+					<Image style={styles.image} source={require('../assets/ICONE/PNG/CHIUDISELEZIONATO.png')} />
+				</TouchableOpacity>		
 			</View>
 
 			<View>
 				<Text style={styles.paragrafo1Text}>
-					DATI PERSONALI
+					DATI MEDICI
 				</Text>
 			</View>
 			
@@ -62,7 +65,7 @@ export default function PROFILO() {
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
-					Nome*
+					In che anno è stata ricevuta una diagnosi di artrosi al ginocchio?
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
@@ -75,7 +78,7 @@ export default function PROFILO() {
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
-					Cognome*
+					In quale area? (Ginocchio destro, sinistro o entrambi)
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
@@ -88,7 +91,7 @@ export default function PROFILO() {
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
-					Età*
+					Valuta da 0 a 10 il dolore che provi al ginocchio*
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
@@ -101,7 +104,7 @@ export default function PROFILO() {
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
-					Genere*
+					Da 0 a 10, provi una sensazione di rigidità?*
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
@@ -114,7 +117,7 @@ export default function PROFILO() {
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
-					Stato Civile*
+					Da 0 a 10, senti il ginocchio debole?*
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
@@ -140,7 +143,15 @@ export default function PROFILO() {
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
-					Peso*
+					*In caso di gonartrosi bilaterale, 
+					dovrai riferirti al ginocchio più dolente
+					o dolente al momento della compilazione del modulo
+				</Text>
+			</View>
+								
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Da 0 a 10, trovi difficoltà nel cammino?
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
@@ -153,7 +164,7 @@ export default function PROFILO() {
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
-					Altezza*
+					Da 0 a 10, trovi difficoltà nel vestirti?
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
@@ -163,13 +174,33 @@ export default function PROFILO() {
 					/>
 				</View>	
 			</View>
-			
-			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => router.push('/datiMedici')}>MODIFICA</Button>    
-			</View>
-			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => router.push('/datiMedici')}>RIPETI QUESTIONARIO DATI MEDICI</Button>    
-			</View>					
+
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Hai mai assunto farmaci per il dolore al ginocchio? Se si quali?
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						onChangeText={altezza => setAltezza(altezza)}
+						value={altezza}
+						placeholder=" "
+					/>
+				</View>	
+			</View>			
+
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Hai mai praticato infiltrazioni al ginocchio? Se si, con:
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						onChangeText={altezza => setAltezza(altezza)}
+						value={altezza}
+						placeholder=" "
+					/>
+				</View>	
+			</View>	
+
 		</ScrollView>
     </SafeAreaView>
   );

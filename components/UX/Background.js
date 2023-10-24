@@ -6,7 +6,7 @@ export default function Background({ children }) {
   return (
     <ImageBackground
       source={require('../../assets/sfondo.jpeg')}
-      resizeMode="display"
+      resizeMode="stretch"
       style={styles.background}
     >
       <KeyboardAvoidingView style={styles.container} behavior="padding">

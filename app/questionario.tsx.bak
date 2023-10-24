@@ -89,10 +89,7 @@ export default function Questionario() {
 	  
 		putPunteggio.then(function (response) {
 			console.log(response); // Success
-			
-			router.push('/punteggio');   
-		
-			
+			router.push('/punteggio');   	
 		}, function (error) {
 			console.log(error); // Failure
 		});

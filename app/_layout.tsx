@@ -62,11 +62,6 @@ function RootLayoutNav() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         <Stack.Screen name="tutorial" />
-		<Stack.Screen name="EserciziLiv1" />
-		<Stack.Screen name="EserciziLiv2" />
-		<Stack.Screen name="EserciziLiv3" />
-		<Stack.Screen name="EserciziLiv4" />
-		<Stack.Screen name="EserciziLiv5" />
       </Stack>
     </ThemeProvider>
   );
