@@ -28,7 +28,7 @@ export default function CHAT() {
 		<ScrollView style={styles.scrollView}>     
 			<View style={styles.container}>
 				<LogoViola/>
-			
+			</View>
 
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
@@ -58,7 +58,7 @@ export default function CHAT() {
 			</View>	
 		
 			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => router.push('/')}>AVVIA LA CHAT</Button>    
+				<Button mode="contained" onPress={() => router.push('/registrazioneDatiPersonali')}>AVVIA LA CHAT</Button>    
 			</View>		
 		</ScrollView>
     </SafeAreaView>

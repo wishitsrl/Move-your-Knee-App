@@ -58,8 +58,13 @@ export default function CHAT() {
 			</View>	
 		
 			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => router.push('/')}>AVVIA LA CHAT</Button>    
-			</View>		
+				<Button mode="contained" onPress={() => router.push('/registrazioneDatiPersonali')}>AVVIA LA CHAT</Button>    
+			</View>	
+
+			<View style={styles.buttonContainer}>
+				<Button mode="contained" onPress={() => router.push('/registrazioneDatiMedici')}>AVVIA LA CHAT</Button>    
+			</View>	
+
 		</ScrollView>
     </SafeAreaView>
   );

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, StatusBar, ScrollView, Image, SafeAreaView, } from 'react-native';
+import { View, StyleSheet, StatusBar, ScrollView, Image, SafeAreaView, Alert } from 'react-native';
 import LogoViola from '../../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text,  } from '@/components/Themed';
@@ -12,7 +12,7 @@ import { Permission, Role,  ID, Query, } from "appwrite";
 export default function DATI() {
   const { user } = useAuth();
   const router = useRouter();
-  const [livelloAttuale, setLivelloAttuale] = React.useState('');  
+  const [livelloAttuale, setLivelloAttuale] = React.useState('Bradipo');  
   const [livelloImg, setLivelloImg] = React.useState(require("../../assets/ICONE/PNG/BRADIPONEUTRO_1.png"));  
   const [loaded] = useFonts({
 		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
@@ -29,15 +29,12 @@ export default function DATI() {
 	[
         Query.equal('idPaziente', user.$id)
     ]);
-		
-	promise.then(function (response) {			
-		setLivelloAttuale(response.documents[0].livello)
-		console.log("Livello dati: " + livelloAttuale); // Success
-	}, function (error) {
-		console.log(error); // Failure
-	});
-	
-	/*switch (livelloAttuale) {
+	promise.then(function (response) {	
+			let length = response.documents.length;
+			if(length!=0) {
+				setLivelloAttuale(response.documents[length-1].livello)
+				console.log("Livello dati: " + livelloAttuale); // Success
+		switch (livelloAttuale) {
 		case 'Bradipo':
 			setLivelloImg(require("../../assets/ICONE/PNG/BRADIPONEUTRO_1.png"));
 			break;
@@ -54,9 +51,15 @@ export default function DATI() {
 			setLivelloImg(require("../../assets/ICONE/PNG/FALCOSELEZIONATO.png"));
 			break;			
 		  default:
-			alert( "I don't know such values" );
-		}	*/
-
+			setLivelloImg(require("../../assets/ICONE/PNG/BRADIPONEUTRO_1.png"));
+		}
+		}
+		else 
+			Alert.alert("Riempire il questionario");
+	}, function (error) {
+		console.log(error); // Failure
+	});
+	
     return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />

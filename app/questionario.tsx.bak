@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
 	fontFamily: 'roboto-flex',
 	marginTop: 20,
-	alignItems: 'left',
+	alignItems: 'center',
   },
   paragrafo0Text: {
     fontSize: 20,

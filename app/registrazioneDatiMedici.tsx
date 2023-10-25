@@ -1,73 +1,62 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput } from 'react-native';
-import Button from '../../components/UX/Button'
-import Background from '../../components/Background'
-import LogoViola from '../../components/UX/LogoViola'
+import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput, TouchableOpacity } from 'react-native';
+import Button from '../components/UX/Button'
+import Background from '../components/Background'
+import LogoViola from '../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
-import { useAuth } from '../context/auth';
+import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
-import client, { databases } from "../lib/appwrite-service";
+import client, { databases } from "./lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
 
-export default function PROFILO() {
-   const { signOut, user } = useAuth();
-   const router = useRouter();
-   const [nome, setNome] = React.useState(''); 
-   const [cognome, setCognome] = React.useState('');  
-   const [eta, setEta] = React.useState(''); 
-   const [genere, setGenere] = React.useState(''); 
-   const [statoCivile, setStatoCivile] = React.useState(''); 
-   const [attivitaLavorativa, setAttivitaLavorativa] = React.useState(''); 
-   const [peso, setPeso] = React.useState('');   
-   const [altezza, setAltezza] = React.useState(''); 
+export default function registrazioneDatiMedici() {
+   const { user } = useAuth();
+   const router = useRouter(); 
+   const [annoDiagnosi, setAnnoDiagnosi] = React.useState('');  
+   const [areaGinocchio, setAreaGinocchio] = React.useState(''); 
+   const [intensitaDolore, setIntensitaDolore] = React.useState(''); 
+   const [sensazioneRigidita, setSensazioneRigidita] = React.useState(''); 
+   const [sensazioneDebole, setSensazioneDebole] = React.useState(''); 
+   const [difficoltaCammino, setDifficoltaCammino] = React.useState('');   
+   const [difficoltaVestirsi, setDifficoltaVestirsi] = React.useState(''); 
+   const [assunzioneFarmaci, setAssunzioneFarmaci] = React.useState(''); 
+   const [infiltrazioni, setInfiltrazioni] = React.useState(''); 
    
    const [loaded] = useFonts({
-		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
-		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
-		"roboto-flex-variable": require('../../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
-		"ultra-black": require('../../assets/fonts/ultrablackitalic.ttf'),
-		"ultra-black-regular": require('../../assets/fonts/UltraBlackRegular.ttf'),
+		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
+		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
+		"roboto-flex-variable": require('../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
+		"ultra-black": require('../assets/fonts/ultrablackitalic.ttf'),
+		"ultra-black-regular": require('../assets/fonts/UltraBlackRegular.ttf'),
   });
 
   if (!loaded) {
     return null;
   }
-  const getDatiPersonali = databases.getDocument('652e8e4607298ced5902', '6538c5cc9690a2884b8d', user.$id);
-		getDatiPersonali.then(function (response) {
-		console.log(response); // Success
-		setNome(response.nome);
-		setCognome(response.cognome);
-		setEta(response.eta);
-		setGenere(response.genere);
-		setStatoCivile(response.statoCivile);
-		setAttivitaLavorativa(response.attivitaLavorativa);
-		setPeso(parseFloat(response.peso));
-		setAltezza(parseFloat(response.altezza));
-	}, function (error) {
-		console.log(error); // Failure
-	});
   
 	function handleSubmit() {
 
-		const updateDatiPersonali = databases.updateDocument('652e8e4607298ced5902', '6538c5cc9690a2884b8d', user.$id,
+		const datiMedici = databases.createDocument('652e8e4607298ced5902', '6538c6af1ca5781c351b', user.$id,
 		{
 			'idPaziente': user.$id, 
-			'nome': nome, 
-			'cognome': cognome,   
-			'eta': eta,
-			'genere': genere,
-			'statoCivile': statoCivile,
-			'attivitaLavorativa': attivitaLavorativa,
-			'peso': peso, 
-            'altezza': altezza,
+			'annoDiagnosi': annoDiagnosi, 
+			'areaGinocchio': areaGinocchio,   
+			'intensitaDolore': intensitaDolore,
+			'sensazioneRigidita': sensazioneRigidita,
+			'sensazioneDebole': sensazioneDebole,
+			'difficoltaCammino': difficoltaCammino,
+			'difficoltaVestirsi': difficoltaVestirsi, 
+            'assunzioneFarmaci': assunzioneFarmaci,
+			'infiltrazioni': infiltrazioni,
 		},
         [Permission.update(Role.any())],				
 	  );	
 	  
-		updateDatiPersonali.then(function (response) {
-			console.log(response); // Success 	
+		datiMedici.then(function (response) {
+			console.log(response); // Success 
+			router.push('/')		
 		}, function (error) {
 			console.log(error); // Failure
 		});
@@ -88,12 +77,12 @@ export default function PROFILO() {
 			<View>
 				 <Text style={styles.titoloText}>
 					PROFILO
-				</Text>
+				</Text>	
 			</View>
 
 			<View>
 				<Text style={styles.paragrafo1Text}>
-					DATI PERSONALI
+					DATI MEDICI
 				</Text>
 			</View>
 			
@@ -103,38 +92,12 @@ export default function PROFILO() {
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
-					Nome*
+					In che anno è stata ricevuta una diagnosi di artrosi al ginocchio?
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={nome => setNome(nome)}
-						value={nome}
-						placeholder=" "
-					/>
-				</View>	
-			</View>
-			
-			<View>
-				<Text style={styles.paragrafo2Text}>
-					Cognome*
-				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
-						onChangeText={cognome => setCognome(cognome)}
-						value={cognome}
-						placeholder=" "
-					/>
-				</View>	
-			</View>
-			
-			<View>
-				<Text style={styles.paragrafo2Text}>
-					Età*
-				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
-						onChangeText={eta => setEta(eta)}
-						value={eta.toString()}
+						onChangeText={annoDiagnosi => setAnnoDiagnosi(annoDiagnosi)}
+						value={annoDiagnosi}
 						placeholder=" "
 						keyboardType="phone-pad"
 					/>
@@ -143,12 +106,12 @@ export default function PROFILO() {
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
-					Genere*
+					In quale area? (Ginocchio destro, sinistro o entrambi)
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={genere => setGenere(genere)}
-						value={genere}
+						onChangeText={areaGinocchio => setAreaGinocchio(areaGinocchio)}
+						value={areaGinocchio}
 						placeholder=" "
 					/>
 				</View>	
@@ -156,38 +119,12 @@ export default function PROFILO() {
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
-					Stato Civile*
+					Valuta da 0 a 10 il dolore che provi al ginocchio*
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={statoCivile => setStatoCivile(statoCivile)}
-						value={statoCivile}
-						placeholder=" "
-					/>
-				</View>	
-			</View>
-			
-			<View>
-				<Text style={styles.paragrafo2Text}>
-					Attività Lavorativa*
-				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
-						onChangeText={attivitaLavorativa => setAttivitaLavorativa(attivitaLavorativa)}
-						value={attivitaLavorativa}
-						placeholder=" "
-					/>
-				</View>	
-			</View>
-			
-			<View>
-				<Text style={styles.paragrafo2Text}>
-					Peso*
-				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
-						onChangeText={peso => setPeso(peso)}
-						value={peso.toString()}
+						onChangeText={intensitaDolore => setIntensitaDolore(intensitaDolore)}
+						value={intensitaDolore}
 						placeholder=" "
 						keyboardType="phone-pad"
 					/>
@@ -196,24 +133,98 @@ export default function PROFILO() {
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
-					Altezza*
+					Da 0 a 10, provi una sensazione di rigidità?*
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={altezza => setAltezza(altezza)}
-						value={altezza.toString()}
+						onChangeText={sensazioneRigidita => setSensazioneRigidita(sensazioneRigidita)}
+						value={sensazioneRigidita}
 						placeholder=" "
 						keyboardType="phone-pad"
 					/>
 				</View>	
 			</View>
+			
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Da 0 a 10, senti il ginocchio debole?*
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						onChangeText={sensazioneDebole => setSensazioneDebole(sensazioneDebole)}
+						value={sensazioneDebole}
+						placeholder=" "
+						keyboardType="phone-pad"
+					/>
+				</View>	
+			</View>
+			
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					*In caso di gonartrosi bilaterale, 
+					dovrai riferirti al ginocchio più dolente
+					o dolente al momento della compilazione del modulo
+				</Text>
+			</View>
+			
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Da 0 a 10, trovi difficoltà nel cammino?
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						onChangeText={difficoltaCammino => setDifficoltaCammino(difficoltaCammino)}
+						value={difficoltaCammino}
+						placeholder=" "
+						keyboardType="phone-pad"
+					/>
+				</View>	
+			</View>
+						
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Da 0 a 10, trovi difficoltà nel vestirti?
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						onChangeText={difficoltaVestirsi => setDifficoltaVestirsi(difficoltaVestirsi)}
+						value={difficoltaVestirsi}
+						placeholder=" "
+						keyboardType="phone-pad"
+					/>
+				</View>	
+			</View>
+
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Hai mai assunto farmaci per il dolore al ginocchio? Se si quali?
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						onChangeText={assunzioneFarmaci => setAssunzioneFarmaci(assunzioneFarmaci)}
+						value={assunzioneFarmaci}
+						placeholder=" "
+					/>
+				</View>	
+			</View>			
+
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Hai mai praticato infiltrazioni al ginocchio? Se si, con:
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						onChangeText={infiltrazioni => setInfiltrazioni(infiltrazioni)}
+						value={infiltrazioni}
+						placeholder=" "
+					/>
+				</View>	
+			</View>	
 			
 			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => handleSubmit()}>MODIFICA</Button>    
+				<Button mode="contained" onPress={() => handleSubmit()}>CONCLUDI</Button>    
 			</View>
-			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => router.push('/datiMedici')}>RIPETI QUESTIONARIO DATI MEDICI</Button>    
-			</View>					
+
 		</ScrollView>
     </SafeAreaView>
   );

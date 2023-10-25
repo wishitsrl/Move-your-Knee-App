@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, FlatList, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, FlatList, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Image, Alert } from 'react-native';
 import Button from '../../components/UX/Button'
 import Background from '../../components/Background'
 import LogoViola from '../../components/UX/LogoViola'
@@ -78,7 +78,7 @@ const renderItem = ({item}) => (
 export default function ALLENATI() {
    const { user } = useAuth();
    const router = useRouter();
-   const [livelloAttuale, setLivelloAttuale] = React.useState('');  
+   const [livelloAttuale, setLivelloAttuale] = React.useState('Bradipo');  
    const [loaded] = useFonts({
 		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
@@ -95,10 +95,14 @@ export default function ALLENATI() {
 	[
         Query.equal('idPaziente', user.$id)
     ]);
-		
 	promise.then(function (response) {			
-		setLivelloAttuale(response.documents[0].livello)
-		console.log("Livello Allenati: " + livelloAttuale); // Success
+		let length = response.documents.length;
+			if(length!=0) {
+				setLivelloAttuale(response.documents[length-1].livello)
+				console.log("Livello Allenati: " + livelloAttuale); // Success
+			}
+			else 
+				Alert.alert("Riempire il questionario");
 	}, function (error) {
 		console.log(error); // Failure
 	});

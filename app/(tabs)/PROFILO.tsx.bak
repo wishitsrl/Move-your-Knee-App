@@ -8,6 +8,8 @@ import { Text, View } from '@/components/Themed';
 import { useAuth } from '../context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
+import client, { databases } from "../lib/appwrite-service";
+import { Permission, Role,  ID, Query, } from "appwrite";
 
 export default function PROFILO() {
    const { signOut, user } = useAuth();
@@ -32,6 +34,45 @@ export default function PROFILO() {
   if (!loaded) {
     return null;
   }
+  const getDatiPersonali = databases.getDocument('652e8e4607298ced5902', '6538c5cc9690a2884b8d', user.$id);
+		getDatiPersonali.then(function (response) {
+		console.log(response); // Success
+		setNome(response.nome);
+		setCognome(response.cognome);
+		setEta(response.eta);
+		setGenere(response.genere);
+		setStatoCivile(response.statoCivile);
+		setAttivitaLavorativa(response.attivitaLavorativa);
+		setPeso(parseFloat(response.peso));
+		setAltezza(parseFloat(response.altezza));
+	}, function (error) {
+		console.log(error); // Failure
+	});
+  
+	function handleSubmit() {
+
+		const updateDatiPersonali = databases.updateDocument('652e8e4607298ced5902', '6538c5cc9690a2884b8d', user.$id,
+		{
+			'idPaziente': user.$id, 
+			'nome': nome, 
+			'cognome': cognome,   
+			'eta': eta,
+			'genere': genere,
+			'statoCivile': statoCivile,
+			'attivitaLavorativa': attivitaLavorativa,
+			'peso': peso, 
+            'altezza': altezza,
+		},
+        [Permission.update(Role.any())],				
+	  );	
+	  
+		updateDatiPersonali.then(function (response) {
+			console.log(response); // Success 	
+		}, function (error) {
+			console.log(error); // Failure
+		});
+	}
+	
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
@@ -79,8 +120,9 @@ export default function PROFILO() {
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={nome => setNome(nome)}
-						value={nome}
+						onChangeText={cognome => setCognome(cognome)}
+						defaultValue={cognome}
+						value={""}
 						placeholder=" "
 					/>
 				</View>	
@@ -93,8 +135,9 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={eta => setEta(eta)}
-						value={eta}
+						value={eta.toString()}
 						placeholder=" "
+						keyboardType="phone-pad"
 					/>
 				</View>	
 			</View>
@@ -145,8 +188,9 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={peso => setPeso(peso)}
-						value={peso}
+						value={peso.toString()}
 						placeholder=" "
+						keyboardType="phone-pad"
 					/>
 				</View>	
 			</View>
@@ -158,14 +202,15 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={altezza => setAltezza(altezza)}
-						value={altezza}
+						value={altezza.toString()}
 						placeholder=" "
+						keyboardType="phone-pad"
 					/>
 				</View>	
 			</View>
 			
 			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => router.push('/datiMedici')}>MODIFICA</Button>    
+				<Button mode="contained" onPress={() => handleSubmit()}>MODIFICA</Button>    
 			</View>
 			<View style={styles.buttonContainer}>
 				<Button mode="contained" onPress={() => router.push('/datiMedici')}>RIPETI QUESTIONARIO DATI MEDICI</Button>    

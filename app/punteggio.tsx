@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Image, SafeAreaView, ScrollView, StatusBar, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Alert } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { RadioButton } from 'react-native-paper';
 import { TextInput } from 'react-native-paper';
@@ -34,11 +34,13 @@ export default function Punteggio() {
 	const promise = databases.listDocuments('652e8e4607298ced5902', '652e8e563085d6a5aad0',   
 	[
         Query.equal('idPaziente', user.$id)
-    ]);
-		
-	promise.then(function (response) {			
-		setPunteggio(response.documents[1].punteggio)
-		console.log("Livello Allenati: " + punteggio); // Success
+    ]);	
+	promise.then(function (response) {
+		let length = response.documents.length;
+		if(length!=0) {
+			setPunteggio(response.documents[length-1].punteggio)
+			console.log("Livello Punteggio: " + punteggio); // Success
+		}
 	}, function (error) {
 		console.log(error); // Failure
 	});

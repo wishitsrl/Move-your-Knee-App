@@ -8,18 +8,21 @@ import { Text, View } from '@/components/Themed';
 import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
+import client, { databases } from "./lib/appwrite-service";
+import { Permission, Role,  ID, Query, } from "appwrite";
 
-export default function PROFILO() {
+export default function datiMedici() {
    const { signOut, user } = useAuth();
    const router = useRouter();
-   const [nome, setNome] = React.useState(''); 
-   const [cognome, setCognome] = React.useState('');  
-   const [eta, setEta] = React.useState(''); 
-   const [genere, setGenere] = React.useState(''); 
-   const [statoCivile, setStatoCivile] = React.useState(''); 
-   const [attivitaLavorativa, setAttivitaLavorativa] = React.useState(''); 
-   const [peso, setPeso] = React.useState('');   
-   const [altezza, setAltezza] = React.useState(''); 
+   const [annoDiagnosi, setAnnoDiagnosi] = React.useState(''); 
+   const [areaGinocchio, setAreaGinocchio] = React.useState('');  
+   const [intensitaDolore, setIntensitaDolore] = React.useState(''); 
+   const [sensazioneRigidita, setSensazioneRigidita] = React.useState(''); 
+   const [sensazioneDebole, setSensazioneDebole] = React.useState(''); 
+   const [difficoltaCammino, setDifficoltaCammino] = React.useState(''); 
+   const [difficoltaVestirsi, setDifficoltaVestirsi] = React.useState('');   
+   const [assunzioneFarmaci, setAssunzioneFarmaci] = React.useState('');    
+   const [infiltrazioni, setInfiltrazioni] = React.useState(''); 
    
    const [loaded] = useFonts({
 		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
@@ -32,6 +35,48 @@ export default function PROFILO() {
   if (!loaded) {
     return null;
   }
+  
+	const datiMedici = databases.getDocument('652e8e4607298ced5902', '6538c6af1ca5781c351b', user.$id)	
+			datiMedici.then(function (response) {
+				console.log(response); // Success 
+				setAnnoDiagnosi(response.annoDiagnosi);
+				setAreaGinocchio(response.areaGinocchio);
+				setIntensitaDolore(response.intensitaDolore);
+				setSensazioneRigidita(response.sensazioneRigidita);
+				setSensazioneDebole(response.sensazioneDebole);
+				setDifficoltaCammino(response.difficoltaCammino);
+				setDifficoltaVestirsi(response.difficoltaVestirsi);
+				setAssunzioneFarmaci(response.assunzioneFarmaci);
+				setInfiltrazioni(response.infiltrazioni);
+			}, function (error) {
+			console.log(error); // Failure
+		});
+  
+  	function handleSubmit() {
+
+		const updateDatiMedici = databases.updateDocument('652e8e4607298ced5902', '6538c6af1ca5781c351b', user.$id, 	
+		{
+			'idPaziente': user.$id, 
+			'annoDiagnosi': annoDiagnosi, 
+			'areaGinocchio': areaGinocchio,   
+			'intensitaDolore': intensitaDolore,
+			'sensazioneRigidita': sensazioneRigidita,
+			'sensazioneDebole': sensazioneDebole,
+			'difficoltaCammino': difficoltaCammino,
+			'difficoltaVestirsi': difficoltaVestirsi, 
+            'assunzioneFarmaci': assunzioneFarmaci,
+			'infiltrazioni': infiltrazioni,
+		},
+        [Permission.update(Role.any())],				
+	  );	
+	  
+		updateDatiMedici.then(function (response) {
+			console.log(response); // Success 	
+		}, function (error) {
+			console.log(error); // Failure
+		});
+	}
+  
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
@@ -69,9 +114,10 @@ export default function PROFILO() {
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={nome => setNome(nome)}
-						value={nome}
+						onChangeText={annoDiagnosi => setAnnoDiagnosi(annoDiagnosi)}
+						value={annoDiagnosi.toString()}
 						placeholder=" "
+						keyboardType="phone-pad"
 					/>
 				</View>	
 			</View>
@@ -82,8 +128,8 @@ export default function PROFILO() {
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={nome => setNome(nome)}
-						value={nome}
+						onChangeText={areaGinocchio => setAreaGinocchio(areaGinocchio)}
+						value={areaGinocchio}
 						placeholder=" "
 					/>
 				</View>	
@@ -95,9 +141,10 @@ export default function PROFILO() {
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={eta => setEta(eta)}
-						value={eta}
+						onChangeText={intensitaDolore => setIntensitaDolore(intensitaDolore)}
+						value={intensitaDolore.toString()}
 						placeholder=" "
+						keyboardType="phone-pad"
 					/>
 				</View>	
 			</View>
@@ -108,9 +155,10 @@ export default function PROFILO() {
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={genere => setGenere(genere)}
-						value={genere}
+						onChangeText={sensazioneRigidita => setSensazioneRigidita(sensazioneRigidita)}
+						value={sensazioneRigidita.toString()}
 						placeholder=" "
+						keyboardType="phone-pad"
 					/>
 				</View>	
 			</View>
@@ -121,22 +169,10 @@ export default function PROFILO() {
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={statoCivile => setStatoCivile(statoCivile)}
-						value={statoCivile}
+						onChangeText={sensazioneDebole => setSensazioneDebole(sensazioneDebole)}
+						value={sensazioneDebole.toString()}
 						placeholder=" "
-					/>
-				</View>	
-			</View>
-			
-			<View>
-				<Text style={styles.paragrafo2Text}>
-					Attività Lavorativa*
-				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
-						onChangeText={attivitaLavorativa => setAttivitaLavorativa(attivitaLavorativa)}
-						value={attivitaLavorativa}
-						placeholder=" "
+						keyboardType="phone-pad"
 					/>
 				</View>	
 			</View>
@@ -148,29 +184,31 @@ export default function PROFILO() {
 					o dolente al momento della compilazione del modulo
 				</Text>
 			</View>
-								
+			
 			<View>
 				<Text style={styles.paragrafo2Text}>
 					Da 0 a 10, trovi difficoltà nel cammino?
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={peso => setPeso(peso)}
-						value={peso}
+						onChangeText={difficoltaCammino => setDifficoltaCammino(difficoltaCammino)}
+						value={difficoltaCammino.toString()}
 						placeholder=" "
+						keyboardType="phone-pad"
 					/>
 				</View>	
 			</View>
-			
+						
 			<View>
 				<Text style={styles.paragrafo2Text}>
 					Da 0 a 10, trovi difficoltà nel vestirti?
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={altezza => setAltezza(altezza)}
-						value={altezza}
+						onChangeText={difficoltaVestirsi => setDifficoltaVestirsi(difficoltaVestirsi)}
+						value={difficoltaVestirsi.toString()}
 						placeholder=" "
+						keyboardType="phone-pad"
 					/>
 				</View>	
 			</View>
@@ -181,8 +219,8 @@ export default function PROFILO() {
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={altezza => setAltezza(altezza)}
-						value={altezza}
+						onChangeText={assunzioneFarmaci => setAssunzioneFarmaci(assunzioneFarmaci)}
+						value={assunzioneFarmaci}
 						placeholder=" "
 					/>
 				</View>	
@@ -194,13 +232,16 @@ export default function PROFILO() {
 				</Text>
 				<View style={styles.form}>
 					<TextInput style={styles.input}
-						onChangeText={altezza => setAltezza(altezza)}
-						value={altezza}
+						onChangeText={infiltrazioni => setInfiltrazioni(infiltrazioni)}
+						value={infiltrazioni}
 						placeholder=" "
 					/>
 				</View>	
 			</View>	
-
+			
+			<View style={styles.buttonContainer}>
+				<Button mode="contained" onPress={() => handleSubmit()}>MODIFICA</Button>    
+			</View>
 		</ScrollView>
     </SafeAreaView>
   );

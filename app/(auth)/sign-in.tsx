@@ -7,111 +7,116 @@ import {
   SafeAreaView,
   StatusBar,
   ScrollView,
+  Alert
 } from "react-native";
 import { useAuth } from "../context/auth";
 import Logo from '../../components/UX/Logo'
 import Background from '../../components/UX/Background'
 import { Stack, useRouter } from "expo-router";
 import { useRef } from "react";
+import Button from '../../components/UX/Button'
+import { useFonts } from 'expo-font';
 
 export default function SignIn() {
   const { signIn } = useAuth();
   const router = useRouter();
-
   const emailRef = useRef("");
   const passwordRef = useRef("");
+     const [loaded] = useFonts({
+		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
+		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
+		"roboto-flex-variable": require('../../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
+		"ultra-black": require('../../assets/fonts/ultrablackitalic.ttf'),
+		"ultra-black-regular": require('../../assets/fonts/UltraBlackRegular.ttf'),
+  });
+
+  if (!loaded) {
+    return null;
+  }
   return (
   <Background>
-    <SafeAreaView style={styles.container}>
-	    <StatusBar hidden={true} />   
+	<SafeAreaView style={styles.container}>
+		<StatusBar hidden={true} />  
+		<ScrollView style={styles.scrollView}>     	
 			<View style={styles.container}>
 				<Logo/>
 			</View>
-			<View style={styles.container2}>
 			
-			<Text style={styles.label}>Email</Text>
-			<TextInput
-				placeholder="Email"
-				autoCapitalize="none"
-				nativeID="email"
-				onChangeText={(text) => {
-				emailRef.current = text;
-            }}
-			style={styles.textInput}
-			/>
-		    
-			<Text style={styles.label}>Password</Text>
-			<TextInput
-				placeholder="Password"
-				secureTextEntry={true}
-				nativeID="password"
-				onChangeText={(text) => {
-				passwordRef.current = text;
-            }}
-            style={styles.textInput}
-          />
-		  <TouchableOpacity
-          onPress={async () => {
-            const { data, error } = await signIn(
-              emailRef.current,
-              passwordRef.current
-            );
-            if (data) {
-              router.replace("/");
-            } else {
-              console.log(error);
-              // Alert.alert("Login Error", resp.error?.message);
-            }
-          }}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-		   <View style={{ marginTop: 60, marginBottom: 20}}>
-          <Text
-            style={{ fontWeight: "500" }}
-            onPress={() => router.push("/sign-up")}
-          >
-            Clicca per registrarti per un nuovo account
-          </Text>
-        </View>
-        </View>
-    </SafeAreaView>
-	 </Background>
+		<View style={styles.containerCenter}>	
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Email
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						placeholder="Email"
+						autoCapitalize="none"
+						nativeID="email"
+						onChangeText={(text) => {
+						emailRef.current = text;}}
+					/>
+				</View>
+ 		    </View>
+			
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Password
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						placeholder="Password"
+						secureTextEntry={true}
+						nativeID="password"
+						onChangeText={(text) => {
+						passwordRef.current = text;}}
+					/>
+				</View>
+			</View>
+		 
+			<View style={styles.buttonContainer}>
+				<Button mode="contained" onPress={async () => {
+					const { data, error } = await signIn(emailRef.current, passwordRef.current);
+					if (data) {
+						router.replace("/");
+					} else {
+						console.log(error);
+						Alert.alert("Inserire Email e Password corretti");
+					}
+					}}>Login</Button>    
+			</View>
+			
+			<View style={styles.buttonContainer}>
+				<Button mode="contained" onPress={() => router.push("/sign-up")}>Registrati</Button>    
+			</View>
+		 
+		  </View>   
+		</ScrollView>
+	</SafeAreaView>
+	</Background>
   );
 }
 
 const styles = StyleSheet.create({
  container: {
     flex: 1,
-    alignItems: 'center',
+	alignItems: 'center',
     justifyContent: 'center',
   },
-   container2: {
+  containerCenter: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 60,
   },
-  label: {
-    marginBottom: 4,
-    color: "#455fff",
-  },
-  textInput: {
-    width: 250,
-	backgroundColor: "white",
-    borderWidth: 1,
-    borderRadius: 4,
+  input: {
+	marginHorizontal: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
     borderColor: "gray",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    marginBottom: 16,
-  },
-  button: {
-    backgroundColor: "blue",
-    padding: 10,
-    width: 250,
-    borderRadius: 5,
-    marginTop: 16,
+    width: "100%",
+    borderRadius: 10,
+    padding: 15, 
+	flex: 1,
+    flexDirection: 'row',    
+    justifyContent: 'center',
   },
   buttonText: {
     color: "white",
@@ -122,14 +127,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
    scrollView: {
 	flex: 1,
-    marginHorizontal: 0,
   },
   text: {
     fontSize: 42,
@@ -161,5 +160,18 @@ const styles = StyleSheet.create({
 	flex: 1,
     flexDirection: 'row',    
     justifyContent: 'center',
-  }
+  },
+  paragrafo2Text: {
+	marginHorizontal: 20,
+    fontSize: 20,
+	color: '#48d1cc',
+	fontFamily: 'roboto-flex',
+	marginTop: 0,
+  },
+  form: {
+    flex: 1,   
+	marginHorizontal: 10,
+	justifyContent: 'center',
+	flexDirection: 'row',    
+  },
 });

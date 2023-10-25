@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput } from 'react-native';
-import Button from '../../components/UX/Button'
-import Background from '../../components/Background'
-import LogoViola from '../../components/UX/LogoViola'
+import Button from '../components/UX/Button'
+import Background from '../components/Background'
+import LogoViola from '../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
-import { useAuth } from '../context/auth';
+import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
-import client, { databases } from "../lib/appwrite-service";
+import client, { databases } from "./lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
 
-export default function PROFILO() {
-   const { signOut, user } = useAuth();
+export default function registrazione() {
+   const { user } = useAuth();
    const router = useRouter();
    const [nome, setNome] = React.useState(''); 
    const [cognome, setCognome] = React.useState('');  
@@ -24,34 +24,20 @@ export default function PROFILO() {
    const [altezza, setAltezza] = React.useState(''); 
    
    const [loaded] = useFonts({
-		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
-		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
-		"roboto-flex-variable": require('../../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
-		"ultra-black": require('../../assets/fonts/ultrablackitalic.ttf'),
-		"ultra-black-regular": require('../../assets/fonts/UltraBlackRegular.ttf'),
+		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
+		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
+		"roboto-flex-variable": require('../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
+		"ultra-black": require('../assets/fonts/ultrablackitalic.ttf'),
+		"ultra-black-regular": require('../assets/fonts/UltraBlackRegular.ttf'),
   });
 
   if (!loaded) {
     return null;
   }
-  const getDatiPersonali = databases.getDocument('652e8e4607298ced5902', '6538c5cc9690a2884b8d', user.$id);
-		getDatiPersonali.then(function (response) {
-		console.log(response); // Success
-		setNome(response.nome);
-		setCognome(response.cognome);
-		setEta(response.eta);
-		setGenere(response.genere);
-		setStatoCivile(response.statoCivile);
-		setAttivitaLavorativa(response.attivitaLavorativa);
-		setPeso(parseFloat(response.peso));
-		setAltezza(parseFloat(response.altezza));
-	}, function (error) {
-		console.log(error); // Failure
-	});
   
 	function handleSubmit() {
 
-		const updateDatiPersonali = databases.updateDocument('652e8e4607298ced5902', '6538c5cc9690a2884b8d', user.$id,
+		const datiPersonali = databases.createDocument('652e8e4607298ced5902', '6538c5cc9690a2884b8d', user.$id,
 		{
 			'idPaziente': user.$id, 
 			'nome': nome, 
@@ -66,13 +52,15 @@ export default function PROFILO() {
         [Permission.update(Role.any())],				
 	  );	
 	  
-		updateDatiPersonali.then(function (response) {
+		datiPersonali.then(function (response) {
 			console.log(response); // Success 	
 		}, function (error) {
 			console.log(error); // Failure
 		});
 	}
-	
+  
+  
+  
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
@@ -86,19 +74,9 @@ export default function PROFILO() {
 			</View>
 				
 			<View>
-				 <Text style={styles.titoloText}>
-					PROFILO
-				</Text>
-			</View>
-
-			<View>
 				<Text style={styles.paragrafo1Text}>
 					DATI PERSONALI
 				</Text>
-			</View>
-			
-			<View style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: 10,}}>
-				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 			
 			<View>
@@ -109,7 +87,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={nome => setNome(nome)}
 						value={nome}
-						placeholder=" "
+						placeholder="Nome"
 					/>
 				</View>	
 			</View>
@@ -122,7 +100,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={cognome => setCognome(cognome)}
 						value={cognome}
-						placeholder=" "
+						placeholder="Cognome"
 					/>
 				</View>	
 			</View>
@@ -134,8 +112,8 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={eta => setEta(eta)}
-						value={eta.toString()}
-						placeholder=" "
+						value={eta}
+						placeholder="Età"
 						keyboardType="phone-pad"
 					/>
 				</View>	
@@ -149,7 +127,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={genere => setGenere(genere)}
 						value={genere}
-						placeholder=" "
+						placeholder="Genere"
 					/>
 				</View>	
 			</View>
@@ -162,7 +140,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={statoCivile => setStatoCivile(statoCivile)}
 						value={statoCivile}
-						placeholder=" "
+						placeholder="Stato Civile"
 					/>
 				</View>	
 			</View>
@@ -175,7 +153,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={attivitaLavorativa => setAttivitaLavorativa(attivitaLavorativa)}
 						value={attivitaLavorativa}
-						placeholder=" "
+						placeholder="Attività Lavorativa"
 					/>
 				</View>	
 			</View>
@@ -187,8 +165,8 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={peso => setPeso(peso)}
-						value={peso.toString()}
-						placeholder=" "
+						value={peso}
+						placeholder="Peso"
 						keyboardType="phone-pad"
 					/>
 				</View>	
@@ -201,19 +179,22 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={altezza => setAltezza(altezza)}
-						value={altezza.toString()}
-						placeholder=" "
+						value={altezza}
+						placeholder="Altezza"
 						keyboardType="phone-pad"
 					/>
 				</View>	
 			</View>
 			
 			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => handleSubmit()}>MODIFICA</Button>    
+				<Button mode="contained" onPress={() => handleSubmit()}>PROSEGUI</Button>    
 			</View>
-			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => router.push('/datiMedici')}>RIPETI QUESTIONARIO DATI MEDICI</Button>    
-			</View>					
+
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					* Tutti i dati richiesti sono obbligatori per proseguire.
+				</Text>			
+			</View>	
 		</ScrollView>
     </SafeAreaView>
   );
@@ -222,6 +203,7 @@ export default function PROFILO() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+	
   },
   form: {
     flex: 1,   
@@ -277,6 +259,7 @@ const styles = StyleSheet.create({
 	color: '#48d1cc',
 	fontFamily: 'roboto-flex',
 	marginTop: 0,
+	
   },
   boldText: {
     color: '#560CCE',

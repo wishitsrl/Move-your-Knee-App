@@ -44,7 +44,7 @@ export default function Questionario() {
 	//attivita intense comprendono le 2 attività (met unità di misura) 
 	attMetIntense = 8 * domanda2 * domanda1
 	attMetModerate = 4 * domanda3 * domanda4
-	livello = ''
+	let livello = 'Bradipo';
 	
 	if (domanda7 == 'Intenso')
 	{
