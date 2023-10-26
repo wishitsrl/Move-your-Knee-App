@@ -11,6 +11,8 @@ import { Stack, useRouter } from "expo-router";
 import client, { databases } from "../lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
 
+const router = useRouter();
+
 const CardData = [
   {
     livello: 'LIVELLO 1',
@@ -60,24 +62,24 @@ const renderItem = ({item}) => (
 		<Text style={styles.paragrafo1Text}>
 			{item.livello}
 		</Text>
-		<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 2}}>
-				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+		<View style={{flexDirection: 'row', alignItems: 'center',}}>
+			<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 		</View>
-	<View style={styles.item}>	  
-		<View style={{alignItems:"left", flex:1}}>
-			<Text style={styles.sottotitoloText}>{item.titolo}</Text>
-			<Text style={styles.paragrafo1Text}>{item.body}</Text>
-			<Text style={styles.paragrafo1Text}>{item.avanzamento}</Text>
+		<View style={styles.item}>	  
+			<View style={{alignItems:"left", flex:1}}>
+				<Text style={styles.sottotitoloText}>{item.titolo}</Text>
+				<Text style={styles.paragrafo1Text}>{item.body}</Text>
+				<Text style={styles.paragrafo1Text}>{item.avanzamento}</Text>
+			</View>
+			<Image source= {item.img}  style={{width:100, height:100}} />
 		</View>
-        <Image source= {item.img}  style={{width:100, height:100}} />
-    </View>
 	</View>	
 </TouchableOpacity>
 );
 
 export default function ALLENATI() {
    const { user } = useAuth();
-   const router = useRouter();
+  
    const [livelloAttuale, setLivelloAttuale] = React.useState('Bradipo');  
    const [loaded] = useFonts({
 		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
@@ -136,16 +138,16 @@ export default function ALLENATI() {
 					Svolgi gli esercizi e continua a migliorare.
 				</Text>
 			</View>
-
-			<View>
-				 <FlatList style={{ marginTop: 15 }}
+		</ScrollView>
+		
+		<View style={styles.container}>
+				 <FlatList style={{ marginTop: 0 }}
 					data={CardData}
 					renderItem={ renderItem }
 					keyExtractor={item => item.titolo}			
 				/>
-			</View>		
-			
-		</ScrollView>
+		</View>	
+		
     </SafeAreaView>
   );
 }
@@ -153,8 +155,6 @@ export default function ALLENATI() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   title: {
     fontSize: 20,
@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
   livello: {
 	flex:1,
 	fontWeight: 'bold',
+	marginHorizontal: 10,
   }  
 });
 

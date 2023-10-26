@@ -73,7 +73,6 @@ export default function CHAT() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
- 
   },
   title: {
     fontSize: 20,

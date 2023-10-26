@@ -220,6 +220,10 @@ export default function registrazioneDatiMedici() {
 					/>
 				</View>	
 			</View>	
+			
+			<View style={styles.buttonContainer}>
+				<Button mode="contained" onPress={() => handleSubmit()}>CONCLUDI</Button>    
+			</View>
 
 		</ScrollView>
     </SafeAreaView>

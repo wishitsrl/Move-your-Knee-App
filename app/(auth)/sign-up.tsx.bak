@@ -1,123 +1,200 @@
+import * as React from 'react';
 import {
   Text,
+  TextInput,
   View,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
+  SafeAreaView,
+  StatusBar,
+  ScrollView,
+  Alert
 } from "react-native";
+import {Picker} from '@react-native-picker/picker';
+import { useAuth } from "../context/auth";
 import Logo from '../../components/UX/Logo'
 import Background from '../../components/UX/Background'
-import { useAuth } from "../context/auth";
 import { Stack, useRouter } from "expo-router";
 import { useRef } from "react";
+import Button from '../../components/UX/Button'
+import { useFonts } from 'expo-font';
+import { SelectList } from 'react-native-dropdown-select-list'
 
 export default function SignUp() {
   const { signUp } = useAuth();
   const router = useRouter();
-
+  
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const userNameRef = useRef("");
 
+  const [loaded] = useFonts({
+		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
+		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
+		"roboto-flex-variable": require('../../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
+		"ultra-black": require('../../assets/fonts/ultrablackitalic.ttf'),
+		"ultra-black-regular": require('../../assets/fonts/UltraBlackRegular.ttf'),
+  });
+  if (!loaded) {
+    return null;
+  }
   return (
-    <>
-	<Background>
-      <Stack.Screen options={{ title: "sign up", headerShown: false }} />
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-    	<Logo/>       
- 	    <View>
-          <Text style={styles.label}>UserName</Text>
-          <TextInput
-            placeholder="Username"
-            autoCapitalize="none"
-            nativeID="userName"
-            onChangeText={(text) => {
-              userNameRef.current = text;
-            }}
-            style={styles.textInput}
-          />
-        </View>
-        <View>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
-            placeholder="email"
-            autoCapitalize="none"
-            nativeID="email"
-            onChangeText={(text) => {
-              emailRef.current = text;
-            }}
-            style={styles.textInput}
-          />
-        </View>
-        <View>
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            placeholder="password"
-            secureTextEntry={true}
-            nativeID="password"
-            onChangeText={(text) => {
-              passwordRef.current = text;
-            }}
-            style={styles.textInput}
-          />
-        </View>
+  <Background>
+	<SafeAreaView style={styles.container}>
+		<StatusBar hidden={true} />  
+		<ScrollView style={styles.scrollView}>     	
+			<View style={styles.container}>
+				<Logo/>
+			</View>
+			
+		<View style={styles.containerCenter}>		
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Paziente o dottore
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						placeholder="Paziente o dottore"
+						autoCapitalize="none"
+						nativeID="userName"
+						onChangeText={(text) => {
+						userNameRef.current = text;}}
+					/>
+				</View>
+ 		    </View>	
+			
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Email
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						placeholder="Email"
+						autoCapitalize="none"
+						nativeID="email"
+						onChangeText={(text) => {
+						emailRef.current = text;}}
+					/>
+				</View>
+ 		    </View>
+			
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Password
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						placeholder="Password"
+						secureTextEntry={true}
+						nativeID="password"
+						onChangeText={(text) => {
+						passwordRef.current = text;}}
+					/>
+				</View>
+			</View>
 
-        <TouchableOpacity
-          onPress={async () => {
-            const { data, error } = await signUp(
-              emailRef.current,
-              passwordRef.current,
-              userNameRef.current
-            );
-            if (data) {
-              router.replace("/");
-            } else {
-              console.log(error);
-              // Alert.alert("Login Error", resp.error?.message);
-            }
-          }}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Crea Account</Text>
-        </TouchableOpacity>
-        <View style={{ marginTop: 60, marginBottom: 20}}>
-          <Text
-            style={{ fontWeight: "500" }}
-            onPress={() => router.replace("/sign-in")}
-          >
-            Clicca per ritornare alla pagina di login
-          </Text>
-        </View>
-      </View>
-	  </Background>
-    </>
+			<View style={styles.buttonContainer}>
+				<Button mode="contained" onPress={async () => {
+					const { data, error } = await signUp(emailRef.current, passwordRef.current, userNameRef.current);
+					if (data) {
+						router.replace("/registrazioneDatiPersonali ");
+					} else {
+						console.log(error);
+						Alert.alert("Dati non corretti!");
+					}
+					}}>REGISTRATI</Button>    
+			</View>
+
+		  </View>   
+		</ScrollView>
+	</SafeAreaView>
+	</Background>
   );
 }
-
 const styles = StyleSheet.create({
-  label: {
-    marginBottom: 4,
-    color: "#455fff",
+ container: {
+    flex: 1,
+	alignItems: 'center',
+    justifyContent: 'center',
   },
-  textInput: {
-    width: 250,
-    borderWidth: 1,
-    borderRadius: 4,
-    borderColor: "#455fff",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    marginBottom: 16,
+  containerCenter: {
+    flex: 1,
+    marginTop: 60,
   },
-  button: {
-    backgroundColor: "blue",
-    padding: 10,
-    width: 250,
-    borderRadius: 5,
-    marginTop: 16,
+  input: {
+	marginHorizontal: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "gray",
+    width: "100%",
+    borderRadius: 10,
+    padding: 15, 
+	flex: 1,
+    flexDirection: 'row',    
+    justifyContent: 'center',
   },
   buttonText: {
     color: "white",
     textAlign: "center",
     fontSize: 16,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+   scrollView: {
+	flex: 1,
+  },
+  text: {
+    fontSize: 42,
+  },
+  row: {
+    flexDirection: 'row',
+    marginTop: 4,
+  },
+  titoloText: {
+	marginHorizontal: 10,
+	color: '#560CCE',
+    fontSize: 50,
+	fontFamily: 'ultra-black-regular',
+	fontWeight: 'bold'
+
+  },
+  sottotitoloText: {
+	marginHorizontal: 10,
+	color: '#560CCE',
+    fontSize: 30,
+	fontFamily: 'roboto-flex-regular',
+	marginTop: 50,
+	fontWeight: 'bold'
+  },
+  boldText: {
+	fontWeight: 'bold',
+  },
+  buttonContainer: {
+	flex: 1,
+    flexDirection: 'row',    
+    justifyContent: 'center',
+  },
+  paragrafo2Text: {
+	marginHorizontal: 20,
+    fontSize: 20,
+	color: '#48d1cc',
+	fontFamily: 'roboto-flex',
+	marginTop: 0,
+  },
+  form: {
+    flex: 1,   
+	marginHorizontal: 10,
+	justifyContent: 'center',
+	flexDirection: 'row',    
+  },
+  pickerStyles: {
+    marginHorizontal: 10,
+    marginVertical: 30,
+    width: 300,
+    padding: 10,
+    borderWidth: 2,
+    borderColor: "#666",
   },
 });

@@ -54,7 +54,7 @@ export default function registrazioneDatiPersonali() {
 	  
 		datiPersonali.then(function (response) {
 			console.log(response); // Success 
-			router.push('/registrazioneDatiMedici')			
+			router.replace('/registrazioneDatiMedici')			
 		}, function (error) {
 			console.log(error); // Failure
 		});

@@ -12,7 +12,7 @@ import { useFonts } from 'expo-font';
 export default function EserciziLiv1() {
 
    const { user } = useAuth();
-   const router = useRouter();
+  
    const [loaded] = useFonts({
 		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
@@ -27,6 +27,9 @@ export default function EserciziLiv1() {
   return (
     <>
 		
+		<View style={styles.container}>	
+			<Text style={styles.subtitle}> EserciziLiv1!</Text>
+		</View>
     </>
   );
 }

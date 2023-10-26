@@ -15,7 +15,6 @@ export default function ModalScreen() {
 	
 		<View style={styles.container}>
 			<Image style={styles.image} source={require('../assets/ICONE/PNG/CHIUDISELEZIONATO.png')} />
-      <EditScreenInfo path="app/(tabs)/PROFILO.tsx" />
 
 			<Text style={styles.paragrafo1Text}>
 				SEI SICURO DI VOLER USCIRE?
@@ -26,7 +25,7 @@ export default function ModalScreen() {
 			</View>
 			
 			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => router.push('/PROFILO')}>RIPRENDI</Button>    
+				<Button mode="contained" onPress={() => router.replace('/PROFILO')}>RIPRENDI</Button>    
 			</View>	
 		{/* Use a light status bar on iOS to account for the black space above the modal */}
 		<StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />

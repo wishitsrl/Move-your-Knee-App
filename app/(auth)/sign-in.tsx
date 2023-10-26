@@ -22,7 +22,7 @@ export default function SignIn() {
   const router = useRouter();
   const emailRef = useRef("");
   const passwordRef = useRef("");
-     const [loaded] = useFonts({
+  const [loaded] = useFonts({
 		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
 		"roboto-flex-variable": require('../../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
@@ -82,11 +82,11 @@ export default function SignIn() {
 						console.log(error);
 						Alert.alert("Inserire Email e Password corretti");
 					}
-					}}>Login</Button>    
+					}}>LOGIN</Button>    
 			</View>
 			
 			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => router.push("/sign-up")}>Registrati</Button>    
+				<Button mode="contained" onPress={() => router.push("/sign-up")}>REGISTRATI</Button>    
 			</View>
 		 
 		  </View>   

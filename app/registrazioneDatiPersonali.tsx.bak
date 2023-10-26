@@ -11,7 +11,7 @@ import { Stack, useRouter } from "expo-router";
 import client, { databases } from "./lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
 
-export default function registrazione() {
+export default function registrazioneDatiPersonali() {
    const { user } = useAuth();
    const router = useRouter();
    const [nome, setNome] = React.useState(''); 

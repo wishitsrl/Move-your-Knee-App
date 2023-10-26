@@ -56,7 +56,7 @@ export default function registrazioneDatiMedici() {
 	  
 		datiMedici.then(function (response) {
 			console.log(response); // Success 
-			router.push('/')		
+			router.replace('/')		
 		}, function (error) {
 			console.log(error); // Failure
 		});
