@@ -108,8 +108,8 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={nome => setNome(nome)}
-						value={nome}
-						placeholder=" "
+						
+						placeholder={nome}
 					/>
 				</View>	
 			</View>
@@ -121,8 +121,7 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={cognome => setCognome(cognome)}
-						defaultValue={cognome}
-						value={""}
+						value={cognome}
 						placeholder=" "
 					/>
 				</View>	

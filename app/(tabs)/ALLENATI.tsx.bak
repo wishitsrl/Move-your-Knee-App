@@ -10,6 +10,7 @@ import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
 import client, { databases } from "../lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
+import { Card } from 'react-native-paper';
 
 const router = useRouter();
 
@@ -57,7 +58,7 @@ const CardData = [
 ];
 
 const renderItem = ({item}) => (
-<TouchableOpacity onPress={() => router.replace(item.page)}>
+<TouchableOpacity onPress={() => router.push(item.page)}>
 	<View style={styles.livello}>
 		<Text style={styles.paragrafo1Text}>
 			{item.livello}
@@ -138,16 +139,100 @@ export default function ALLENATI() {
 					Svolgi gli esercizi e continua a migliorare.
 				</Text>
 			</View>
-		</ScrollView>
-		
-		<View style={styles.container}>
-				 <FlatList style={{ marginTop: 0 }}
-					data={CardData}
-					renderItem={ renderItem }
-					keyExtractor={item => item.titolo}			
-				/>
-		</View>	
-		
+			
+			<View style={styles.livello}>
+				<Text style={styles.paragrafo1Text}>
+						{CardData[0].livello}
+					</Text>
+					<View style={{flexDirection: 'row', alignItems: 'center',}}>
+						<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+					</View>
+
+				<TouchableOpacity onPress={() => router.push(CardData[0].page)}>		
+					<Card style={styles.item}>
+						<View style={{alignItems:"left", flex:1}}>
+								<Text style={styles.titoloText}>{CardData[0].titolo}</Text>
+								<Text style={styles.paragrafo1Text}>{CardData[0].body}</Text>
+								<Text style={styles.paragrafo1Text}>{CardData[0].avanzamento}</Text>
+								<Image source= {CardData[0].img}  style={{width:100, height:100}} />						
+						</View>
+					</Card>
+				</TouchableOpacity>
+				
+					<Text style={styles.paragrafo1Text}>
+						{CardData[1].livello}
+					</Text>
+					<View style={{flexDirection: 'row', alignItems: 'center',}}>
+						<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+					</View>
+
+				<TouchableOpacity onPress={() => router.push(CardData[1].page)}>		
+					<Card style={styles.item}>
+						<View style={{alignItems:"left", flex:1}}>
+								<Text style={styles.titoloText}>{CardData[1].titolo}</Text>
+								<Text style={styles.paragrafo1Text}>{CardData[1].body}</Text>
+								<Text style={styles.paragrafo1Text}>{CardData[1].avanzamento}</Text>
+								<Image source= {CardData[1].img}  style={{width:100, height:100}} />						
+						</View>
+					</Card>
+				</TouchableOpacity>
+				
+				<Text style={styles.paragrafo1Text}>
+						{CardData[2].livello}
+					</Text>
+					<View style={{flexDirection: 'row', alignItems: 'center',}}>
+						<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+					</View>
+
+				<TouchableOpacity onPress={() => router.push(CardData[2].page)}>		
+					<Card style={styles.item}>
+						<View style={{alignItems:"left", flex:1}}>
+								<Text style={styles.titoloText}>{CardData[2].titolo}</Text>
+								<Text style={styles.paragrafo1Text}>{CardData[2].body}</Text>
+								<Text style={styles.paragrafo1Text}>{CardData[2].avanzamento}</Text>
+								<Image source= {CardData[2].img}  style={{width:100, height:100}} />						
+						</View>
+					</Card>
+				</TouchableOpacity>
+				
+				<Text style={styles.paragrafo1Text}>
+						{CardData[3].livello}
+					</Text>
+					<View style={{flexDirection: 'row', alignItems: 'center',}}>
+						<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+					</View>
+
+				<TouchableOpacity onPress={() => router.push(CardData[3].page)}>		
+					<Card style={styles.item}>
+						<View style={{alignItems:"left", flex:1}}>
+								<Text style={styles.titoloText}>{CardData[3].titolo}</Text>
+								<Text style={styles.paragrafo1Text}>{CardData[3].body}</Text>
+								<Text style={styles.paragrafo1Text}>{CardData[3].avanzamento}</Text>
+								<Image source= {CardData[3].img}  style={{width:100, height:100}} />						
+						</View>
+					</Card>
+				</TouchableOpacity>
+			
+					<Text style={styles.paragrafo1Text}>
+						{CardData[4].livello}
+					</Text>
+					<View style={{flexDirection: 'row', alignItems: 'center',}}>
+						<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+					</View>
+
+				<TouchableOpacity onPress={() => router.push(CardData[4].page)}>		
+					<Card style={styles.item}>
+						<View style={{alignItems:"left", flex:1}}>
+								<Text style={styles.titoloText}>{CardData[4].titolo}</Text>
+								<Text style={styles.paragrafo1Text}>{CardData[4].body}</Text>
+								<Text style={styles.paragrafo1Text}>{CardData[4].avanzamento}</Text>
+								<Image source= {CardData[4].img}  style={{width:100, height:100}} />						
+						</View>
+					</Card>
+				</TouchableOpacity>
+			
+			</View>
+		</ScrollView>		
     </SafeAreaView>
   );
 }
@@ -212,7 +297,7 @@ const styles = StyleSheet.create({
   item: {
     padding: 20,
 	borderRadius: 8,
-	borderColor: "black",
+	borderColor: "grey",
 	borderWidth: 3,
 	flexDirection: 'row',
 	margin: 10,

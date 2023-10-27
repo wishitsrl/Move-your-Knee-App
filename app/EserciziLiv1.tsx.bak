@@ -1,18 +1,128 @@
-import { Link, Stack, useRouter } from 'expo-router';
-import Swiper from 'react-native-swiper/src';
-import AntDesign from "@expo/vector-icons/AntDesign";
-import Onboarding from 'react-native-onboarding-swiper';
-import Background from '../components/UX/Background'
-import { View, TouchableWithoutFeedback, Text, SafeAreaView, StyleSheet, Dimensions, TouchableOpacity, ImageBackground, ScrollView, StatusBar, NavigationContainer, Image } from 'react-native';
-import Logo from '../components/UX/Logo';
-import Button from '../components/UX/Button';
+import * as React from 'react';
+import { View, StyleSheet, FlatList, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Image, Alert } from 'react-native';
+import Button from '../components/UX/Button'
+import Background from '../components/Background'
+import LogoViola from '../components/UX/LogoViola'
+import EditScreenInfo from '@/components/EditScreenInfo';
+import { Text,  } from '@/components/Themed';
 import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
+import { Stack, useRouter } from "expo-router";
+import client, { databases } from "./lib/appwrite-service";
+import { Permission, Role,  ID, Query, } from "appwrite";
+import { Card } from 'react-native-paper';
+
+const router = useRouter();
+const CardData = [
+  {
+    esercizio: 'ESERCIZIO 1',
+	nomeEsercizio: '',
+    titolo: 'Cammino',
+	sottoTitolo: '',
+	minuti: '',
+	body: '5 minuti',
+	body1: '',
+	body2: '',
+	body3: '',
+	img: require('../assets/IllustrazioniSchede/PNG/B1_Cammino_Icon.png'),
+	page: '',
+  },
+  {
+    esercizio: 'ESERCIZIO 2',	
+	nomeEsercizio: '',
+    titolo: 'Weight training',
+	sottoTitolo: '',
+	minuti: '',
+	body: '15 minuti',
+	body1: '3 serie',
+	body2: '10 ripetizioni',
+	body3: '30 minuti di riposo',
+	img: require('../assets/IllustrazioniSchede/PNG/B2_Weight_3_Icon.png'),
+	page: '',
+  },
+  {
+    esercizio: 'ESERCIZIO 3',
+	nomeEsercizio: 'Calisthenics',
+    titolo: 'Sit-Ups',
+	sottoTitolo: 'Svolgere ogni esercizio seguendo le indicazioni, poi 30 secondi di riposo. Dunque, passare all esercizio successivo.',
+	minuti: '15 minuti',
+	body: '3 serie',
+	body1: '',
+	body2: '15 ripetizioni',
+	body3: '30 secondi riposo',
+	img: '',
+	page: '/sitUpsBradipo',
+  },
+    {
+    esercizio: 'ESERCIZIO 4',
+	nomeEsercizio: 'STRETCHING',
+    titolo: 'STRETCHING',
+	sottoTitolo: 'Mantenere ogni posizione per almeno 30 secondi, poi 30 secondi di riposo. Dunque, passare alla posizione successiva.',
+	minuti: '5 minuti',
+	body: '3 serie',
+	body1: '15 ripetizioni',
+	body2: '30 secondi riposo',
+	body3: '',
+	img: '',
+	page: '',
+  },
+];
+
+const CardSottoData = [
+  {
+	nomeEsercizio: 'Squat',
+	serie: '3 serie',
+	ripetizioni: '15 ripetizioni',
+	riposo: '30 secondi di riposo',
+	img: require('../assets/IllustrazioniSchede/PNG/B3_Squat_Icon.png'),
+	page: '',
+  },
+  {
+	nomeEsercizio: 'Affondi',
+	serie: '3 serie',
+	ripetizioni: '15 ripetizioni per lato',
+	riposo: '30 secondi di riposo',
+	img: require('../assets/IllustrazioniSchede/PNG/B3_Affondi_Icon.png'),
+	page: '',
+  },
+  {
+	nomeEsercizio: 'Sit-Ups',
+	serie: '3 serie',
+	ripetizioni: '15 ripetizioni',
+	riposo: '30 secondi di riposo',
+	img: require('../assets/IllustrazioniSchede/PNG/B3_SitUp_Icon.png'),
+	page: '',
+  },
+  {
+	nomeEsercizio: 'Muscoli anteriori coscia',
+	serie: '',
+	ripetizioni: '',
+	riposo: '',
+	img: require('../assets/IllustrazioniSchede/PNG/B4_Stretching_1_Icon.png'),
+	page: '',
+  },
+  {
+	nomeEsercizio: 'Muscoli posteriori coscia',
+	serie: '',
+	ripetizioni: '',
+	riposo: '',
+	img: require('../assets/IllustrazioniSchede/PNG/B4_Stretching_2_Icon.png'),
+	page: '',
+  },
+  {
+	nomeEsercizio: 'Muscoli interni coscia',
+	serie: '',
+	ripetizioni: '',
+	riposo: '',
+	img: require('../assets/IllustrazioniSchede/PNG/B4_Stretching_3_Icon.png'),
+	page: '',
+  },
+];
 
 export default function EserciziLiv1() {
 
    const { user } = useAuth();
-  
+   const router = useRouter();
    const [loaded] = useFonts({
 		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
@@ -24,91 +134,234 @@ export default function EserciziLiv1() {
   if (!loaded) {
     return null;
   }
+  
   return (
-    <>
-		
-		<View style={styles.container}>	
-			<Text style={styles.subtitle}> EserciziLiv1!</Text>
-		</View>
-    </>
+  <SafeAreaView style={styles.container}>
+	    <StatusBar hidden={true} />	
+		<ScrollView style={styles.scrollView}>     
+
+			<View style={styles.container}>
+				<LogoViola/>
+			</View>
+
+			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+			</View>
+				
+			<View>
+				 <Text style={styles.titoloText}>
+					LIVELLO BRADIPO
+				</Text>
+			</View>
+			
+			<View>
+				<Text style={styles.paragrafo1Text}>
+					40 minuti 3 volte a settimana
+				</Text>
+			</View>
+			
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Seleziona un esercizio, apri la schermata e segui le istruzioni per il tuo allenamento
+				</Text>
+			</View>
+			
+			<View style={styles.livello}>
+			
+				<Text style={styles.paragrafo1Text}>
+					{CardData[0].esercizio}
+				</Text>
+				<View style={{flexDirection: 'row', alignItems: 'center',}}>
+					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+				</View>
+			
+			<Card style={styles.item}>
+				<View style={{alignItems:"left", flex:1}}>
+						<Text style={styles.paragrafo1BoldText}>{CardData[0].titolo}</Text>
+						<Text style={styles.paragrafo1Text}>{CardData[0].body}</Text>
+						<Text style={styles.paragrafo1Text}>{CardData[0].body1}</Text>
+						<Text style={styles.paragrafo1Text}>{CardData[0].body2}</Text>
+						<Text style={styles.paragrafo1Text}>{CardData[0].body3}</Text>
+						<Image source= {CardData[0].img}  style={{width:100, height:100}} />
+				</View>
+			</Card>
+
+				<Text style={styles.paragrafo1Text}>
+					{CardData[1].esercizio}
+				</Text>
+				<View style={{flexDirection: 'row', alignItems: 'center',}}>
+					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+				</View>
+
+			<Card style={styles.item}>
+				<View style={{alignItems:"left", flex:1}}>
+						<Text style={styles.paragrafo1BoldText}>{CardData[1].titolo}</Text>
+						<Text style={styles.paragrafo1Text}>{CardData[1].body}</Text>
+						<Text style={styles.paragrafo1Text}>{CardData[1].body1}</Text>
+						<Text style={styles.paragrafo1Text}>{CardData[1].body2}</Text>
+						<Text style={styles.paragrafo1Text}>{CardData[1].body3}</Text>
+				</View>
+				<Image source= {CardData[1].img}  style={{width:100, height:100}} />
+			</Card>		
+
+				<Text style={styles.paragrafo1Text}>
+					{CardData[2].esercizio}
+				</Text>
+				
+				<View style={{flexDirection: 'row', alignItems: 'center',}}>
+					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+				</View>
+				
+				<Text style={styles.paragrafo1BoldText}>{CardData[2].nomeEsercizio}</Text>
+				<Text style={styles.paragrafo1Text}>{CardData[2].minuti}</Text>
+				<Text style={styles.paragrafo2Text}>{CardData[2].sottoTitolo}</Text>	
+					
+			<Card style={styles.item}>
+				<View style={{alignItems:"left", flex:1}}>
+						<Text style={styles.paragrafo1BoldText}>{CardSottoData[0].nomeEsercizio}</Text>
+						<Text style={styles.paragrafo1Text}>{CardSottoData[0].serie}</Text>
+						<Text style={styles.paragrafo1Text}>{CardSottoData[0].ripetizioni}</Text>
+						<Text style={styles.paragrafo1Text}>{CardSottoData[0].riposo}</Text>
+						<Image source= {CardSottoData[0].img}  style={{width:100, height:100}} />
+				</View>
+			</Card>
+			
+			<Card style={styles.item}>
+				<View style={{alignItems:"left", flex:1}}>
+						<Text style={styles.paragrafo1BoldText}>{CardSottoData[1].nomeEsercizio}</Text>
+						<Text style={styles.paragrafo1Text}>{CardSottoData[1].serie}</Text>
+						<Text style={styles.paragrafo1Text}>{CardSottoData[1].ripetizioni}</Text>
+						<Text style={styles.paragrafo1Text}>{CardSottoData[1].riposo}</Text>
+						<Image source= {CardSottoData[1].img}  style={{width:100, height:100}} />
+				</View>
+			</Card>
+
+		<TouchableOpacity onPress={() => router.replace(CardData[2].page)}>
+			<Card style={styles.item}>
+				<View style={{alignItems:"left", flex:1}}>
+						<Text style={styles.paragrafo1BoldText}>{CardSottoData[2].nomeEsercizio}</Text>
+						<Text style={styles.paragrafo1Text}>{CardSottoData[2].serie}</Text>
+						<Text style={styles.paragrafo1Text}>{CardSottoData[2].ripetizioni}</Text>
+						<Text style={styles.paragrafo1Text}>{CardSottoData[2].riposo}</Text>
+						<Image source= {CardSottoData[2].img}  style={{width:100, height:100}} />
+				</View>
+			</Card>	
+		</TouchableOpacity> 			
+			
+				<Text style={styles.paragrafo1Text}>
+					{CardData[3].esercizio}
+				</Text>
+				<View style={{flexDirection: 'row', alignItems: 'center',}}>
+					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+				</View>
+			
+				<Text style={styles.paragrafo1BoldText}>{CardData[3].nomeEsercizio}</Text>
+				<Text style={styles.paragrafo1Text}>{CardData[3].minuti}</Text>
+				<Text style={styles.paragrafo2Text}>{CardData[3].sottoTitolo}</Text>	
+					
+			<Card style={styles.item}>
+				<View style={{alignItems:"left", flex:1}}>
+						<Text style={styles.paragrafo1BoldText}>{CardSottoData[3].nomeEsercizio}</Text>						
+						<Image source= {CardSottoData[3].img}  style={{width:100, height:100}} />
+				</View>
+			</Card>
+			
+			<Card style={styles.item}>
+				<View style={{alignItems:"left", flex:1}}>
+						<Text style={styles.paragrafo1BoldText}>{CardSottoData[4].nomeEsercizio}</Text>						
+						<Image source= {CardSottoData[4].img}  style={{width:100, height:100}} />
+				</View>
+			</Card>
+			
+			<Card style={styles.item}>
+				<View style={{alignItems:"left", flex:1}}>
+					<Text style={styles.paragrafo1BoldText}>{CardSottoData[5].nomeEsercizio}</Text>					
+					<Image source= {CardSottoData[5].img}  style={{width:100, height:100}} />
+				</View>
+			</Card>
+
+			</View>
+		</ScrollView>
+    </SafeAreaView> 
   );
 }
-
 const styles = StyleSheet.create({
- 	container: {
-	flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-  scrollView: {
-	flex: 1,
-  },
-  slide: {
+  container: {
     flex: 1,
-    paddingTop: 30,
-    marginHorizontal: 30,
-  },
-  image: {
-    alignSelf: "center",
-	width: 300,
-    height: 300,
   },
   title: {
-    fontFamily: 'ultra-black-regular',
-    fontSize: 40,
-    color: '#FFFFFF',
-	
+    fontSize: 20,
+    fontWeight: 'bold',
   },
-  subtitle: {
-    fontFamily: 'ultra-black-regular',
-    fontSize: 24,
-    color: '#FFFFFF'
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: '80%',
+  },
+   scrollView: {
+	flex: 1,
+    marginHorizontal: 0,
+  },
+  text: {
+    fontSize: 42,
+  },
+  row: {
+    flexDirection: 'row',
+    marginTop: 4,
   },
   titoloText: {
+	marginHorizontal: 10,
 	color: '#560CCE',
     fontSize: 50,
 	fontFamily: 'ultra-black-regular',
 	fontWeight: 'bold'
+
   },
-   sottotitoloText: {
-	color: '#fff',
-	marginTop: 20,
-    fontSize: 40,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
-	alignItems: 'center', 
-	flex:1,
-  },
-  paragrafo1Text: {
-	color: '#fff',
-	marginBottom: 0,
-    fontSize: 15,
-	fontFamily: 'roboto-flex',
-	alignItems: 'center', 
-	flex:1,
-  },
-   paragrafo2Text: {
-	color: '#fff',
-	marginTop: 0,
-    fontSize: 20,
-	fontFamily: 'ultra-black-regular',
-	alignItems: 'center', 
-	flex:1,
-  },
-  buttonContainer: {
-	flex: 1,
-    flexDirection: 'row',    
-    justifyContent: 'center',
-  },
-  descrizione: 
-  {
+  sottotitoloText: {
+	marginHorizontal: 10,
 	color: '#560CCE',
     fontSize: 30,
-	fontFamily: 'ultra-black-regular',
-	alignItems: 'center', 
+	fontFamily: 'roboto-flex-regular',
+	marginTop: 50,
+	fontWeight: 'bold'
+  },
+  paragrafo1Text: {
+	marginHorizontal: 10,
+	color: '#560CCE',
+    fontSize: 25,
+	fontFamily: 'roboto-flex',
+	marginTop: 10,
+  },
+  paragrafo2Text: {
+	marginHorizontal: 10,
+    fontSize: 20,
+	fontFamily: 'roboto-flex',
+	marginTop: 0,
+	marginBottom: 0,
+  },
+  boldText: {
+	fontWeight: 'bold',
+  },
+  item: {
+    padding: 20,
+	borderRadius: 8,
+	borderColor: "grey",
+	borderWidth: 3,
+	flexDirection: 'row',
+	margin: 10,
+  },
+  livello: {
 	flex:1,
-	alignItems: 'center',
-    justifyContent: 'center',
-  }
+	fontWeight: 'bold',
+	marginHorizontal: 10,
+  },
+  paragrafo1BoldText: {
+	marginHorizontal: 10,
+	color: '#560CCE',
+    fontSize: 25,
+	fontFamily: 'ultra-black-regular',
+	marginTop: 10,
+	fontWeight: 'bold',
+	}  
 });
+

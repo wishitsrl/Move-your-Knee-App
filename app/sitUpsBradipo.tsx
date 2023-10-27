@@ -1,0 +1,328 @@
+import * as React from 'react';
+import { View, StyleSheet, FlatList, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Image, Alert, TextInput } from 'react-native';
+import Button from '../components/UX/Button'
+import Background from '../components/Background'
+import LogoViola from '../components/UX/LogoViola'
+import EditScreenInfo from '@/components/EditScreenInfo';
+import { Text,  } from '@/components/Themed';
+import { useAuth } from './context/auth';
+import { useFonts } from 'expo-font';
+import { Stack, useRouter } from "expo-router";
+import client, { databases } from "./lib/appwrite-service";
+import { Permission, Role,  ID, Query, } from "appwrite";
+import Swiper from 'react-native-swiper'
+
+const router = useRouter();
+
+export default function EserciziLiv1() {
+
+   const { user } = useAuth();
+   const router = useRouter();
+   const [serie, setSerie] = React.useState(''); 
+   const [ripetizioni, setRipetizioni] = React.useState('');  
+   const [loaded] = useFonts({
+		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
+		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
+		"roboto-flex-variable": require('../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
+		"ultra-black": require('../assets/fonts/ultrablackitalic.ttf'),
+		"ultra-black-regular": require('../assets/fonts/UltraBlackRegular.ttf'),
+  });
+
+  if (!loaded) {
+    return null;
+  }
+  const CardData = [
+  {
+	img: require('../assets/IllustrazioniSchede/PNG/B3_Sit-Up.png'),
+  },
+  {
+	img: require('../assets/IllustrazioniSchede/PNG/B3_Sit-Up.png'),
+  },
+ 
+];
+
+function handleSubmit() {
+
+	const esercizi = databases.createDocument('652e8e4607298ced5902', '653b96edce5c1c196251', ID.unique(),
+		{
+			'idPaziente': user.$id, 
+			'serie': serie, 
+			'ripetizioni': ripetizioni,   
+		},
+        [Permission.update(Role.any())],				
+	  );	
+	  
+		esercizi.then(function (response) {
+			console.log(response); // Success 
+			router.push("/ALLENATI")	
+		}, function (error) {
+			console.log(error); // Failure
+		});
+	}
+	
+  return (
+ <SafeAreaView style={styles.container}>
+	    <StatusBar hidden={true} />	
+		<ScrollView style={styles.scrollView}>     
+
+			<View style={styles.container}>
+				<LogoViola/>
+			</View>
+			
+			<View style={styles.container}>
+				<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
+					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+				</View>
+					
+				<View>
+					 <Text style={styles.titoloText}>
+						SIT-UPS
+					</Text>
+				</View>
+				
+				<View>
+					<View style={styles.mainbox}>
+						<Swiper style={styles.wrapper} showsButtons={false}>
+							<View style={styles.slide1}>
+								<Image style={styles.image} source= {CardData[0].img}/>
+							</View>
+							<View style={styles.slide2}>
+								<Image style={styles.image} source= {CardData[1].img}/>
+							</View>
+						</Swiper>
+					</View>	
+				</View>
+				
+				<View>
+					<Text style={styles.paragrafo1Text}>
+					3 serie 
+					</Text>
+				</View>
+				
+				<View>
+					<Text style={styles.paragrafo1Text}>
+					15 ripetizioni
+					</Text>
+				</View>
+				
+				<View>
+					<Text style={styles.paragrafo1Text}>
+					30 secondi riposo
+					</Text>
+				</View>
+				
+				<View>
+					<Text style={styles.paragrafo1Text}>
+					Descrizione dell esercizio
+					</Text>
+				</View>
+				
+				<View>
+					<View style={styles.buttonContainer}>
+						<Button mode="contained" onPress={() => router.replace("/motionCapture")}>AVVIA MOTION CAPTURE</Button>    
+					</View>	
+				</View>
+				
+				<View>
+					<Text style={styles.paragrafo1Text}>
+					IL TUO ALLENAMENTO
+					</Text>
+				</View>
+
+				<View style={{flexDirection: 'row', alignItems: 'center',}}>
+					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
+				</View>
+				
+				<View>
+					<Text style={styles.paragrafo1Text}>
+					Usa i campi per inserire i dati sul tuo allenamento.
+					</Text>
+				</View>
+				
+				<View>
+					<Text style={styles.paragrafo2Text}>
+						(Ad esempio 2 serie e 10 ripetizioni).
+					</Text>
+				</View>
+				
+				<View>
+					<Text style={styles.paragrafo1BoldText}>
+						Ricorda: le serie e ripetizioni consigliate, sono quelle riportate nella scheda descrittiva.
+					</Text>
+				</View>
+				
+				<View>
+					<Text style={styles.paragrafo3Text}>
+						Inserisci serie
+					</Text>
+					<View style={styles.form}>
+						<TextInput style={styles.input}
+							onChangeText={serie => setSerie(serie)}
+							value={serie}
+							placeholder="Serie"
+							keyboardType="phone-pad"
+						/>
+					</View>	
+				</View>
+				
+				<View>
+					<Text style={styles.paragrafo3Text}>
+						Inserisci ripetizioni
+					</Text>
+					<View style={styles.form}>
+						<TextInput style={styles.input}
+							onChangeText={ripetizioni => setRipetizioni(ripetizioni)}
+							value={ripetizioni}
+							placeholder="Ripetizioni"
+							keyboardType="phone-pad"
+						/>
+					</View>	
+				</View>
+				
+				<View>
+					<View style={styles.buttonContainer}>
+						<Button mode="contained" onPress={() => handleSubmit()} >CONCLUDI</Button>
+				</View>	
+				</View>
+				
+			</View>
+		</ScrollView>	
+    </SafeAreaView> 
+  );
+}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  separator: {
+    marginVertical: 30,
+    height: 1,
+    width: '80%',
+  },
+   scrollView: {
+	flex: 1,
+    marginHorizontal: 0,
+  },
+  text: {
+    fontSize: 42,
+  },
+  row: {
+    flexDirection: 'row',
+    marginTop: 4,
+  },
+  titoloText: {
+	marginHorizontal: 10,
+	color: '#560CCE',
+    fontSize: 50,
+	fontFamily: 'ultra-black-regular',
+	fontWeight: 'bold'
+
+  },
+  sottotitoloText: {
+	marginHorizontal: 10,
+	color: '#560CCE',
+    fontSize: 30,
+	fontFamily: 'roboto-flex-regular',
+	marginTop: 50,
+	fontWeight: 'bold'
+  },
+  paragrafo1Text: {
+	marginHorizontal: 10,
+	color: '#560CCE',
+    fontSize: 25,
+	fontFamily: 'roboto-flex',
+	marginTop: 10,
+  },
+  paragrafo2Text: {
+	marginHorizontal: 10,
+    fontSize: 20,
+	fontFamily: 'roboto-flex',
+	marginTop: 0,
+	marginBottom: 0,
+  },
+  paragrafo3Text: {
+	marginHorizontal: 10,
+    fontSize: 20,
+	fontFamily: 'roboto-flex',
+	marginTop: 0,
+	marginBottom: 0,
+	color: '#48d1cc',
+  },  
+  boldText: {
+	fontWeight: 'bold',
+  },
+  item: {
+    padding: 20,
+	borderRadius: 8,
+	borderColor: "black",
+	borderWidth: 3,
+	flexDirection: 'row',
+	margin: 10,
+  },
+  livello: {
+	flex:1,
+	fontWeight: 'bold',
+	marginHorizontal: 10,
+  },
+  paragrafo1BoldText: {
+	marginHorizontal: 10,
+	color: '#560CCE',
+    fontSize: 25,
+	fontFamily: 'ultra-black-regular',
+	marginTop: 10,
+	fontWeight: 'bold',
+	},
+  buttonContainer: {
+	flex: 1,
+    flexDirection: 'row',    
+    justifyContent: 'center',
+  },
+  form: {
+    flex: 1,   
+	marginHorizontal: 10,
+	justifyContent: 'center',
+	flexDirection: 'row',    
+  },
+  input: {
+	marginHorizontal: 10,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "gray",
+    width: "90%",
+    borderRadius: 10,
+    padding: 15, 
+	flex: 1,
+    flexDirection: 'row',    
+    justifyContent: 'center',
+  },  
+  mainbox:{
+	marginHorizontal: 10,
+    padding: 20,
+	borderRadius: 8,
+	borderColor: "grey",
+	borderWidth: 3,
+	flexDirection: 'row',
+	margin: 10,
+    },
+     wrapper: {},
+      slide1: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    slide2: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+   image: {
+    alignSelf: "center",
+	width: 300,
+    height: 300,
+  },
+});
+
