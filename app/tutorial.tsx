@@ -36,95 +36,95 @@ export default function tutorial() {
 			<SafeAreaView style={styles.container}>			
 			<StatusBar hidden={true} />
 				<ScrollView style={styles.scrollView}>  
-					<Logo/>  
-					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
+				<View style={styles.container}>
+					<Logo/>
+				</View>
+					<View style={{flexDirection: 'row', alignItems: 'center'}}>
 						<View style={{flex: 1, height: 2, backgroundColor: '#FFFFFF'}} />
 					</View>
-	<View style={styles.container}>
-		<Swiper showsButtons={true} autoplay={true}
-		  buttonWrapperStyle={{
-			backgroundColor: "transparent",
-			flexDirection: "row",
-			position: "absolute",
-			bottom: 0,
-			left: 0,
-			flex: 1,
-			paddingHorizontal: 30,
-			paddingVertical: 20,
-			justifyContent: "flex-end",
-			alignItems: "flex-end",
-		  }}
-		  style={styles.wrapper}
-		  showsButtons={true}
+					<View style={styles.container}>
+						<Swiper showsButtons={true} autoplay={true}
+						  buttonWrapperStyle={{
+							backgroundColor: "transparent",
+							flexDirection: "row",
+							position: 'absolute',
+							top: 0,
+							left: 0,
+							flex: 1,
+							paddingHorizontal: 10,
+							paddingVertical: 10,
+							justifyContent: 'space-between',
+							alignItems: 'flex-end'
+						  }}
+						  style={styles.wrapper}
+						  showsButtons={true}
+						  activeDotColor="#560CCE"
+						  dotColor="#560CCE"
+						  nextButton={
+							<View
+							  style={{
+								height: 60,
+								borderRadius: 30,
+								alignItems: "right",
+								width: 60,
+								borderColor: "#560CCE",  
+								backgroundColor: "transparent",
+							  }}
+							>
+							  <AntDesign name="arrowright" size={22} color="#560CCE" />
+							</View>
+						  }
+						  prevButton={
+							<View
+							  style={{
+								height: 60,
+								borderRadius: 30,
+								alignItems: "left",
+								width: 60,
+								borderColor: "#560CCE",  
+								backgroundColor: "transparent",
+							  }}
+							>
+							  <AntDesign name="arrowleft" size={22} color="#560CCE" />
+							</View>
+						  }
+						 >
+						 <View style={styles.slide}>
+							<Text style={styles.title}>CONOSCITI</Text>
+							<Text style={styles.subtitle}>Calcola le tue calorie e impara a conoscere il tuo corpo</Text>
+							<Image source={require('../assets/ICONE/PNG/CONOSCITIBIANCO.png')} style={styles.image} />
+							<Text style={styles.descrizione}>MOVE YOUR KNEE</Text>
+						 </View>
+						  <View style={styles.slide}>
+							<Text style={styles.title}>ALLENATI</Text>
+							<Text style={styles.subtitle}>Che aspetti ad allenarti ?! Tieniti in forma e vedrai che starai sempre meglio, giorno dopo giorno!</Text>
+							<Image source={require('../assets/ICONE/PNG/ALLENATIBIANCO.png')} style={styles.image} />
+							<Text style={styles.descrizione}>MOVE YOUR KNEE</Text>
+						 </View>
+						 <View style={styles.slide}>
+							<Text style={styles.title}>DATI</Text>
+							<Text style={styles.subtitle}>Monitora il tuo allenamento e i tuoi avanzamenti. In men che non si dica, sarai un FALCOOOO!</Text>
+							<Image source={require('../assets/ICONE/PNG/DATIBIANCO.png')} style={styles.image} />
+							<Text style={styles.descrizione}>STEP-BY-STEP</Text>
+						  </View>
+						  <View style={styles.slide}>
+							<Text style={styles.title}>CHAT</Text>
+							<Text style={styles.subtitle}>Non sei solo! Scrivi al tuo medico, come supportarti.</Text>
+							<Image source={require('../assets/ICONE/PNG/CHATBIANCO.png')} style={styles.image} />
+							<Text style={styles.descrizione}></Text>						
+						  </View>
+						  <View style={styles.slide}>
+							<Text style={styles.title}>PROFILO</Text>
+							<Text style={styles.subtitle}>Accedendo alla sezione profilo potrai rivedere e modificare i tuoi dati medici, ripetendo il questionario. Così saprai sempre di quanto sei migliorato!</Text>
+							<Image source={require('../assets/ICONE/PNG/ALLENATIBIANCO.png')} style={styles.image} />
+							<Text style={styles.descrizione}></Text>						
+						  </View>
+						</Swiper>	
 
-		  activeDotColor="#560CCE"
-		  dotColor="#560CCE"
-		  nextButton={
-			<View
-			  style={{
-				height: 60,
-				borderRadius: 30,
-				alignItems: "center",
-				justifyContent: "center",
-				width: 60,
-				borderColor: "#560CCE",  
-				backgroundColor: "transparent",
-			  }}
-			>
-			  <AntDesign name="arrowright" size={22} color="#560CCE" />
-			</View>
-		  }
-		  prevButton={
-			<View
-			  style={{
-				height: 60,
-				borderRadius: 30,
-				alignItems: "center",
-				justifyContent: "center",
-				width: 60,
-				backgroundColor: "transparent",
-				marginHorizontal: 20,
-			  }}
-			>
-			  <AntDesign name="arrowleft" size={22} color="#560CCE" />
-			</View>
-		  }
-		 >
-		 <View style={styles.slide}>
-			<Text style={styles.title}>CONOSCITI</Text>
-			<Text style={styles.subtitle}>Calcola le tue calorie e impara a conoscere il tuo corpo</Text>
-			<Image source={require('../assets/ICONE/PNG/CONOSCITIBIANCO.png')} style={styles.image} />
-			<Text style={styles.descrizione}>MOVE YOUR KNEE</Text>
-		 </View>
-		  <View style={styles.slide}>
-			<Text style={styles.title}>ALLENATI</Text>
-			<Text style={styles.subtitle}>Che aspetti ad allenarti ?! Tieniti in forma e vedrai che starai sempre meglio, giorno dopo giorno!</Text>
-			<Image source={require('../assets/ICONE/PNG/ALLENATIBIANCO.png')} style={styles.image} />
-			<Text style={styles.descrizione}>MOVE YOUR KNEE</Text>
-		 </View>
-		 <View style={styles.slide}>
-			<Text style={styles.title}>DATI</Text>
-			<Text style={styles.subtitle}>Monitora il tuo allenamento e i tuoi avanzamenti. In men che non si dica, sarai un FALCOOOO!</Text>
-			<Image source={require('../assets/ICONE/PNG/DATIBIANCO.png')} style={styles.image} />
-			<Text style={styles.descrizione}>STEP-BY-STEP</Text>
-		  </View>
-		  <View style={styles.slide}>
-			<Text style={styles.title}>CHAT</Text>
-			<Text style={styles.subtitle}>Non sei solo! Scrivi al tuo medico, come supportarti.</Text>
-			<Image source={require('../assets/ICONE/PNG/CHATBIANCO.png')} style={styles.image} />
-		  </View>
-		  <View style={styles.slide}>
-			<Text style={styles.title}>PROFILO</Text>
-			<Text style={styles.subtitle}>Accedendo alla sezione profilo potrai rivedere e modificare i tuoi dati medici, ripetendo il questionario. Così saprai sempre di quanto sei migliorato!</Text>
-			<Image source={require('../assets/ICONE/PNG/ALLENATIBIANCO.png')} style={styles.image} />
-		</View>
-		</Swiper>	
-
-		<View style={styles.buttonContainer}>
-			<Button mode="contained" onPress={() => router.push("/CONOSCITI")}>SALTA IL TUTORIAL</Button>    
-		</View>	
-	
-	</View>
+						<View style={styles.buttonContainer}>
+							<Button mode="contained" onPress={() => router.push("/CONOSCITI")}>SALTA IL TUTORIAL</Button>    
+						</View>	
+					</View>
 				</ScrollView>
 			</SafeAreaView>
 		</Background>
@@ -140,7 +140,8 @@ const styles = StyleSheet.create({
   },
   slide: {
     flex: 1,
-
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
     alignSelf: "center",
@@ -149,45 +150,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'ultra-black-regular',
-    fontSize: 40,
+    fontSize: 48,
     color: '#FFFFFF',
-	
   },
   subtitle: {
     fontFamily: 'ultra-black-regular',
-    fontSize: 24,
-    color: '#FFFFFF'
-  },
-  titoloText: {
-	color: '#560CCE',
-    fontSize: 50,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold'
-  },
-   sottotitoloText: {
-	color: '#fff',
-	marginTop: 20,
-    fontSize: 40,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
-	alignItems: 'center', 
-	flex:1,
-  },
-  paragrafo1Text: {
-	color: '#fff',
-	marginBottom: 0,
-    fontSize: 15,
-	fontFamily: 'roboto-flex',
-	alignItems: 'center', 
-	flex:1,
-  },
-   paragrafo2Text: {
-	color: '#fff',
-	marginTop: 0,
     fontSize: 20,
-	fontFamily: 'ultra-black-regular',
-	alignItems: 'center', 
-	flex:1,
+    color: '#FFFFFF'
   },
   buttonContainer: {
 	flex: 1,
@@ -196,11 +165,8 @@ const styles = StyleSheet.create({
   },
   descrizione: {
 	color: '#560CCE',
-    fontSize: 25,
+    fontSize: 20,
 	fontFamily: 'ultra-black-regular',
 	flex:1,
-	marginTop: 10,
-	alignItems: 'center',
-    justifyContent: 'center',
   }
 });

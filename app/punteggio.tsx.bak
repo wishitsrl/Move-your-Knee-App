@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Image, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, Image, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Alert } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { RadioButton } from 'react-native-paper';
 import { TextInput } from 'react-native-paper';
@@ -7,7 +7,7 @@ import Button from '../components/UX/Button'
 import Background from '../components/Background'
 import LogoViola from '../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { Text } from '@/components/Themed';
 import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
@@ -41,21 +41,19 @@ export default function Punteggio() {
 			setPunteggio(response.documents[length-1].punteggio)
 			console.log("Livello Punteggio: " + punteggio); // Success
 		}
-		else 
-			Alert.alert("Riempire il questionario");
 	}, function (error) {
 		console.log(error); // Failure
 	});
    
   return (
-	<SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
 		<ScrollView style={styles.scrollView}>     
 			<View style={styles.container}>
 				<LogoViola/>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 				
@@ -84,16 +82,15 @@ export default function Punteggio() {
 			
 			<View>
 				 <Text style={styles.sottotitoloText}>
-					Sei sufficiente attivo,
-					allenati e continua a migliorare!
+					Sei sufficiente attivo, allenati e continua a migliorare!
 				</Text> 
 			</View>
 			
 			
 			<View>
 			<TouchableOpacity onPress={() => router.push("/ALLENATI")}>
-				 <Text style={styles.paragrafo0Text}>
-					Vai alla sezione  <Text style={styles.boldText}> ALLENATI </Text> 
+				 <Text style={styles.sottotitoloText}>
+					Vai alla sezione<Text style={styles.boldText}> ALLENATI </Text> 
 					e inizia a muoverti!
 				</Text> 
 			</TouchableOpacity>
@@ -105,61 +102,37 @@ export default function Punteggio() {
 }
 
 const styles = StyleSheet.create({
- container: {
+  container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
    scrollView: {
 	flex: 1,
-    marginHorizontal: 0,
-  },
-  text: {
-    fontSize: 42,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
   },
   titoloText: {
 	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 50,
+    fontSize: 30,
 	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold'
-
+	fontWeight: 'bold',
+	alignSelf: "center",
   },
   sottotitoloText: {
 	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 30,
+    fontSize: 25,
 	fontFamily: 'roboto-flex-regular',
 	marginTop: 20,
-	fontWeight: 'bold'
+	fontWeight: 'bold',
+	alignSelf: "center",
   },
   paragrafo0Text: {
 	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 30,
+    fontSize: 25,
 	fontFamily: 'roboto-flex-regular',
 	marginTop: 50,
-	fontWeight: 'bold'
-  },
-  paragrafo1Text: {
-    fontSize: 20,
-	color: '#48d1cc',
-	fontFamily: 'roboto-flex',
-	marginHorizontal: 10,
-	marginTop: 0,
+	fontWeight: 'bold',
+	alignSelf: "center",
   },
    boldText: {
     color: '#560CCE',

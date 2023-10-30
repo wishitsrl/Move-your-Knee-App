@@ -11,7 +11,7 @@ import { useFonts } from 'expo-font';
 
 export default function NotFoundScreen() {
 
-   const { signOut, user } = useAuth();
+   const { user } = useAuth();
    const router = useRouter();
    const [loaded] = useFonts({
 		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
@@ -25,20 +25,21 @@ export default function NotFoundScreen() {
     return null;
   }
   return (
-    <>
-	<Background>
-		<Stack.Screen options={{ title: 'Tutorial' }} />
-			<SafeAreaView style={styles.container}>			
-			<StatusBar hidden={true} />
-				<ScrollView style={styles.scrollView}>  
-					<Logo/>  
-					<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 20}}>
-						<View style={{flex: 1, height: 2, backgroundColor: '#FFFFFF'}} />
-					</View>
-					
-					<View>
-						<Text style={styles.sottotitoloText}>PRONTI PER INIZIARE!</Text>				
-					</View>
+   <Background>
+	  <SafeAreaView style={styles.container}>	 
+	    <StatusBar hidden={true} />
+		<ScrollView style={styles.scrollView}>     
+			<View style={styles.container}>
+				<Logo/>
+			</View>
+
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
+				<View style={{flex: 1, height: 2, backgroundColor: '#ffffff'}} />
+			</View>
+				
+			<View>
+				<Text style={styles.titoloText}>PRONTI PER INIZIARE!</Text>				
+			</View>
 					
 					<View>
 						<Text style={styles.paragrafo1Text}>Move Your Knee è l'APP che ti aiuta a tenerti in forma, ad allenarti e prendere cura di te, ma soprattutto delle tue ginocchia!</Text>				
@@ -58,18 +59,16 @@ export default function NotFoundScreen() {
 
 					<View style={styles.buttonContainer}>
 						<Button mode="contained" onPress={() => router.push("/CONOSCITI")}>SALTA IL TUTORIAL</Button>    
-					</View>	
-					
-				</ScrollView>
-			</SafeAreaView>
-		</Background>
-    </>
+					</View>		
+		</ScrollView>
+		</SafeAreaView>
+	</Background>
   );
 }
 
 const styles = StyleSheet.create({
- 	container: {
-	flex: 1,
+  container: {
+    flex: 1,
   },
   scrollView: {
 	flex: 1,
@@ -78,27 +77,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica',
     fontSize: 40,
     color: '#FFFFFF',
-	
-  },
-  subtitle: {
-    fontFamily: 'Helvetica',
-    fontSize: 24,
-    color: '#FFFFFF'
   },
   titoloText: {
 	color: '#560CCE',
-    fontSize: 50,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold'
-  },
-   sottotitoloText: {
-	color: '#fff',
-	marginTop: 20,
-    fontSize: 40,
+    fontSize: 48,
 	fontFamily: 'ultra-black-regular',
 	fontWeight: 'bold',
-	alignItems: 'center', 
-	flex:1,
+	color: '#FFFFFF',
   },
   paragrafo1Text: {
 	color: '#fff',
@@ -120,5 +105,5 @@ const styles = StyleSheet.create({
 	flex: 1,
     flexDirection: 'row',    
     justifyContent: 'center',
-  }
+  },
 });

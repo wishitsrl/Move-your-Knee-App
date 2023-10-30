@@ -1,15 +1,15 @@
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Image } from 'react-native';
+import { StyleSheet, View, SafeAreaView, ScrollView, StatusBar, Image } from 'react-native';
 import Button from '../../components/UX/Button'
 import Background from '../../components/Background'
 import LogoViola from '../../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { Text,  } from '@/components/Themed';
 import { useAuth } from '../context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
 
 export default function CHAT() {
-   const { signOut, user } = useAuth();
+   const { user } = useAuth();
    const router = useRouter();
    const [loaded] = useFonts({
 		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
@@ -41,13 +41,13 @@ export default function CHAT() {
 			</View>
 
 			<View>
-				<Text style={styles.paragrafo1Text}>
+				<Text style={styles.sottotitoloText}>
 					Non sei solo!
 				</Text>
 			</View>
 
 			<View>
-				<Text style={styles.paragrafo1Text}>
+				<Text style={styles.sottotitoloText}>
 					Scrivi al tuo medico, come supportarti!.
 				</Text>
 			</View>
@@ -70,65 +70,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
    scrollView: {
 	flex: 1,
   },
-  text: {
-    fontSize: 42,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
   titoloText: {
 	marginHorizontal: 10,
+	marginTop: 10,
 	color: '#560CCE',
-    fontSize: 50,
+    fontSize: 48,
 	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold'
-
   },
   sottotitoloText: {
 	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 30,
+    fontSize: 25,
 	fontFamily: 'roboto-flex-regular',
-	marginTop: 0,
-	fontWeight: 'bold',
-  },
-  paragrafo1Text: {
-	marginHorizontal: 10,
-	color: '#560CCE',
-    fontSize: 25,
-	fontFamily: 'roboto-flex',
-	marginTop: 10,
-  },
-  paragrafo2Text: {
-	marginHorizontal: 10,
-    fontSize: 20,
-	fontFamily: 'roboto-flex',
-	marginTop: 0,
-	marginBottom: 30,
-  },
-  boldText: {
-    color: '#560CCE',
-    fontSize: 25,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
-  },
-  boldTextBlack: {
-    fontSize: 20,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
+	marginBottom: 10,
+	fontWeight: 'bold'
   },
   buttonContainer: {
 	flex: 1,

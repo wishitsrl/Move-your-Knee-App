@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput, TouchableOpacity } from 'react-native';
 import Button from '../components/UX/Button'
 import Background from '../components/Background'
 import LogoViola from '../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
 import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
@@ -251,46 +250,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  form: {
-    flex: 1,   
-	marginHorizontal: 10,
-	justifyContent: 'center',
-	flexDirection: 'row',    
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
    scrollView: {
 	flex: 1,
   },
-  text: {
-    fontSize: 42,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
   titoloText: {
 	marginHorizontal: 10,
+	marginTop: 10,
 	color: '#560CCE',
-    fontSize: 50,
+    fontSize: 48,
 	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold'
-
   },
-  sottotitoloText: {
-	marginHorizontal: 10,
-	color: '#560CCE',
-    fontSize: 30,
-	fontFamily: 'roboto-flex-regular',
-	marginTop: 0,
-	fontWeight: 'bold',
+  form: {
+    flex: 1,   
+	justifyContent: 'center',
+	flexDirection: 'row',    
   },
   paragrafo1Text: {
 	marginHorizontal: 10,
@@ -305,17 +278,6 @@ const styles = StyleSheet.create({
 	color: '#48d1cc',
 	fontFamily: 'roboto-flex',
 	marginTop: 0,
-  },
-  boldText: {
-    color: '#560CCE',
-    fontSize: 25,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
-  },
-  boldTextBlack: {
-    fontSize: 20,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
   },
   buttonContainer: {
 	flex: 1,
@@ -333,6 +295,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 2,
     borderColor: "gray",
+	color: '#560CCE',
     width: "90%",
     borderRadius: 10,
     padding: 15, 

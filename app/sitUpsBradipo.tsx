@@ -216,30 +216,28 @@ const styles = StyleSheet.create({
   },
   titoloText: {
 	marginHorizontal: 10,
+	marginTop: 10,
 	color: '#560CCE',
-    fontSize: 50,
+    fontSize: 48,
 	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold'
-
   },
   sottotitoloText: {
 	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 30,
-	fontFamily: 'roboto-flex-regular',
+    fontSize: 25,
+	fontFamily: 'ultra-black-regular',
 	marginTop: 50,
-	fontWeight: 'bold'
   },
   paragrafo1Text: {
 	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 25,
+    fontSize: 20,
 	fontFamily: 'roboto-flex',
 	marginTop: 10,
   },
   paragrafo2Text: {
 	marginHorizontal: 10,
-    fontSize: 20,
+    fontSize: 18,
 	fontFamily: 'roboto-flex',
 	marginTop: 0,
 	marginBottom: 0,
@@ -271,7 +269,7 @@ const styles = StyleSheet.create({
   paragrafo1BoldText: {
 	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 25,
+    fontSize: 20,
 	fontFamily: 'ultra-black-regular',
 	marginTop: 10,
 	fontWeight: 'bold',

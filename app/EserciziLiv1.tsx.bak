@@ -36,7 +36,7 @@ const CardData = [
 	body: '15 minuti',
 	body1: '3 serie',
 	body2: '10 ripetizioni',
-	body3: '30 minuti di riposo',
+	body3: '30 secondi di riposo',
 	img: require('../assets/IllustrazioniSchede/PNG/B2_Weight_3_Icon.png'),
 	page: '',
   },
@@ -200,8 +200,8 @@ export default function EserciziLiv1() {
 						<Text style={styles.paragrafo1Text}>{CardData[1].body1}</Text>
 						<Text style={styles.paragrafo1Text}>{CardData[1].body2}</Text>
 						<Text style={styles.paragrafo1Text}>{CardData[1].body3}</Text>
+						<Image source= {CardData[1].img}  style={{width:100, height:100}} />
 				</View>
-				<Image source= {CardData[1].img}  style={{width:100, height:100}} />
 			</Card>		
 
 				<Text style={styles.paragrafo1Text}>
@@ -311,19 +311,17 @@ const styles = StyleSheet.create({
   },
   titoloText: {
 	marginHorizontal: 10,
+	marginTop: 10,
 	color: '#560CCE',
-    fontSize: 50,
+    fontSize: 48,
 	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold'
-
   },
   sottotitoloText: {
 	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 30,
-	fontFamily: 'roboto-flex-regular',
+    fontSize: 25,
+	fontFamily: 'ultra-black-regular',
 	marginTop: 50,
-	fontWeight: 'bold'
   },
   paragrafo1Text: {
 	marginHorizontal: 10,

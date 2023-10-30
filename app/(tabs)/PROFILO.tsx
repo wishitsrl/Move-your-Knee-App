@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput } from 'react-native';
+import { StyleSheet, View, SafeAreaView, ScrollView, StatusBar, Image, TextInput } from 'react-native';
 import Button from '../../components/UX/Button'
 import Background from '../../components/Background'
 import LogoViola from '../../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { Text } from '@/components/Themed';
 import { useAuth } from '../context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
@@ -21,7 +21,16 @@ export default function PROFILO() {
    const [statoCivile, setStatoCivile] = React.useState(''); 
    const [attivitaLavorativa, setAttivitaLavorativa] = React.useState(''); 
    const [peso, setPeso] = React.useState('');   
-   const [altezza, setAltezza] = React.useState(''); 
+   const [altezza, setAltezza] = React.useState('');    
+   
+   const [getNome, setGetNome] = React.useState(''); 
+   const [getCognome, setGetCognome] = React.useState('');  
+   const [getEta, setGetEta] = React.useState(''); 
+   const [getGenere, setGetGenere] = React.useState(''); 
+   const [getStatoCivile, setGetStatoCivile] = React.useState(''); 
+   const [getSttivitaLavorativa, setGetAttivitaLavorativa] = React.useState(''); 
+   const [getPeso, setGetPeso] = React.useState('');   
+   const [getAltezza, setGetAltezza] = React.useState(''); 
    
    const [loaded] = useFonts({
 		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
@@ -37,14 +46,14 @@ export default function PROFILO() {
   const getDatiPersonali = databases.getDocument('652e8e4607298ced5902', '6538c5cc9690a2884b8d', user.$id);
 		getDatiPersonali.then(function (response) {
 		console.log(response); // Success
-		setNome(response.nome);
-		setCognome(response.cognome);
-		setEta(response.eta);
-		setGenere(response.genere);
-		setStatoCivile(response.statoCivile);
-		setAttivitaLavorativa(response.attivitaLavorativa);
-		setPeso(parseFloat(response.peso));
-		setAltezza(parseFloat(response.altezza));
+		setGetNome(response.nome);
+		setGetCognome(response.cognome);
+		setGetEta(response.eta);
+		setGetGenere(response.genere);
+		setGetStatoCivile(response.statoCivile);
+		setGetAttivitaLavorativa(response.attivitaLavorativa);
+		setGetPeso(parseFloat(response.peso));
+		setGetAltezza(parseFloat(response.altezza));
 	}, function (error) {
 		console.log(error); // Failure
 	});
@@ -80,11 +89,11 @@ export default function PROFILO() {
 			<View style={styles.container}>
 				<LogoViola/>
 			</View>
-
+			
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
-				
+			
 			<View>
 				 <Text style={styles.titoloText}>
 					PROFILO
@@ -109,7 +118,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={nome => setNome(nome)}
 						value={nome}
-						placeholder=" "
+						placeholder={ getNome }
 					/>
 				</View>	
 			</View>
@@ -122,7 +131,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={cognome => setCognome(cognome)}
 						value={cognome}
-						placeholder=" "
+						placeholder={ getCognome }
 					/>
 				</View>	
 			</View>
@@ -135,7 +144,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={eta => setEta(eta)}
 						value={eta.toString()}
-						placeholder=" "
+						placeholder={ getEta.toString() }
 						keyboardType="phone-pad"
 					/>
 				</View>	
@@ -149,7 +158,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={genere => setGenere(genere)}
 						value={genere}
-						placeholder=" "
+						placeholder={ getGenere }
 					/>
 				</View>	
 			</View>
@@ -162,7 +171,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={statoCivile => setStatoCivile(statoCivile)}
 						value={statoCivile}
-						placeholder=" "
+						placeholder={ getStatoCivile }
 					/>
 				</View>	
 			</View>
@@ -175,7 +184,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={attivitaLavorativa => setAttivitaLavorativa(attivitaLavorativa)}
 						value={attivitaLavorativa}
-						placeholder=" "
+						placeholder={ getSttivitaLavorativa.toString() }
 					/>
 				</View>	
 			</View>
@@ -188,7 +197,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={peso => setPeso(peso)}
 						value={peso.toString()}
-						placeholder=" "
+						placeholder={ getPeso.toString() }
 						keyboardType="phone-pad"
 					/>
 				</View>	
@@ -202,7 +211,7 @@ export default function PROFILO() {
 					<TextInput style={styles.input}
 						onChangeText={altezza => setAltezza(altezza)}
 						value={altezza.toString()}
-						placeholder=" "
+						placeholder={ getAltezza.toString() }
 						keyboardType="phone-pad"
 					/>
 				</View>	
@@ -223,46 +232,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  form: {
-    flex: 1,   
-	marginHorizontal: 10,
-	justifyContent: 'center',
-	flexDirection: 'row',    
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
    scrollView: {
 	flex: 1,
   },
-  text: {
-    fontSize: 42,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
   titoloText: {
 	marginHorizontal: 10,
+	marginTop: 10,
 	color: '#560CCE',
-    fontSize: 50,
+    fontSize: 48,
 	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold'
-
   },
-  sottotitoloText: {
-	marginHorizontal: 10,
-	color: '#560CCE',
-    fontSize: 30,
-	fontFamily: 'roboto-flex-regular',
-	marginTop: 0,
-	fontWeight: 'bold',
+  form: {
+    flex: 1,   
+	justifyContent: 'center',
+	flexDirection: 'row',    
   },
   paragrafo1Text: {
 	marginHorizontal: 10,
@@ -277,17 +260,6 @@ const styles = StyleSheet.create({
 	color: '#48d1cc',
 	fontFamily: 'roboto-flex',
 	marginTop: 0,
-  },
-  boldText: {
-    color: '#560CCE',
-    fontSize: 25,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
-  },
-  boldTextBlack: {
-    fontSize: 20,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
   },
   buttonContainer: {
 	flex: 1,
@@ -305,6 +277,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 2,
     borderColor: "gray",
+	color: '#560CCE',
     width: "90%",
     borderRadius: 10,
     padding: 15, 

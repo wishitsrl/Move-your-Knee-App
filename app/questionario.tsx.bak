@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, } from 'react-native';
+import { StyleSheet, TextInput, View, SafeAreaView, ScrollView, StatusBar, } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { RadioButton } from 'react-native-paper';
-import { TextInput } from 'react-native-paper';
 import Button from '../components/UX/Button'
 import Background from '../components/Background'
 import LogoViola from '../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import { Text } from '@/components/Themed';
 import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
@@ -44,7 +43,7 @@ export default function Questionario() {
 	//attivita intense comprendono le 2 attività (met unità di misura) 
 	attMetIntense = 8 * domanda2 * domanda1
 	attMetModerate = 4 * domanda3 * domanda4
-	livello = ''
+	let livello = 'Bradipo';
 	
 	if (domanda7 == 'Intenso')
 	{
@@ -103,7 +102,7 @@ export default function Questionario() {
 				<LogoViola/>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', }}>
+			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 				
@@ -489,7 +488,7 @@ export default function Questionario() {
 			</View>
 
 			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => handleSubmit()}>Vai al punteggio</Button>    
+				<Button mode="contained" onPress={() => handleSubmit()}>CONCLUDI</Button>    
 			</View>
 			
 			</View>	
@@ -501,41 +500,21 @@ export default function Questionario() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-   scrollView: {
+  scrollView: {
 	flex: 1,
-    marginHorizontal: 0,
-  },
-  text: {
-    fontSize: 42,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
   },
   titoloText: {
 	marginHorizontal: 10,
+	marginTop: 10,
 	color: '#560CCE',
-    fontSize: 50,
+    fontSize: 48,
 	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold'
-
   },
   sottotitoloText: {
 	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 30,
+    fontSize: 25,
 	fontFamily: 'roboto-flex-regular',
 	marginTop: 20,
 	fontWeight: 'bold'
@@ -567,12 +546,13 @@ const styles = StyleSheet.create({
 	fontFamily: 'ultra-black-regular',
 	fontWeight: 'bold',
 	marginHorizontal: 10,
+	marginTop: 15,
 	marginBottom: 5,
 	textDecorationLine: 'underline',
   },
    boldText: {
     color: '#560CCE',
-    fontSize: 30,
+    fontSize: 25,
     fontFamily: 'ultra-black-regular',
 	fontWeight: 'bold',
   },
@@ -589,14 +569,19 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#666",
   },
-  input: {
+   input: {
+	marginHorizontal: 10,
     backgroundColor: "white",
     borderWidth: 2,
     borderColor: "gray",
-    width: "100%",
+	color: '#560CCE',
+    width: "90%",
     borderRadius: 10,
-    padding: 10,
-  }, 
+    padding: 15, 
+	flex: 1,
+    flexDirection: 'row',    
+    justifyContent: 'center',
+  },
    radioButton: { 
 		marginHorizontal: 10,
         paddingVertical: 12, 

@@ -36,7 +36,7 @@ const CardData = [
 	body: '15 minuti',
 	body1: '3 serie',
 	body2: '10 ripetizioni',
-	body3: '30 minuti di riposo',
+	body3: '30 secondi di riposo',
 	img: require('../assets/IllustrazioniSchede/PNG/B2_Weight_3_Icon.png'),
 	page: '',
   },
@@ -311,33 +311,31 @@ const styles = StyleSheet.create({
   },
   titoloText: {
 	marginHorizontal: 10,
+	marginTop: 10,
 	color: '#560CCE',
-    fontSize: 50,
+    fontSize: 48,
 	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold'
-
   },
   sottotitoloText: {
 	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 30,
-	fontFamily: 'roboto-flex-regular',
+    fontSize: 25,
+	fontFamily: 'ultra-black-regular',
 	marginTop: 50,
-	fontWeight: 'bold'
   },
   paragrafo1Text: {
 	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 25,
+    fontSize: 20,
 	fontFamily: 'roboto-flex',
 	marginTop: 10,
   },
   paragrafo2Text: {
 	marginHorizontal: 10,
-    fontSize: 20,
+    fontSize: 18,
 	fontFamily: 'roboto-flex',
 	marginTop: 0,
-	marginBottom: 0,
+	marginBottom: 30,
   },
   boldText: {
 	fontWeight: 'bold',

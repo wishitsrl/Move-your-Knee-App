@@ -25,6 +25,8 @@ const styles = StyleSheet.create({
     width: windowWidth - 40,
     borderWidth: 0,
     borderColor: '#000',
+	marginBottom: 10,
+	marginTop: 50,
   },
   image: {
     flex: 1,
