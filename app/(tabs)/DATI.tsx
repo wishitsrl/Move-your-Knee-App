@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, StatusBar, ScrollView, Image, SafeAreaView, Alert } from 'react-native';
+import { View, StyleSheet, StatusBar, ScrollView, Image, SafeAreaView, Alert, Dimensions } from 'react-native';
 import LogoViola from '../../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text } from '@/components/Themed';
@@ -8,9 +8,10 @@ import { useAuth } from '../context/auth';
 import { Stack, useRouter } from "expo-router";
 import client, { databases } from "../lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
-import { BarChart, Grid, XAxis } from 'react-native-svg-charts'
+//import { BarChart, Grid, XAxis } from 'react-native-svg-charts'
 import * as scale from 'd3-scale'
-
+//import { BarChart } from 'react-native-chart-kit';
+import { BarChart } from "react-native-gifted-charts";
 export default function DATI() {
 	
 	const data = [
@@ -151,27 +152,22 @@ export default function DATI() {
 				</Text>
 			</View>
 			
-			<View>
-				<BarChart
-    				style={{ flex: 1, marginLeft: 8, padding: 2, borderRadius:10 }}
-                    data={data}
-                    horizontal={false}
-                    yAccessor={({ item }) => item.value}
-                    svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-                    contentInset={{ top: 10, bottom: 10 }}
-                    spacing={0.2}
+			<View style={{ flex: 1, padding: 10, alignItems: 'center', marginLeft: 8, marginBottom: 20 }}>
+				 <BarChart 
+					barWidth={22}
+					hideDataPoints={false}
+					noOfSections={3}
+					barBorderRadius={10}
+					frontColor="#560CCE"
+					data={data}
+					xAxisTextStyle={{color: '#560CCE'}}
+					yAxisThickness={0}
+					xAxisThickness={0}
                     gridMin={0}
-					alignmentBaseline={'middle'}
+					xAxisLabelTextStyle={{color: '#560CCE', textAlign: 'center'}}
+					xAxisColor={'#560CCE'}
+					yAxisTextStyle={{color: '#560CCE'}}
 				/>
-				 <XAxis
-                    data={data}
-                    yAccessor={({ index }) => index}
-                    scale={scale.scaleBand}
-					svg={{ fill: 'rgba(134, 65, 244, 0.8)' }}
-                    contentInset={{ top: 10, bottom: 10 }}
-                    spacing={0.2}
-                    formatLabel={(_, index) => data[ index ].label}
-                />
             </View>
 
 			<View>

@@ -25,8 +25,9 @@ export default function SignUp() {
   const router = useRouter();
   
   const emailRef = useRef("");
-  const passwordRef = useRef("");
   const userNameRef = useRef("");
+  const passwordRef = useRef("");
+  const confermaPasswordRef = useRef("");
 
   const [loaded] = useFonts({
 		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
@@ -92,17 +93,35 @@ export default function SignUp() {
 					/>
 				</View>
 			</View>
+			
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					Conferma password
+				</Text>
+				<View style={styles.form}>
+					<TextInput style={styles.input}
+						placeholder="Conferma Password"
+						secureTextEntry={true}
+						nativeID="password"
+						onChangeText={(text) => {
+						confermaPasswordRef.current = text;}}
+					/>
+				</View>
+			</View>
 
 			<View style={styles.buttonContainer}>
 				<Button mode="contained" onPress={async () => {
-					const { data, error } = await signUp(emailRef.current, passwordRef.current, userNameRef.current);
-					if (data) {
-						router.replace("/registrazioneDatiPersonali");
-					} else {
-						console.log(error);
-						Alert.alert("Dati non corretti!");
-					}
-					}}>REGISTRATI</Button>    
+					if(passwordRef.current===confermaPasswordRef.current) {
+						const { data, error } = await signUp(emailRef.current, passwordRef.current, userNameRef.current);
+										
+						if (data) {
+							router.replace("/registrazioneDatiPersonali");
+						} else {
+							console.log(error);
+							Alert.alert("Dati non corretti!");
+						}
+						}
+						}}>REGISTRATI</Button>    
 			</View>
 
 		  </View>   
