@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, TextInput, View, SafeAreaView, ScrollView, StatusBar, } from 'react-native';
+import { StyleSheet, TextInput, View, SafeAreaView, ScrollView, StatusBar, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { RadioButton } from 'react-native-paper';
 import Button from '../components/UX/Button'
@@ -12,6 +12,7 @@ import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
 import client, { databases } from "./lib/appwrite-service";
 import { Permission, Role,  ID, } from "appwrite";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function Questionario() {
   
@@ -97,7 +98,10 @@ export default function Questionario() {
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
-		<ScrollView style={styles.scrollView}>     
+		<KeyboardAwareScrollView>
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+		<View style={styles.inner}>
+			
 			<View style={styles.container}>
 				<LogoViola/>
 			</View>
@@ -138,26 +142,27 @@ export default function Questionario() {
 				</View>
 
 				<View>
-			<Text style={styles.paragrafo1Text}>
-				Giorni alla settimana
-			</Text>
-			<Text style={styles.paragrafo0Text}>
-				(nemmeno 1? Vai alla sezione successiva)					
-			</Text>
-			<Picker style={styles.pickerStyles} 
-					selectedValue={domanda1}
-					onValueChange={(value, index) => setDomanda1(value)}
-					mode="dropdown" // Android only
-					style={styles.pickerStyles}>
-						<Picker.Item label="Nessuno" value="1" />
-						<Picker.Item label="1 giorno" value="1" />
-						<Picker.Item label="2 giorni" value="2" />
-						<Picker.Item label="3 giorni" value="3" />
-						<Picker.Item label="4 giorni" value="4" />
-						<Picker.Item label="5 giorni" value="5" />
-						<Picker.Item label="6 giorni" value="6" />
-						<Picker.Item label="7 giorni" value="7" />
-				</Picker>
+					<Text style={styles.paragrafo1Text}>
+						Giorni alla settimana
+					</Text>
+					<Text style={styles.paragrafo0Text}>
+						(nemmeno 1? Vai alla sezione successiva)					
+					</Text>
+					
+					<Picker
+						selectedValue={domanda1}
+						onValueChange={(value, index) => setDomanda1(value)}
+						mode="dropdown" // Android only
+						style={styles.pickerStyles}>
+							<Picker.Item label="Nessuno" value="1" />
+							<Picker.Item label="1 giorno" value="1" />
+							<Picker.Item label="2 giorni" value="2" />
+							<Picker.Item label="3 giorni" value="3" />
+							<Picker.Item label="4 giorni" value="4" />
+							<Picker.Item label="5 giorni" value="5" />
+							<Picker.Item label="6 giorni" value="6" />
+							<Picker.Item label="7 giorni" value="7" />
+					</Picker>
 			</View>	
 
 			<View>
@@ -465,7 +470,7 @@ export default function Questionario() {
 			</View>
 
 			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
-				<View style={{flex: 1, height: 4, backgroundColor: '#560CCE'}} />
+				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
 			<View>
@@ -492,7 +497,10 @@ export default function Questionario() {
 			</View>
 			
 			</View>	
-		</ScrollView>
+
+	</View>
+    </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>	
     </SafeAreaView>
   );
 }
@@ -514,7 +522,7 @@ const styles = StyleSheet.create({
   sottotitoloText: {
 	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 25,
+    fontSize: 20,
 	fontFamily: 'roboto-flex-regular',
 	marginTop: 20,
 	fontWeight: 'bold'
@@ -528,7 +536,7 @@ const styles = StyleSheet.create({
 	alignItems: 'center',
   },
   paragrafo0Text: {
-    fontSize: 20,
+    fontSize: 18,
 	fontFamily: 'roboto-flex',
 	marginHorizontal: 10,
 	marginTop: 0,
@@ -552,7 +560,7 @@ const styles = StyleSheet.create({
   },
    boldText: {
     color: '#560CCE',
-    fontSize: 25,
+    fontSize: 20,
     fontFamily: 'ultra-black-regular',
 	fontWeight: 'bold',
   },

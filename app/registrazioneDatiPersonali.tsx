@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput } from 'react-native';
+import { Text, StyleSheet, TextInput, View, SafeAreaView, ScrollView, StatusBar, Image, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import Button from '../components/UX/Button'
 import Background from '../components/Background'
 import LogoViola from '../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
 import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
@@ -63,7 +62,10 @@ export default function registrazioneDatiPersonali() {
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
-		<ScrollView style={styles.scrollView}>     
+		<KeyboardAwareScrollView>
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+		<View style={styles.inner}>
+		
 			<View style={styles.container}>
 				<LogoViola/>
 			</View>
@@ -194,7 +196,9 @@ export default function registrazioneDatiPersonali() {
 					* Tutti i dati richiesti sono obbligatori per proseguire.
 				</Text>			
 			</View>	
-		</ScrollView>
+	</View>
+    </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }

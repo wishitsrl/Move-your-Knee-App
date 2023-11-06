@@ -42,6 +42,9 @@ export default function tutorial() {
 					<View style={{flexDirection: 'row', alignItems: 'center'}}>
 						<View style={{flex: 1, height: 2, backgroundColor: '#FFFFFF'}} />
 					</View>
+					
+				<View style={styles.containerMain}>	
+					
 					<View style={styles.container}>
 						<Swiper showsButtons={true} autoplay={true}
 						  buttonWrapperStyle={{
@@ -71,7 +74,7 @@ export default function tutorial() {
 								backgroundColor: "transparent",
 							  }}
 							>
-							  <AntDesign name="arrowright" size={22} color="#560CCE" />
+							  <AntDesign name="arrowright" size={25} color="#560CCE" />
 							</View>
 						  }
 						  prevButton={
@@ -85,45 +88,56 @@ export default function tutorial() {
 								backgroundColor: "transparent",
 							  }}
 							>
-							  <AntDesign name="arrowleft" size={22} color="#560CCE" />
+							  <AntDesign name="arrowleft" size={25} color="#560CCE" />
 							</View>
 						  }
 						 >
 						 <View style={styles.slide}>
 							<Text style={styles.title}>CONOSCITI</Text>
 							<Text style={styles.subtitle}>Calcola le tue calorie e impara a conoscere il tuo corpo</Text>
-							<Image source={require('../assets/ICONE/PNG/CONOSCITIBIANCO.png')} style={styles.image} />
-							<Text style={styles.descrizione}>MOVE YOUR KNEE</Text>
+							<View style={styles.containerImg}>	
+								<Image source={require('../assets/ICONE/PNG/CONOSCITIBIANCO.png')} style={styles.image} />
+								<Text style={styles.descrizione}>MOVE YOUR KNEE</Text>
+							</View>
 						 </View>
 						  <View style={styles.slide}>
 							<Text style={styles.title}>ALLENATI</Text>
 							<Text style={styles.subtitle}>Che aspetti ad allenarti ?! Tieniti in forma e vedrai che starai sempre meglio, giorno dopo giorno!</Text>
-							<Image source={require('../assets/ICONE/PNG/ALLENATIBIANCO.png')} style={styles.image} />
-							<Text style={styles.descrizione}>MOVE YOUR KNEE</Text>
+							<View style={styles.containerImg}>	
+								<Image source={require('../assets/ICONE/PNG/ALLENATIBIANCO.png')} style={styles.image} />					
+								<Text style={styles.descrizione}>MOVE YOUR KNEE</Text>
+							</View>
 						 </View>
 						 <View style={styles.slide}>
 							<Text style={styles.title}>DATI</Text>
 							<Text style={styles.subtitle}>Monitora il tuo allenamento e i tuoi avanzamenti. In men che non si dica, sarai un FALCOOOO!</Text>
-							<Image source={require('../assets/ICONE/PNG/DATIBIANCO.png')} style={styles.image} />
-							<Text style={styles.descrizione}>STEP-BY-STEP</Text>
+							<View style={styles.containerImg}>
+								<Image source={require('../assets/ICONE/PNG/DATIBIANCO.png')} style={styles.image} />
+								<Text style={styles.descrizione}>STEP-BY-STEP</Text>
+							</View>
 						  </View>
 						  <View style={styles.slide}>
 							<Text style={styles.title}>CHAT</Text>
 							<Text style={styles.subtitle}>Non sei solo! Scrivi al tuo medico, come supportarti.</Text>
-							<Image source={require('../assets/ICONE/PNG/CHATBIANCO.png')} style={styles.image} />
-							<Text style={styles.descrizione}></Text>						
-						  </View>
-						  <View style={styles.slide}>
+							<View style={styles.containerImg}>
+								<Image source={require('../assets/ICONE/PNG/CHATBIANCO.png')} style={styles.image} /> 
+								<Text style={styles.descrizione}></Text>						
+							</View>	
+							</View>
+							<View style={styles.slide}>
 							<Text style={styles.title}>PROFILO</Text>
 							<Text style={styles.subtitle}>Accedendo alla sezione profilo potrai rivedere e modificare i tuoi dati medici, ripetendo il questionario. Così saprai sempre di quanto sei migliorato!</Text>
-							<Image source={require('../assets/ICONE/PNG/ALLENATIBIANCO.png')} style={styles.image} />
-							<Text style={styles.descrizione}></Text>						
+							<View style={styles.containerImg}>
+								<Image source={require('../assets/ICONE/PNG/ALLENATIBIANCO.png')} style={styles.image} />
+								<Text style={styles.descrizione}></Text>	
+							</View>								
 						  </View>
 						</Swiper>	
 
 						<View style={styles.buttonContainer}>
 							<Button mode="contained" onPress={() => router.push("/CONOSCITI")}>SALTA IL TUTORIAL</Button>    
 						</View>	
+					</View>
 					</View>
 				</ScrollView>
 			</SafeAreaView>
@@ -135,6 +149,14 @@ const styles = StyleSheet.create({
  	container: {
 	flex: 1,
   },
+  containerImg: {
+    flex: 1,
+	marginTop: 10,
+  },
+  containerMain: {
+      flex: 1,
+	  marginHorizontal: 10,
+  },
   scrollView: {
 	flex: 1,
   },
@@ -145,8 +167,8 @@ const styles = StyleSheet.create({
   },
   image: {
     alignSelf: "center",
-	width: 200,
-    height: 200,
+	width: 400,
+    height: 400,
   },
   title: {
     fontFamily: 'ultra-black-regular',
@@ -165,7 +187,7 @@ const styles = StyleSheet.create({
   },
   descrizione: {
 	color: '#560CCE',
-    fontSize: 20,
+    fontSize: 25,
 	fontFamily: 'ultra-black-regular',
 	flex:1,
   }

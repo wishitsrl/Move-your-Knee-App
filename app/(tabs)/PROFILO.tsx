@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, SafeAreaView, ScrollView, StatusBar, Image, TextInput } from 'react-native';
+import { StyleSheet, View, SafeAreaView, ScrollView, StatusBar, Image, TextInput, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, } from 'react-native';
 import Button from '../../components/UX/Button'
 import Background from '../../components/Background'
 import LogoViola from '../../components/UX/LogoViola'
@@ -10,6 +10,7 @@ import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
 import client, { databases } from "../lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function PROFILO() {
    const { signOut, user } = useAuth();
@@ -85,7 +86,10 @@ export default function PROFILO() {
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
-		<ScrollView style={styles.scrollView}>     
+		<KeyboardAwareScrollView>
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+		<View style={styles.inner}>
+		
 			<View style={styles.container}>
 				<LogoViola/>
 			</View>
@@ -223,7 +227,9 @@ export default function PROFILO() {
 			<View style={styles.buttonContainer}>
 				<Button mode="contained" onPress={() => router.push('/datiMedici')}>RIPETI QUESTIONARIO DATI MEDICI</Button>    
 			</View>					
-		</ScrollView>
+	</View>
+    </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>	
     </SafeAreaView>
   );
 }

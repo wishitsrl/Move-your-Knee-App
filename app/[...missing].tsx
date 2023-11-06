@@ -25,42 +25,46 @@ export default function NotFoundScreen() {
     return null;
   }
   return (
-   <Background>
-	  <SafeAreaView style={styles.container}>	 
-	    <StatusBar hidden={true} />
-		<ScrollView style={styles.scrollView}>     
-			<View style={styles.container}>
-				<Logo/>
-			</View>
-
-			<View style={{flexDirection: 'row', alignItems: 'center'}}>
-				<View style={{flex: 1, height: 2, backgroundColor: '#ffffff'}} />
-			</View>
-				
-			<View>
-				<Text style={styles.titoloText}>PRONTI PER INIZIARE!</Text>				
-			</View>
-					
-					<View>
-						<Text style={styles.paragrafo1Text}>Move Your Knee è l'APP che ti aiuta a tenerti in forma, ad allenarti e prendere cura di te, ma soprattutto delle tue ginocchia!</Text>				
+	<Background>
+		<SafeAreaView style={styles.container}>	 
+			<StatusBar hidden={true} />
+				<ScrollView style={styles.scrollView}>     
+					<View style={styles.container}>
+						<Logo/>
 					</View>
 
-					<View>
-						<Text style={styles.paragrafo2Text}>Conosci il tuo corpo, allenati, passa di livello, comunica con il tuo medico... e torna sui tuoi passi ogni volta che vorrai.</Text>
+					<View style={{flexDirection: 'row', alignItems: 'center'}}>
+						<View style={{flex: 1, height: 2, backgroundColor: '#ffffff'}} />
 					</View>
+						
+					<View style={styles.containerMain}>	
+						<View>
+							<Text style={styles.titoloText}>PRONTI PER INIZIARE!</Text>				
+						</View>
+						
+						<View>
+							<Text style={styles.paragrafo1Text}>Move Your Knee è l'APP che ti aiuta a tenerti in forma, ad allenarti e prendere cura di te, ma soprattutto delle tue ginocchia!</Text>				
+						</View>
 
-					<View>
-						<Text style={styles.paragrafo2Text}>Con Move Your Knee lascerai gli OPPLA' agli altri!</Text>
-					</View>
-					
-					<View style={styles.buttonContainer}>
-						<Button mode="contained" onPress={() =>  router.replace("/tutorial")}>AVVIA IL TUTORIAL</Button>    
-					</View>	
+						<View>
+							<Text style={styles.paragrafo2Text}>Conosci il tuo corpo, allenati, passa di livello, comunica con il tuo medico... e torna sui tuoi passi ogni volta che vorrai.</Text>
+						</View>
 
-					<View style={styles.buttonContainer}>
-						<Button mode="contained" onPress={() => router.push("/CONOSCITI")}>SALTA IL TUTORIAL</Button>    
-					</View>		
-		</ScrollView>
+						<View>
+							<Text style={styles.paragrafo2Text}>Con Move Your Knee lascerai gli OPPLA' agli altri!</Text>
+						</View>
+						
+						<View style={styles.buttonMainContainer}>
+							<View style={styles.buttonContainer}>
+								<Button mode="contained" onPress={() =>  router.replace("/tutorial")}>AVVIA IL TUTORIAL</Button>    
+							</View>	
+
+							<View style={styles.buttonContainer}>
+								<Button mode="contained" onPress={() => router.push("/CONOSCITI")}>SALTA IL TUTORIAL</Button>    
+							</View>
+						</View>			
+				</View>					
+			</ScrollView>
 		</SafeAreaView>
 	</Background>
   );
@@ -69,6 +73,10 @@ export default function NotFoundScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  containerMain: {
+      flex: 1,
+	  marginHorizontal: 10,
   },
   scrollView: {
 	flex: 1,
@@ -106,4 +114,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',    
     justifyContent: 'center',
   },
+  buttonMainContainer: {
+	marginTop: 20,
+  }
 });

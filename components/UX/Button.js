@@ -2,32 +2,46 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Button as PaperButton } from 'react-native-paper'
 import { theme } from '../../core/theme'
+import { TouchableOpacity, Text, View} from 'react-native';
 
 export default function Button({ mode, style, ...props }) {
-  return (
-    <PaperButton
-      style={[
-        styles.button,
-        mode === 'outlined' && { backgroundColor: theme.colors.surface },
-        style,
-      ]}
-      labelStyle={styles.text}
-      mode={mode}
-      {...props}
-    />
+	
+	const [isActive, setIsActive] = React.useState(false);
+
+    const onPressLearnMore = () =>{
+      setIsActive(true);
+	  console.log("ok")
+    }	
+
+	return (
+		<PaperButton
+		  style={[
+			styles.button,
+			mode === 'contained' && { backgroundColor: 'transparent' },
+			style,
+			onPress={onPressLearnMore}
+		  ]}
+		  
+		  labelStyle={styles.text}
+		  mode={mode}
+		  {...props}
+		/>
   )
 }
 
 const styles = StyleSheet.create({
   button: {
-    width: '60%',
-	borderRadius: 8,
+    width: '90%',
+	borderRadius: 10,
     marginVertical: 10,
     paddingVertical: 2,
-  },
+	borderColor: '#560CCE',
+	borderWidth: 2,
+ },
   text: {
-    fontWeight: 'bold',
-    fontSize: 15,
-    lineHeight: 26,
+	fontFamily: 'roboto-flex',    
+    fontSize: 20,
+    lineHeight: 20,
+	color: '#560CCE',
   },
 })

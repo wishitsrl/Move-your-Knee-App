@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, TextInput, View, SafeAreaView, ScrollView, StatusBar, Image, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import Button from '../components/UX/Button'
 import Background from '../components/Background'
 import LogoViola from '../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
 import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
 import client, { databases } from "./lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function registrazioneDatiMedici() {
    const { user } = useAuth();
@@ -65,7 +65,10 @@ export default function registrazioneDatiMedici() {
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
-		<ScrollView style={styles.scrollView}>     
+		<KeyboardAwareScrollView>
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+		<View style={styles.inner}>
+		
 			<View style={styles.container}>
 				<LogoViola/>
 			</View>
@@ -225,7 +228,9 @@ export default function registrazioneDatiMedici() {
 				<Button mode="contained" onPress={() => handleSubmit()}>CONCLUDI</Button>    
 			</View>
 
-		</ScrollView>
+	</View>
+    </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }

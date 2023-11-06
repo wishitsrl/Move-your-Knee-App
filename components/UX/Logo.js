@@ -21,11 +21,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   imageContainer: {
-    height: 60,
-    width: windowWidth - 40,
+    height: 50,
+    width: windowWidth - 30,
     borderWidth: 0,
     borderColor: '#000',
-	marginBottom: 10,
+	marginBottom: 0,
 	marginTop: 50,
   },
   image: {

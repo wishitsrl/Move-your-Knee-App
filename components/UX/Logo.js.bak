@@ -21,12 +21,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   imageContainer: {
-    height: 60,
-    width: windowWidth - 40,
+    height: 30,
+    width: windowWidth - 30,
     borderWidth: 0,
     borderColor: '#000',
-	marginBottom: 10,
-	marginTop: 20,
+	marginBottom: 0,
+	marginTop: 50,
   },
   image: {
     flex: 1,

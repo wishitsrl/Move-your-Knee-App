@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View, StyleSheet, SafeAreaView, ScrollView, StatusBar, Image, TextInput, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, TextInput, View, SafeAreaView, ScrollView, StatusBar, Image, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import Button from '../components/UX/Button'
 import Background from '../components/Background'
 import LogoViola from '../components/UX/LogoViola'
@@ -9,6 +9,7 @@ import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
 import client, { databases } from "./lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function datiMedici() {
    const { signOut, user } = useAuth();
@@ -79,7 +80,10 @@ export default function datiMedici() {
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
-		<ScrollView style={styles.scrollView}>     
+		<KeyboardAwareScrollView>
+		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+		<View style={styles.inner}>
+		
 			<View style={styles.container}>
 				<LogoViola/>
 			</View>
@@ -241,7 +245,9 @@ export default function datiMedici() {
 			<View style={styles.buttonContainer}>
 				<Button mode="contained" onPress={() => handleSubmit()}>MODIFICA</Button>    
 			</View>
-		</ScrollView>
+	</View>
+    </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
