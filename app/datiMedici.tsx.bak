@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, TextInput, View, SafeAreaView, ScrollView, StatusBar, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, } from 'react-native';
+import { Text, StyleSheet, TextInput, View, SafeAreaView, ScrollView, StatusBar, Image, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import Button from '../components/UX/Button'
 import Background from '../components/Background'
 import LogoViola from '../components/UX/LogoViola'
@@ -95,10 +95,7 @@ export default function datiMedici() {
 			<View>
 				 <Text style={styles.titoloText}>
 					PROFILO
-				</Text>
-				<TouchableOpacity onPress={() => router.push('/modal')} >
-					<Image style={styles.image} source={require('../assets/ICONE/PNG/CHIUDISELEZIONATO.png')} />
-				</TouchableOpacity>		
+				 </Text>
 			</View>
 
 			<View>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, SafeAreaView, ScrollView, StatusBar, Image, TextInput } from 'react-native';
+import { StyleSheet, View, SafeAreaView, ScrollView, StatusBar, Image, TextInput, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, } from 'react-native';
 import Button from '../../components/UX/Button'
 import Background from '../../components/Background'
 import LogoViola from '../../components/UX/LogoViola'
@@ -121,8 +121,7 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={nome => setNome(nome)}
-						value={nome}
-						placeholder={ getNome }
+						value={getNome}
 					/>
 				</View>	
 			</View>
@@ -134,8 +133,7 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={cognome => setCognome(cognome)}
-						value={cognome}
-						placeholder={ getCognome }
+						value={getCognome}
 					/>
 				</View>	
 			</View>
@@ -147,8 +145,7 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={eta => setEta(eta)}
-						value={eta.toString()}
-						placeholder={ getEta.toString() }
+						value={getEta.toString()}
 						keyboardType="phone-pad"
 					/>
 				</View>	
@@ -161,8 +158,7 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={genere => setGenere(genere)}
-						value={genere}
-						placeholder={ getGenere }
+						value={getGenere}
 					/>
 				</View>	
 			</View>
@@ -174,8 +170,7 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={statoCivile => setStatoCivile(statoCivile)}
-						value={statoCivile}
-						placeholder={ getStatoCivile }
+						value={getStatoCivile}
 					/>
 				</View>	
 			</View>
@@ -187,8 +182,7 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={attivitaLavorativa => setAttivitaLavorativa(attivitaLavorativa)}
-						value={attivitaLavorativa}
-						placeholder={ getSttivitaLavorativa.toString() }
+						value={getSttivitaLavorativa}
 					/>
 				</View>	
 			</View>
@@ -200,8 +194,7 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={peso => setPeso(peso)}
-						value={peso.toString()}
-						placeholder={ getPeso.toString() }
+						value={getPeso.toString()}
 						keyboardType="phone-pad"
 					/>
 				</View>	
@@ -214,8 +207,7 @@ export default function PROFILO() {
 				<View style={styles.form}>
 					<TextInput style={styles.input}
 						onChangeText={altezza => setAltezza(altezza)}
-						value={altezza.toString()}
-						placeholder={ getAltezza.toString() }
+						value={getAltezza.toString()}
 						keyboardType="phone-pad"
 					/>
 				</View>	
@@ -226,7 +218,15 @@ export default function PROFILO() {
 			</View>
 			<View style={styles.buttonContainer}>
 				<Button mode="contained" onPress={() => router.push('/datiMedici')}>RIPETI QUESTIONARIO DATI MEDICI</Button>    
-			</View>					
+			</View>		
+			<View style={styles.buttonContainer}>
+				<Button mode="contained" onPress={() => router.replace('/modal')}>LOGOUT</Button>    
+			</View>		
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					* Tutti i dati richiesti sono obbligatori per proseguire.
+				</Text>			
+			</View>				
 	</View>
     </TouchableWithoutFeedback>
     </KeyboardAwareScrollView>	

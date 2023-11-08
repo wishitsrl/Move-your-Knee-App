@@ -227,7 +227,11 @@ export default function registrazioneDatiMedici() {
 			<View style={styles.buttonContainer}>
 				<Button mode="contained" onPress={() => handleSubmit()}>CONCLUDI</Button>    
 			</View>
-
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					* Tutti i dati richiesti sono obbligatori per proseguire.
+				</Text>			
+			</View>	
 	</View>
     </TouchableWithoutFeedback>
     </KeyboardAwareScrollView>

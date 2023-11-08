@@ -4,7 +4,6 @@ import Button from '../components/UX/Button'
 import Background from '../components/Background'
 import LogoViola from '../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { View } from '@/components/Themed';
 import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
@@ -228,7 +227,11 @@ export default function registrazioneDatiMedici() {
 			<View style={styles.buttonContainer}>
 				<Button mode="contained" onPress={() => handleSubmit()}>CONCLUDI</Button>    
 			</View>
-
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					* Tutti i dati richiesti sono obbligatori per modificare.
+				</Text>			
+			</View>	
 	</View>
     </TouchableWithoutFeedback>
     </KeyboardAwareScrollView>

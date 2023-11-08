@@ -95,10 +95,7 @@ export default function datiMedici() {
 			<View>
 				 <Text style={styles.titoloText}>
 					PROFILO
-				</Text>
-				<TouchableOpacity onPress={() => router.push('/modal')} >
-					<Image style={styles.image} source={require('../assets/ICONE/PNG/CHIUDISELEZIONATO.png')} />
-				</TouchableOpacity>		
+				 </Text>
 			</View>
 
 			<View>
@@ -245,6 +242,11 @@ export default function datiMedici() {
 			<View style={styles.buttonContainer}>
 				<Button mode="contained" onPress={() => handleSubmit()}>MODIFICA</Button>    
 			</View>
+			<View>
+				<Text style={styles.paragrafo2Text}>
+					* Tutti i dati richiesti sono obbligatori per modificare.
+				</Text>			
+			</View>	
 	</View>
     </TouchableWithoutFeedback>
     </KeyboardAwareScrollView>

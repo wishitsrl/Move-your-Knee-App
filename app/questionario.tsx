@@ -13,9 +13,19 @@ import { Stack, useRouter } from "expo-router";
 import client, { databases } from "./lib/appwrite-service";
 import { Permission, Role,  ID, } from "appwrite";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { SelectList } from 'react-native-dropdown-select-list'
 
 export default function Questionario() {
-  
+    const day = [
+	  {key:'1', value:'Nessuno'},
+      {key:'1', value:'1 giorno'},
+      {key:'2', value:'2 giorno'},
+      {key:'3', value:'3 giorno'},
+      {key:'4', value:'4 giorno'},
+      {key:'5', value:'5 giorno'},
+      {key:'6', value:'6 giorno'},
+      {key:'7', value:'7 giorno'},
+  ]
   const { user } = useAuth();
   const router = useRouter();
   const [domanda1, setDomanda1] = React.useState('');  
@@ -148,21 +158,15 @@ export default function Questionario() {
 					<Text style={styles.paragrafo0Text}>
 						(nemmeno 1? Vai alla sezione successiva)					
 					</Text>
-					
-					<Picker
-						selectedValue={domanda1}
-						onValueChange={(value, index) => setDomanda1(value)}
-						mode="dropdown" // Android only
-						style={styles.pickerStyles}>
-							<Picker.Item label="Nessuno" value="1" />
-							<Picker.Item label="1 giorno" value="1" />
-							<Picker.Item label="2 giorni" value="2" />
-							<Picker.Item label="3 giorni" value="3" />
-							<Picker.Item label="4 giorni" value="4" />
-							<Picker.Item label="5 giorni" value="5" />
-							<Picker.Item label="6 giorni" value="6" />
-							<Picker.Item label="7 giorni" value="7" />
-					</Picker>
+					<View style={styles.pickerStyles}>
+						<SelectList
+						setSelected={(value, index) => setDomanda1(value)}
+						data={day} 
+						search={false} 
+						boxStyles={{borderRadius:0}}
+						defaultOption={{ key:'1', value:'Nessuno' }}
+						/>
+					</View>
 			</View>	
 
 			<View>
@@ -233,20 +237,15 @@ export default function Questionario() {
 			<Text style={styles.paragrafo0Text}>
 				(nemmeno 1? Vai alla sezione successiva)					
 			</Text>
-			<Picker
-					selectedValue={domanda3}
-					onValueChange={(value, index) => setDomanda3(value)}
-					mode="dropdown" // Android only
-					style={styles.pickerStyles}>
-						<Picker.Item label="Nessuno" value="1" />
-						<Picker.Item label="1 giorno" value="1" />
-						<Picker.Item label="2 giorni" value="2" />
-						<Picker.Item label="3 giorni" value="3" />
-						<Picker.Item label="4 giorni" value="4" />
-						<Picker.Item label="5 giorni" value="5" />
-						<Picker.Item label="6 giorni" value="6" />
-						<Picker.Item label="7 giorni" value="7" />
-				</Picker>
+			<View style={styles.pickerStyles}>
+						<SelectList
+						setSelected={(value, index) => setDomanda3(value)}
+						data={day} 
+						search={false} 
+						boxStyles={{borderRadius:0}}
+						defaultOption={{ key:'1', value:'Nessuno' }}
+						/>
+					</View>
 			</View>	
 
 			<View>
@@ -313,20 +312,15 @@ export default function Questionario() {
 			<Text style={styles.paragrafo0Text}>
 					(nemmeno 1? Vai alla sezione successiva)					
 			</Text>
-			<Picker
-					selectedValue={domanda5}
-					onValueChange={(value, index) => setDomanda5(value)}
-					mode="dropdown" // Android only
-					style={styles.pickerStyles}>
-						<Picker.Item label="Nessuno" value="1" />
-						<Picker.Item label="1 giorno" value="1" />
-						<Picker.Item label="2 giorni" value="2" />
-						<Picker.Item label="3 giorni" value="3" />
-						<Picker.Item label="4 giorni" value="4" />
-						<Picker.Item label="5 giorni" value="5" />
-						<Picker.Item label="6 giorni" value="6" />
-						<Picker.Item label="7 giorni" value="7" />
-				</Picker>
+				<View style={styles.pickerStyles}>
+						<SelectList
+						setSelected={(value, index) => setDomanda5(value)}
+						data={day} 
+						search={false} 
+						boxStyles={{borderRadius:0}}
+						defaultOption={{ key:'1', value:'Nessuno' }}
+						/>
+				</View>
 			</View>	
 			
 			<View>
@@ -570,12 +564,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pickerStyles: {
+    flex: 1,
     marginHorizontal: 10,
-    marginVertical: 30,
-    width: 300,
-    padding: 10,
-    borderWidth: 2,
-    borderColor: "#666",
+	flexDirection: 'row',    
+    justifyContent: 'center',
   },
    input: {
 	marginHorizontal: 10,
@@ -583,7 +575,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "gray",
 	color: '#560CCE',
-    width: "90%",
     borderRadius: 10,
     padding: 15, 
 	flex: 1,
