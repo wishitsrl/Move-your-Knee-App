@@ -10,7 +10,6 @@ export default function Button({ mode, style, ...props }) {
 
     const onPressLearnMore = () =>{
       setIsActive(true);
-	  console.log("ok")
     }	
 
 	return (
@@ -21,7 +20,6 @@ export default function Button({ mode, style, ...props }) {
 			style,
 			onPress={onPressLearnMore}
 		  ]}
-		  
 		  labelStyle={styles.text}
 		  mode={mode}
 		  {...props}

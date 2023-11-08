@@ -17,7 +17,8 @@ export default function Button({ mode, style, ...props }) {
 		  style={[
 			styles.button,
 			mode === 'contained' && { backgroundColor: 'transparent' },
-			style,
+			//style,
+			style: isActive ? styles.btnPress : styles.btnNormal, 
 			onPress={onPressLearnMore}
 		  ]}
 		  
@@ -43,4 +44,17 @@ const styles = StyleSheet.create({
     lineHeight: 20,
 	color: '#560CCE',
   },
+  btnNormal: {
+    borderColor: 'blue',
+    borderWidth: 1,
+    borderRadius: 10,
+    height: 30,
+    width: 100,
+  },
+  btnPress: {
+    borderColor: 'blue',
+    borderWidth: 1,
+    height: 30,
+    width: 100,
+  }
 })
