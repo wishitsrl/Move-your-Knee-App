@@ -6,19 +6,19 @@ import { TouchableOpacity, Text, View} from 'react-native';
 
 export default function Button({ mode, style, ...props }) {
 	
-	const [isActive, setIsActive] = React.useState(false);
+	const [isActive, setIsActive] = React.useState(true);
 
     const onPressLearnMore = () =>{
-      setIsActive(true);
+      setIsActive(false);
+	  console.log("cambioooo")
     }	
 
 	return (
 		<PaperButton
 		  style={[
 			styles.button,
-			mode === 'contained' && { backgroundColor: 'transparent' },
+			mode === 'contained' && { backgroundColor: isActive ? 'transparent' : "#560CCE" },
 			style,
-			onPress={onPressLearnMore}
 		  ]}
 		  labelStyle={styles.text}
 		  mode={mode}

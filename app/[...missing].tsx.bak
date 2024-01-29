@@ -3,67 +3,115 @@ import Swiper from 'react-native-swiper/src';
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Onboarding from 'react-native-onboarding-swiper';
 import Background from '../components/UX/Background'
-import { View, Text, SafeAreaView, StyleSheet, Dimensions, TouchableOpacity, ImageBackground, ScrollView, StatusBar, NavigationContainer, Image } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, Dimensions, TouchableHighlight, TouchableOpacity, ImageBackground, ScrollView, StatusBar, NavigationContainer, Image } from 'react-native';
 import Logo from '../components/UX/Logo';
-import Button from '../components/UX/Button';
 import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
+import { useRef, useState, useCallback } from "react";
 
 export default function NotFoundScreen() {
 
-   const { user } = useAuth();
-   const router = useRouter();
-   const [loaded] = useFonts({
+	const { user } = useAuth();
+	const router = useRouter();
+	
+	const [isPressedSalta, setIsPressedSalta] = useState(false);
+	const [isPressedTutorial, setIsPressedTutorial] = useState(false);
+	const buttonSaltaColor = isPressedSalta ? 'white' : '#560CCE';
+	const buttonTutorialColor = isPressedTutorial ? 'white' : '#560CCE';
+
+	const handleButtonPressAvvia = () => {
+			setIsPressedTutorial(!isPressedTutorial)
+			setTimeout(() => {
+				setIsPressedTutorial(isPressedTutorial)
+		}, 2000);
+	  };
+	  
+
+	const [isPressedSalta1, setIsPressedSalta1] = useState(false);
+	const [isPressedTutorial1, setIsPressedTutorial1] = useState(false);
+	const buttonSaltaColor1 = isPressedSalta1 ? 'white' : '#560CCE';
+	const buttonTutorialColor1 = isPressedTutorial1 ? 'white' : '#560CCE';
+
+	  	const handleButtonPressSalta = () => {
+			setIsPressedTutorial1(!isPressedTutorial1)
+			setTimeout(() => {
+				setIsPressedTutorial1(isPressedTutorial1)
+		}, 2000);
+	  };
+
+
+
+
+   const [fontsLoaded, fontError] = useFonts({
 		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
+		"Acumin-Variable-Concept": require('../assets/fonts/Acumin-Variable-Concept.ttf'),
+		"AcuminVariableConcept-WideUltraBlack": require('../assets/fonts/AcuminVariableConcept-WideUltraBlack.ttf'),
 		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
 		"roboto-flex-variable": require('../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
 		"ultra-black": require('../assets/fonts/ultrablackitalic.ttf'),
 		"ultra-black-regular": require('../assets/fonts/UltraBlackRegular.ttf'),
   });
 
-  if (!loaded) {
-    return null;
-  }
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded || fontError) {
+		  await SplashScreen.hideAsync();
+		}
+	  }, [fontsLoaded, fontError]);
+
+	  if (!fontsLoaded && !fontError) {
+		return null;
+	  }
+	  
   return (
 	<Background>
-		<SafeAreaView style={styles.container}>	 
+		<SafeAreaView style={styles.container}>
 			<StatusBar hidden={true} />
-				<ScrollView style={styles.scrollView}>     
-					<View style={styles.container}>
-						<Logo/>
-					</View>
-
-					<View style={{flexDirection: 'row', alignItems: 'center'}}>
-						<View style={{flex: 1, height: 2, backgroundColor: '#ffffff'}} />
-					</View>
+			<ScrollView style={styles.scrollView}>     
+				<View style={styles.container}>
+					<Logo/>
+				</View>
+				
+				<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
+					<View style={{flex: 1, height: 2, backgroundColor: '#fff'}} />
+				</View>	
 						
-					<View style={styles.containerMain}>	
+				<View style={styles.containerMain}>	
+						<View>
+							<Text style={styles.titoloText}>PRONTI PER INIZIARE!</Text>				
+						</View>
 						
-					<View>
-						<Text style={styles.titoloText}>PRONTI PER INIZIARE!</Text>				
-					</View>
-					
-					<View>
-						<Text style={styles.paragrafo1Text}>Move Your Knee è l'APP che ti aiuta a tenerti in forma, ad allenarti e prendere cura di te, ma soprattutto delle tue ginocchia!</Text>				
-					</View>
+						<View>
+							<Text style={styles.paragrafo1Text}>Move Your Knee è l'APP che ti aiuta a tenerti in forma, ad allenarti e prendere cura di te, ma soprattutto delle tue ginocchia!</Text>				
+						</View>
 
-					<View>
-						<Text style={styles.paragrafo2Text}>Conosci il tuo corpo, allenati, passa di livello, comunica con il tuo medico... e torna sui tuoi passi ogni volta che vorrai.</Text>
-					</View>
+						<View>
+							<Text style={styles.paragrafo2Text}>Conosci il tuo corpo, allenati, passa di livello, comunica con il tuo medico... e torna sui tuoi passi ogni volta che vorrai.</Text>
+						</View>
 
-					<View>
-						<Text style={styles.paragrafo2Text}>Con Move Your Knee lascerai gli OPPLA' agli altri!</Text>
-					</View>
-					
-					<View style={styles.buttonMainContainer}>
-						<View style={styles.buttonContainer}>
-							<Button mode="contained" onPress={() =>  router.replace("/tutorial")}>AVVIA IL TUTORIAL</Button>    
+						<View>
+							<Text style={styles.paragrafo2Text}>Con Move Your Knee lascerai gli OPPLA' agli altri!</Text>
+						</View>
+						
+						<View style={{alignItems: 'center', marginTop: 50}}></View>
+												
+						<View>					
+							<TouchableOpacity
+								style={[styles.buttonContainer, { backgroundColor: isPressedTutorial ? '#560CCE' : 'transparent'}]} 
+								onPress={!isPressedTutorial ? handleButtonPressAvvia : null}
+								disabled={isPressedTutorial}>
+								<Text style={[styles.buttonTextStyle, { color: buttonTutorialColor }]}>AVVIA IL TUTORIAL</Text>
+							</TouchableOpacity>
 						</View>	
 
-						<View style={styles.buttonContainer}>
-							<Button mode="contained" onPress={() => router.push("/CONOSCITI")}>SALTA IL TUTORIAL</Button>    
-						</View>
-					</View>			
+						<View>
+							<TouchableOpacity 
+								style={[styles.buttonContainer, { backgroundColor: isPressedTutorial1 ? '#560CCE' : 'transparent'}]} 
+								onPress={!isPressedTutorial1 ? handleButtonPressAvvia : null}
+								disabled={isPressedTutorial1}>
+								<Text style={[styles.buttonTextStyle, { color: buttonSaltaColor1 }]}>SALTA IL TUTORIAL</Text>
+							</TouchableOpacity>
+						</View>		
+						
 				</View>					
 			</ScrollView>
 		</SafeAreaView>
@@ -75,12 +123,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  containerMain: {
-      flex: 1,
-	  marginHorizontal: 10,
-  },
-  scrollView: {
+   scrollView: {
 	flex: 1,
+  },
+  containerMain: {
+	  marginHorizontal: 30,
   },
   title: {
     fontFamily: 'Helvetica',
@@ -88,34 +135,51 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   titoloText: {
-	color: '#560CCE',
-    fontSize: 48,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
+    fontSize: 35,
+	fontFamily: 'AcuminVariableConcept-WideUltraBlack',
 	color: '#FFFFFF',
   },
   paragrafo1Text: {
 	color: '#fff',
 	marginBottom: 30,
-    fontSize: 15,
-	fontFamily: 'roboto-flex',
+    fontSize: 20,
+	fontFamily: 'RobotoFlex',
 	alignItems: 'center', 
-	flex:1,
   },
    paragrafo2Text: {
 	color: '#fff',
 	marginTop: 20,
-    fontSize: 20,
+    fontSize: 30,
+	fontWeight: 'bold',
 	fontFamily: 'ultra-black-regular',
 	alignItems: 'center', 
-	flex:1,
-  },
-  buttonContainer: {
-	flex: 1,
-    flexDirection: 'row',    
-    justifyContent: 'center',
   },
   buttonMainContainer: {
-	marginTop: 20,
-  }
+	marginHorizontal: 30,
+	borderRadius: 10,
+    marginVertical: 10,
+    paddingVertical: 2,
+	borderColor: '#560CCE',
+	borderWidth: 2,
+	justifyContent: 'center',
+
+  },
+  buttonTextStyle: {
+    paddingVertical: 10,
+	fontFamily: 'RobotoFlex',    
+    fontSize: 20,
+    lineHeight: 20,
+	justifyContent: 'center',
+	textAlign: 'center',
+  },
+    buttonContainer: {
+	marginHorizontal: 50,
+	borderRadius: 5,
+    marginVertical: 10,
+    paddingVertical: 2,
+	borderColor: '#560CCE',
+	borderWidth: 1,
+	alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

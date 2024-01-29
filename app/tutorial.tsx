@@ -8,6 +8,7 @@ import Logo from '../components/UX/Logo';
 import Button from '../components/UX/Button';
 import { useAuth } from './context/auth';
 import { useFonts } from 'expo-font';
+import { useRef, useCallback } from "react";
 
  const handleNextScreen = () => {
         if (screen <= 1) {
@@ -19,7 +20,7 @@ export default function tutorial() {
 
    const { user } = useAuth();
    const router = useRouter();
-   const [loaded] = useFonts({
+   const [fontsLoaded, fontError] = useFonts({
 		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
 		"roboto-flex-variable": require('../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
@@ -27,26 +28,31 @@ export default function tutorial() {
 		"ultra-black-regular": require('../assets/fonts/UltraBlackRegular.ttf'),
   });
 
-  if (!loaded) {
-    return null;
-  }
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded || fontError) {
+		  await SplashScreen.hideAsync();
+		}
+	  }, [fontsLoaded, fontError]);
+
+	  if (!fontsLoaded && !fontError) {
+		return null;
+	  }
   return (
 	<Background>
-		<Stack.Screen options={{ title: 'Tutorial' }} />
+	
 			<SafeAreaView style={styles.container}>			
 			<StatusBar hidden={true} />
 				<ScrollView style={styles.scrollView}>  
 				<View style={styles.container}>
 					<Logo/>
 				</View>
-					<View style={{flexDirection: 'row', alignItems: 'center'}}>
-						<View style={{flex: 1, height: 2, backgroundColor: '#FFFFFF'}} />
-					</View>
+					
+				<View style={{flexDirection: 'row', alignItems: 'center'}}>
+					<View style={{flex: 1, height: 2, backgroundColor: '#FFFFFF'}} />
+				</View>
 					
 				<View style={styles.containerMain}>	
-					
-					<View style={styles.container}>
-						<Swiper showsButtons={true} autoplay={true}
+						<Swiper showsButtons={true} autoplay={false}
 						  buttonWrapperStyle={{
 							backgroundColor: "transparent",
 							flexDirection: "row",
@@ -93,52 +99,77 @@ export default function tutorial() {
 						  }
 						 >
 						 <View style={styles.slide}>
-							<Text style={styles.title}>CONOSCITI</Text>
-							<Text style={styles.subtitle}>Calcola le tue calorie e impara a conoscere il tuo corpo</Text>
+							<View style={styles.left}>
+								<Text style={styles.title}>CONOSCITI</Text>
+								<Text style={styles.subtitle}>Calcola le tue calorie e impara a conoscere il tuo corpo</Text>
+							</View>
 							<View style={styles.containerImg}>	
 								<Image source={require('../assets/ICONE/PNG/CONOSCITIBIANCO.png')} style={styles.image} />
-								<Text style={styles.descrizione}>MOVE YOUR KNEE</Text>
-							</View>
-						 </View>
-						  <View style={styles.slide}>
-							<Text style={styles.title}>ALLENATI</Text>
-							<Text style={styles.subtitle}>Che aspetti ad allenarti ?! Tieniti in forma e vedrai che starai sempre meglio, giorno dopo giorno!</Text>
-							<View style={styles.containerImg}>	
-								<Image source={require('../assets/ICONE/PNG/ALLENATIBIANCO.png')} style={styles.image} />					
-								<Text style={styles.descrizione}>MOVE YOUR KNEE</Text>
+								
+								<View style={styles.left}>
+									<Text style={styles.descrizione}>MOVE YOUR KNEE</Text>
+								</View>
 							</View>
 						 </View>
 						 <View style={styles.slide}>
-							<Text style={styles.title}>DATI</Text>
-							<Text style={styles.subtitle}>Monitora il tuo allenamento e i tuoi avanzamenti. In men che non si dica, sarai un FALCOOOO!</Text>
+							<View style={styles.left}>
+								<Text style={styles.title}>ALLENATI</Text>
+								<Text style={styles.subtitle}>Che aspetti ad allenarti ?! Tieniti in forma e vedrai che starai sempre meglio, giorno dopo giorno!</Text>
+						</View>	
+							<View style={styles.containerImg}>	
+								<Image source={require('../assets/ICONE/PNG/ALLENATIBIANCO.png')} style={styles.image} />					
+								<View style={styles.left}>
+									<Text style={styles.descrizione}>MOVE YOUR KNEE</Text>
+								</View>
+							</View>
+						 </View>
+						 <View style={styles.slide}>
+							<View style={styles.left}>
+								<Text style={styles.title}>DATI</Text>
+								<Text style={styles.subtitle}>Monitora il tuo allenamento e i tuoi avanzamenti. In men che non si dica, sarai un FALCOOOO!</Text>
+							</View>	
 							<View style={styles.containerImg}>
 								<Image source={require('../assets/ICONE/PNG/DATIBIANCO.png')} style={styles.image} />
 								<Text style={styles.descrizione}>STEP-BY-STEP</Text>
 							</View>
 						  </View>
 						  <View style={styles.slide}>
-							<Text style={styles.title}>CHAT</Text>
-							<Text style={styles.subtitle}>Non sei solo! Scrivi al tuo medico, come supportarti.</Text>
+							<View style={styles.left}>
+								<Text style={styles.title}>CHAT</Text>
+								<Text style={styles.subtitle}>Non sei solo! Scrivi al tuo medico, come supportarti.</Text>
+							</View>
 							<View style={styles.containerImg}>
 								<Image source={require('../assets/ICONE/PNG/CHATBIANCO.png')} style={styles.image} /> 
-								<Text style={styles.descrizione}></Text>						
+								
+								<View style={styles.left}>
+									<Text style={styles.descrizione}></Text>
+								</View>									
 							</View>	
 							</View>
 							<View style={styles.slide}>
-							<Text style={styles.title}>PROFILO</Text>
-							<Text style={styles.subtitle}>Accedendo alla sezione profilo potrai rivedere e modificare i tuoi dati medici, ripetendo il questionario. Così saprai sempre di quanto sei migliorato!</Text>
+								<View style={styles.left}>
+									<Text style={styles.title}>PROFILO</Text>
+									<Text style={styles.subtitle}>Accedendo alla sezione profilo potrai rivedere e modificare i tuoi dati medici, ripetendo il questionario. Così saprai sempre di quanto sei migliorato!</Text>
+								</View>
 							<View style={styles.containerImg}>
-								<Image source={require('../assets/ICONE/PNG/ALLENATIBIANCO.png')} style={styles.image} />
-								<Text style={styles.descrizione}></Text>	
+								<Image source={require('../assets/ICONE/PNG/PROFILOBIANCO.png')} style={styles.image} />
+								
+								<View style={styles.left}>
+									<Text style={styles.descrizione}></Text>	
+								</View>	
 							</View>								
 						  </View>
 						</Swiper>	
-
 						<View style={styles.buttonContainer}>
-							<Button mode="contained" onPress={() => router.push("/CONOSCITI")}>SALTA IL TUTORIAL</Button>    
-						</View>	
+							<TouchableOpacity
+								activeOpacity={0.5}
+								onPress={() => router.push("/CONOSCITI")}>
+							<Text style={styles.buttonTextStyle}>SALTA IL TUTORIAL</Text>
+							</TouchableOpacity>
+						</View>
+			
 					</View>
-					</View>
+					
 				</ScrollView>
 			</SafeAreaView>
 		</Background>
@@ -152,12 +183,11 @@ const styles = StyleSheet.create({
   containerImg: {
     flex: 1,
 	marginTop: 10,
-	 justifyContent: 'center',
-    alignItems: 'center',
   },
   containerMain: {
-      flex: 1,
-	  marginHorizontal: 10,
+    justifyContent: 'center',
+	textAlign: 'center',
+	marginHorizontal: 30,
   },
   scrollView: {
 	flex: 1,
@@ -168,29 +198,47 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    alignSelf: "center",
 	width: 400,
     height: 400,
+	resizeMode: 'contain'
   },
   title: {
-    fontFamily: 'ultra-black-regular',
-    fontSize: 48,
+    marginTop: 10,
+    fontSize: 35,
+	fontFamily: 'AcuminVariableConcept-WideUltraBlack',
     color: '#FFFFFF',
   },
-  subtitle: {
-    fontFamily: 'ultra-black-regular',
+  subtitle: {	
+	fontFamily: 'UltraBlackRegular',
+	fontWeight: 'bold',
     fontSize: 20,
     color: '#FFFFFF'
   },
   buttonContainer: {
-	flex: 1,
-    flexDirection: 'row',    
-    justifyContent: 'center',
+	marginHorizontal: 30,
+	borderRadius: 10,
+    paddingVertical: 2,
+	borderColor: '#560CCE',
+	borderWidth: 2,
+	justifyContent: 'center',
+  },
+  buttonTextStyle: {
+    paddingVertical: 10,
+	fontFamily: 'RobotoFlex',    
+    fontSize: 20,
+    lineHeight: 20,
+	color: '#560CCE',
+	justifyContent: 'center',
+	textAlign: 'center',
   },
   descrizione: {
 	color: '#560CCE',
     fontSize: 25,
 	fontFamily: 'ultra-black-regular',
-	flex:1,
+ },
+  left:{
+    marginTop: 10,
+    alignSelf: "left",
+    justifyContent: 'center',
   }
 });

@@ -1,160 +1,52 @@
-import {StyleSheet, View, SafeAreaView, ScrollView, StatusBar, } from 'react-native';
-import Button from '../../components/UX/Button'
+import { View, Text, SafeAreaView, StyleSheet, Dimensions, TouchableOpacity, ImageBackground, ScrollView, StatusBar, NavigationContainer, Image } from 'react-native';
 import Background from '../../components/Background'
 import LogoViola from '../../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text } from '@/components/Themed';
 import { useAuth } from '../context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
+import { useRef, useState, useCallback } from "react";
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import conoscitiNavigation from '../conoscitiNavigation';
+import questionario from '../questionario';
+import punteggio from '../punteggio';
 
 export default function CONOSCITI() {
-   const { signOut, user } = useAuth();
+   const { user } = useAuth();
    const router = useRouter();
-   const [loaded] = useFonts({
-		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
-		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
-		"roboto-flex-variable": require('../../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
-		"ultra-black": require('../../assets/fonts/ultrablackitalic.ttf'),
-		"ultra-black-regular": require('../../assets/fonts/UltraBlackRegular.ttf'),
+   const [fontsLoaded, fontError] = useFonts({
+		"RobotoFlex": require('../../assets/fonts/RobotoFlex.ttf'),
+		"RobotoFlex-Regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
+		"Acumin-Variable-Concept": require('../../assets/fonts/Acumin-Variable-Concept.ttf'),
+		"AcuminVariableConcept-WideUltraBlack": require('../../assets/fonts/AcuminVariableConcept-WideUltraBlack.ttf'),
+		"ultrablackitalic": require('../../assets/fonts/ultrablackitalic.ttf'),
+		"UltraBlackRegular": require('../../assets/fonts/UltraBlackRegular.ttf'),
   });
 
-  if (!loaded) {
-    return null;
-  }
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded || fontError) {
+		  await SplashScreen.hideAsync();
+		}
+	  }, [fontsLoaded, fontError]);
+
+	  if (!fontsLoaded && !fontError) {
+		return null;
+	  }
+	  	
+	const Stack = createNativeStackNavigator();
+
   return (
-    <SafeAreaView style={styles.container}>
-	    <StatusBar hidden={true} />
-		<ScrollView style={styles.scrollView}>     
-			<View style={styles.container}>
-				<LogoViola/>
-			</View>
-
-			<View style={{flexDirection: 'row', alignItems: 'center'}}>
-				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
-			</View>
-				
-			<View>
-				 <Text style={styles.titoloText}>
-					CONOSCITI
-				</Text>
-			</View>
-
-			<View>
-				<Text style={styles.paragrafo1Text}>
-					Calcola le tue calorie rispondendo a queste semplici domande
-				</Text>
-			</View>
-
-			<View>
-				<Text style={styles.sottotitoloText}>
-					Alcune indicazioni
-				</Text>
-			</View>
-
-			<View>
-				<Text style={styles.paragrafo1Text}>
-					Il questionario ti aiuta a misurare
-					il tipo e la quantità di attività fisica che fai normalmente.
-				</Text>
-			</View>	
-
-			<View>
-				<Text style={styles.paragrafo2Text}>
-					Per questo, le domande fanno riferimento 
-					all' attività che hai svolto negli<Text style={styles.boldTextBlack}> ultimi 7 giorni </Text> 
-					al lavoro, per spostarti da un posto all'altro,
-					e nel tuo tempo libero, e che ti hanno tenuto impegnato 
-					per<Text style={styles.boldTextBlack}> almeno 10 minuti consecutivi.</Text>
-				</Text>
-			</View>
-
-			<View>
-				<Text style={styles.paragrafo1Text}>
-					Le attività fisiche <Text style={styles.boldText}>intense</Text>, sono quelle che richiedono uno sforzo fisico elevato.
-				</Text>
-			</View>
-			
-			<View>			
-				<Text style={styles.paragrafo2Text}>
-					Dunque sentirai che il ritmo del respiro è molto più elevato del normale,
-					oltre a sudare tanto e a non riuscire a parlare.
-				</Text>
-			</View>
-			
-			<View>	
-				<Text style={styles.paragrafo1Text}>
-					Le attività fisiche <Text style={styles.boldText}>moderate</Text>, richiedono uno sforzo fisico moderato.
-				</Text>
-			</View>
-
-			<View>				
-				<Text style={styles.paragrafo2Text}>
-					Vuol dire che sono quelle che ti costringono a respirare con un ritmo 
-					moderatamente più elevato del normale. Dunque, anche se non dovessi riuscire a cantare
-					la tua canzone preferita, potrai sempre parlare.
-				</Text> 
-			</View>		
-						
-			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => router.push('/questionario')}>INIZIA IL QUESTIONARIO</Button>    
-			</View>		
-		</ScrollView>
-    </SafeAreaView>
+	<Stack.Navigator  screenOptions={{ headerShown: false }}>
+		<Stack.Screen name="conoscitiNavigation" component={conoscitiNavigation} />
+		<Stack.Screen name="questionario" component={questionario} />
+		<Stack.Screen name="punteggio" component={punteggio} />
+    </Stack.Navigator>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  scrollView: {
-	flex: 1,
-    marginHorizontal: 0,
-  },
-  titoloText: {
-	marginHorizontal: 10,
-	marginTop: 10,
-	color: '#560CCE',
-    fontSize: 48,
-	fontFamily: 'ultra-black-regular',
-  },
-  sottotitoloText: {
-	marginHorizontal: 10,
-	color: '#560CCE',
-    fontSize: 25,
-	fontFamily: 'ultra-black-regular',
-	marginTop: 50,
-  },
-  paragrafo1Text: {
-	marginHorizontal: 10,
-	color: '#560CCE',
-    fontSize: 20,
-	fontFamily: 'roboto-flex',
-	marginTop: 10,
-  },
-  paragrafo2Text: {
-	marginHorizontal: 10,
-    fontSize: 18,
-	fontFamily: 'roboto-flex',
-	marginTop: 0,
-	marginBottom: 30,
-  },
-  boldText: {
-    color: '#560CCE',
-    fontSize: 25,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
-  },
-  boldTextBlack: {
-    fontSize: 20,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
-  },
-  buttonContainer: {
-	flex: 1,
-    flexDirection: 'row',    
-    justifyContent: 'center',
   },
 });
 

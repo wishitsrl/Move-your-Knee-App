@@ -92,7 +92,7 @@ export function Provider(props: ProviderProps) {
       }
 
       setAuthInitialized(true);
-      console.log("initialize ", user);
+     // console.log("## initialize: ", user);
     })();
   }, []);
 

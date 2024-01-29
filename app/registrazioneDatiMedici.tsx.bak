@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Text, StyleSheet, TextInput, View, SafeAreaView, ScrollView, StatusBar, Image, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-import Button from '../components/UX/Button'
 import Background from '../components/Background'
 import LogoViola from '../components/UX/LogoViola'
 import EditScreenInfo from '@/components/EditScreenInfo';
@@ -10,6 +9,7 @@ import { Stack, useRouter } from "expo-router";
 import client, { databases } from "./lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { useRef, useCallback } from "react";
 
 export default function registrazioneDatiMedici() {
    const { user } = useAuth();
@@ -23,8 +23,7 @@ export default function registrazioneDatiMedici() {
    const [difficoltaVestirsi, setDifficoltaVestirsi] = React.useState(''); 
    const [assunzioneFarmaci, setAssunzioneFarmaci] = React.useState(''); 
    const [infiltrazioni, setInfiltrazioni] = React.useState(''); 
-   
-   const [loaded] = useFonts({
+   const [fontsLoaded, fontError] = useFonts({
 		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
 		"roboto-flex-variable": require('../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
@@ -32,10 +31,15 @@ export default function registrazioneDatiMedici() {
 		"ultra-black-regular": require('../assets/fonts/UltraBlackRegular.ttf'),
   });
 
-  if (!loaded) {
-    return null;
-  }
-  
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded || fontError) {
+		  await SplashScreen.hideAsync();
+		}
+	  }, [fontsLoaded, fontError]);
+
+	  if (!fontsLoaded && !fontError) {
+		return null;
+	  }
 	function handleSubmit() {
 
 		const datiMedici = databases.createDocument('652e8e4607298ced5902', '6538c6af1ca5781c351b', user.$id,
@@ -125,11 +129,12 @@ export default function registrazioneDatiMedici() {
 					Valuta da 0 a 10 il dolore che provi al ginocchio*
 				</Text>
 				<View style={styles.form}>
-					<TextInput style={styles.input}
+					<Slider style={styles.Slider} 
+						maximumValue={10} minimumValue={0} step="1"
 						onChangeText={intensitaDolore => setIntensitaDolore(intensitaDolore)}
-						value={intensitaDolore}
-						placeholder=" "
-						keyboardType="phone-pad"
+						value={intensitaDolore}				
+						minimumTrackTintColor="#560CCE"
+						maximumTrackTintColor="#560CCE"
 					/>
 				</View>	
 			</View>
@@ -223,17 +228,22 @@ export default function registrazioneDatiMedici() {
 					/>
 				</View>	
 			</View>	
-			
+						
 			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => handleSubmit()}>CONCLUDI</Button>    
+				<TouchableOpacity
+					activeOpacity={0.5}
+					onPress={() => handleSubmit()}>
+					<Text style={styles.buttonTextStyle}>CONCLUDI</Text>
+				</TouchableOpacity>
 			</View>
+
 			<View>
 				<Text style={styles.paragrafo2Text}>
-					* Tutti i dati richiesti sono obbligatori per modificare.
+					* Tutti i dati richiesti sono obbligatori per proseguire.
 				</Text>			
 			</View>	
-	</View>
-    </TouchableWithoutFeedback>
+		</View>
+		</TouchableWithoutFeedback>
     </KeyboardAwareScrollView>
     </SafeAreaView>
   );
@@ -310,9 +320,22 @@ const styles = StyleSheet.create({
 	fontWeight: 'bold',
   },
   buttonContainer: {
-	flex: 1,
-    flexDirection: 'row',    
-    justifyContent: 'center',
+	marginHorizontal: 10,
+	borderRadius: 10,
+    marginVertical: 10,
+    paddingVertical: 2,
+	borderColor: '#560CCE',
+	borderWidth: 2,
+	justifyContent: 'center',
+  },
+  buttonTextStyle: {
+    paddingVertical: 10,
+	fontFamily: 'RobotoFlex',    
+    fontSize: 20,
+    lineHeight: 20,
+	color: '#560CCE',
+	justifyContent: 'center',
+	textAlign: 'center',
   },
   image: {
     alignSelf: "center",

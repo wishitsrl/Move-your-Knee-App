@@ -2,7 +2,7 @@ import React from 'react'
 import {View, Image, StyleSheet, Dimensions, SafeAreaView} from 'react-native';
 import Img2 from '../../assets/LOGOBIANCO.png';
 
-export default function Logo({navigation}) {
+export default function LogoViola({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>
@@ -11,22 +11,17 @@ export default function Logo({navigation}) {
     </SafeAreaView>
   );
 }
-const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexWrap: 'wrap',
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   imageContainer: {
-    height: 50,
-    width: windowWidth - 30,
-    borderWidth: 0,
-    borderColor: '#000',
-	marginBottom: 0,
-	marginTop: 50,
+    height: 30,
+    width: 200,
+	marginBottom: 20,
+	marginTop: 40,
   },
   image: {
     flex: 1,

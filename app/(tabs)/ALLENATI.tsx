@@ -1,218 +1,58 @@
 import * as React from 'react';
-import { View, StyleSheet, FlatList, SafeAreaView, ScrollView, StatusBar, TouchableOpacity, Image, Alert } from 'react-native';
-import Button from '../../components/UX/Button'
-import Background from '../../components/Background'
+import { View, Alert, Text, SafeAreaView, StyleSheet, Dimensions, TouchableOpacity, ImageBackground, ScrollView, StatusBar, NavigationContainer, Image } from 'react-native';
 import LogoViola from '../../components/UX/LogoViola'
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text,  } from '@/components/Themed';
 import { useAuth } from '../context/auth';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
+import { useRef, useState, useCallback } from "react";
 import client, { databases } from "../lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { Card } from 'react-native-paper';
-
-const router = useRouter();
-
-const CardData = [
-  {
-    livello: 'LIVELLO 1',
-    titolo: 'Bradipo',
-	body: 'MENO DI 450 PUNTI.',
-	avanzamento : 'Inattivo.',
-	img: require('../../assets/ICONE/PNG/BRADIPONEUTRO_1.png'),
-	page: "/EserciziLiv1"
-  },
-  {
-    livello: 'LIVELLO 2',
-    titolo: 'Tartaruga',
-	body: 'PIÙ DI 450 PUNTI.',
-	avanzamento : 'Poco attivo.',
-	img: require('../../assets/ICONE/PNG/TARTARUGASELEZIONATO.png'),
-	page: "/EserciziLiv2"
-  },
-  {
-    livello: 'LIVELLO 3',
-    titolo: 'Toro',
-	body: 'DA 450 A 900 PUNTI.',
-	avanzamento : 'Mediamente attivo.',
-	img: require('../../assets/ICONE/PNG/TOROSELEZIONATO.png'),
-	page: "/EserciziLiv3"
-  },
-    {
-    livello: 'LIVELLO 4',
-    titolo: 'Tigre',
-	body: 'DA 900 A 1800 PUNTI.',
-	avanzamento : 'Più che attivo.',
-	img: require('../../assets/ICONE/PNG/TIGRESELEZIONATO.png'),
-	page: "/EserciziLiv4"
-  },
-    {
-    livello: 'LIVELLO 5',
-    titolo: 'Falco',
-	body: 'PIÙ DI 1800 PUNTI.',
-	avanzamento : 'Molto attivo.',
-	img: require('../../assets/ICONE/PNG/FALCOSELEZIONATO.png'),
-	page: "/EserciziLiv5"
-  },
-];
+import Dialog from "react-native-dialog";
+import allenatiNavigation from '../allenatiNavigation';
+import EserciziLiv1 from '../EserciziLiv1';
+import EserciziLiv2 from '../EserciziLiv2';
+import EserciziLiv3 from '../EserciziLiv3';
+import EserciziLiv4 from '../EserciziLiv4';
+import EserciziLiv5 from '../EserciziLiv5';
+import ilTuoAllenamento from '../ilTuoAllenamento';
 
 export default function ALLENATI() {
-   const { user } = useAuth();
-  
-   const [livelloAttuale, setLivelloAttuale] = React.useState('Bradipo');  
-   const [loaded] = useFonts({
+
+	const { user } = useAuth();
+	const router = useRouter();
+	const Stack = createNativeStackNavigator();
+	const [fontsLoaded, fontError] = useFonts({
 		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
+		"Acumin-Variable-Concept": require('../../assets/fonts/Acumin-Variable-Concept.ttf'),
+		"AcuminVariableConcept-WideUltraBlack": require('../../assets/fonts/AcuminVariableConcept-WideUltraBlack.ttf'),
 		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
 		"roboto-flex-variable": require('../../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
 		"ultra-black": require('../../assets/fonts/ultrablackitalic.ttf'),
 		"ultra-black-regular": require('../../assets/fonts/UltraBlackRegular.ttf'),
-   });
-
-  if (!loaded) {
-    return null;
-  }
-  
-  	const promise = databases.listDocuments('652e8e4607298ced5902', '652e8e563085d6a5aad0',   
-	[
-        Query.equal('idPaziente', user.$id)
-    ]);
-	promise.then(function (response) {			
-		let length = response.documents.length;
-			if(length!=0) {
-				setLivelloAttuale(response.documents[length-1].livello)
-				console.log("Livello Allenati: " + livelloAttuale); // Success
-			}
-			else 
-				Alert.alert("Riempire il questionario");
-	}, function (error) {
-		console.log(error); // Failure
 	});
+
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded || fontError) {
+		  await SplashScreen.hideAsync();
+		}
+	  }, [fontsLoaded, fontError]);
+
+	  if (!fontsLoaded && !fontError) {
+		return null;
+	  }
   
-  return (
-    <SafeAreaView style={styles.container}>
-	    <StatusBar hidden={true} />
-		<ScrollView style={styles.scrollView}>     
-			<View style={styles.container}>
-				<LogoViola/>
-			</View>
-
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0}}>
-				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
-			</View>
-				
-			<View>
-				 <Text style={styles.titoloText}>
-					ALLENATI
-				</Text>
-			</View>
-
-			<View>
-				<Text style={styles.sottotitoloText}>
-					Il tuo livello è <Text style={styles.boldText}>{ livelloAttuale }</Text>.
-				</Text>
-			</View>
-
-			<View>
-				<Text style={styles.sottotitoloText}>
-					Svolgi gli esercizi e continua a migliorare.
-				</Text>
-			</View>
-			
-			<View style={styles.livello}>
-				<Text style={styles.paragrafo2Text}>
-						{CardData[0].livello}
-				</Text>
-				<View style={{flexDirection: 'row', alignItems: 'center',}}>
-					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
-				</View>
-
-				<TouchableOpacity onPress={() => router.push(CardData[0].page)}>		
-					<Card style={styles.item}>
-						<View style={{alignItems:"left", flex:1}}>
-								<Text style={styles.boldText}>{CardData[0].titolo}</Text>
-								<Text style={styles.sottotitoloItemText}>{CardData[0].body}</Text>
-								<Text style={styles.sottotitoloItemText}>{CardData[0].avanzamento}</Text>
-								<Image source= {CardData[0].img}  style={{width:100, height:100}} />						
-						</View>
-					</Card>
-				</TouchableOpacity>
-				
-				<Text style={styles.paragrafo2Text}>
-					{CardData[1].livello}
-				</Text>
-				<View style={{flexDirection: 'row', alignItems: 'center',}}>
-					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
-				</View>
-
-				<TouchableOpacity onPress={() => router.push(CardData[1].page)}>		
-					<Card style={styles.item}>
-						<View style={{alignItems:"left", flex:1}}>
-								<Text style={styles.boldText}>{CardData[1].titolo}</Text>
-								<Text style={styles.sottotitoloItemText}>{CardData[1].body}</Text>
-								<Text style={styles.sottotitoloItemText}>{CardData[1].avanzamento}</Text>
-								<Image source= {CardData[1].img}  style={{width:100, height:100}} />						
-						</View>
-					</Card>
-				</TouchableOpacity>
-				
-				<Text style={styles.paragrafo2Text}>
-					{CardData[2].livello}
-				</Text>
-				<View style={{flexDirection: 'row', alignItems: 'center',}}>
-					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
-				</View>
-
-				<TouchableOpacity onPress={() => router.push(CardData[2].page)}>		
-					<Card style={styles.item}>
-						<View style={{alignItems:"left", flex:1}}>
-								<Text style={styles.boldText}>{CardData[2].titolo}</Text>
-								<Text style={styles.sottotitoloItemText}>{CardData[2].body}</Text>
-								<Text style={styles.sottotitoloItemText}>{CardData[2].avanzamento}</Text>
-								<Image source= {CardData[2].img}  style={{width:100, height:100}} />						
-						</View>
-					</Card>
-				</TouchableOpacity>
-				
-				<Text style={styles.paragrafo2Text}>
-					{CardData[3].livello}
-				</Text>
-				<View style={{flexDirection: 'row', alignItems: 'center',}}>
-					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
-				</View>
-
-				<TouchableOpacity onPress={() => router.push(CardData[3].page)}>		
-					<Card style={styles.item}>
-						<View style={{alignItems:"left", flex:1}}>
-								<Text style={styles.boldText}>{CardData[3].titolo}</Text>
-								<Text style={styles.sottotitoloItemText}>{CardData[3].body}</Text>
-								<Text style={styles.sottotitoloItemText}>{CardData[3].avanzamento}</Text>
-								<Image source= {CardData[3].img}  style={{width:100, height:100}} />						
-						</View>
-					</Card>
-				</TouchableOpacity>
-			
-				<Text style={styles.paragrafo2Text}>
-					{CardData[4].livello}
-				</Text>
-				<View style={{flexDirection: 'row', alignItems: 'center',}}>
-					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
-				</View>
-
-				<TouchableOpacity onPress={() => router.push(CardData[4].page)}>		
-					<Card style={styles.item}>
-						<View style={{alignItems:"left", flex:1}}>
-								<Text style={styles.boldText}>{CardData[4].titolo}</Text>
-								<Text style={styles.sottotitoloItemText}>{CardData[4].body}</Text>
-								<Text style={styles.sottotitoloItemText}>{CardData[4].avanzamento}</Text>
-								<Image source= {CardData[4].img}  style={{width:100, height:100}} />						
-						</View>
-					</Card>
-				</TouchableOpacity>
-			
-			</View>
-		</ScrollView>		
-    </SafeAreaView>
+	return (
+		<Stack.Navigator  screenOptions={{ headerShown: false }}>
+			<Stack.Screen name="allenatiNavigation" component={allenatiNavigation} />		
+			<Stack.Screen name="EserciziLiv1" component={EserciziLiv1}/>
+			<Stack.Screen name="EserciziLiv2" component={EserciziLiv2}/>
+			<Stack.Screen name="EserciziLiv3" component={EserciziLiv3}/>
+			<Stack.Screen name="EserciziLiv4" component={EserciziLiv4}/>
+			<Stack.Screen name="EserciziLiv5" component={EserciziLiv5}/>
+			<Stack.Screen name="ilTuoAllenamento" component={ilTuoAllenamento}/>
+		</Stack.Navigator>
   );
 }
 
@@ -220,59 +60,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-   scrollView: {
-	flex: 1,
-  },
-  titoloText: {
-	marginHorizontal: 10,
-	marginTop: 10,
-	color: '#560CCE',
-    fontSize: 48,
-	fontFamily: 'ultra-black-regular',
-  },
-  sottotitoloItemText: {
-	color: '#560CCE',
-    fontSize: 20,
-	fontFamily: 'roboto-flex-regular',
-	fontWeight: 'bold'
-  },
-  sottotitoloText: {
-	marginHorizontal: 10,
-	color: '#560CCE',
-    fontSize: 25,
-	fontFamily: 'roboto-flex-regular',
-	marginBottom: 10,
-	fontWeight: 'bold'
-  },
-  paragrafo1Text: {
-	marginHorizontal: 10,
-	color: '#560CCE',
-    fontSize: 20,
-	fontFamily: 'roboto-flex',
-	marginBottom: 10,
-  },
-  paragrafo2Text: {
-	color: '#560CCE',
-    fontSize: 25,
-	fontFamily: 'roboto-flex-regular',
-  },
-  item: {
-    padding: 20,
-	borderRadius: 8,
-	borderColor: "grey",
-	borderWidth: 3,
-	flexDirection: 'row',
-	margin: 10,
-  },
-  livello: {
-	flex:5,
-	marginHorizontal: 10,
-  },
-  boldText: {
-    color: '#560CCE',
-    fontSize: 22,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
-  },  
 });
 

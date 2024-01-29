@@ -13,23 +13,32 @@ import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
 import client, { databases } from "./lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
+import { useRef, useCallback } from "react";
 
 export default function Punteggio() {
   
   const { user } = useAuth();
   const router = useRouter();
   const [punteggio, setPunteggio] = React.useState('');   
-  const [loaded] = useFonts({
-		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
+  const [fontsLoaded, fontError] = useFonts({
+		"RobotoFlex": require('../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
 		"roboto-flex-variable": require('../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
+		"Acumin-Variable-Concept": require('../assets/fonts/Acumin-Variable-Concept.ttf'),
+		"AcuminVariableConcept-WideUltraBlack": require('../assets/fonts/AcuminVariableConcept-WideUltraBlack.ttf'),		
 		"ultra-black": require('../assets/fonts/ultrablackitalic.ttf'),
-		"ultra-black-regular": require('../assets/fonts/UltraBlackRegular.ttf'),
+		"UltraBlackRegular": require('../assets/fonts/UltraBlackRegular.ttf'),
   });
 
-  if (!loaded) {
-    return null;
-  }
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded || fontError) {
+		  await SplashScreen.hideAsync();
+		}
+	  }, [fontsLoaded, fontError]);
+
+	  if (!fontsLoaded && !fontError) {
+		return null;
+	  }
 
 	const promise = databases.listDocuments('652e8e4607298ced5902', '652e8e563085d6a5aad0',   
 	[
@@ -75,27 +84,36 @@ export default function Punteggio() {
 			</View>	
 		
 			<View>
-				 <Text style={styles.titoloText}>
+				 <Text style={styles.lavoro}>
 					BUON LAVORO
 				</Text> 
 			</View>
 			
 			<View>
-				 <Text style={styles.sottotitoloText}>
-					Sei sufficiente attivo, allenati e continua a migliorare!
-				</Text> 
+				 <Text style={styles.paragrafo0Text}>
+					Sei sufficiente attivo,
+				 </Text> 
 			</View>
-			
-			
 			<View>
-			<TouchableOpacity onPress={() => router.push("/ALLENATI")}>
-				 <Text style={styles.sottotitoloText}>
-					Vai alla sezione<Text style={styles.boldText}> ALLENATI </Text> 
-					e inizia a muoverti!
-				</Text> 
-			</TouchableOpacity>
+				 <Text style={styles.paragrafo0Text}>
+					allenati e continua a migliorare!
+				 </Text> 
 			</View>
-			
+
+			<View>
+				<TouchableOpacity
+						activeOpacity={0.5}
+						onPress={() => router.replace("/ALLENATI")}>
+						<View style={styles.paragrafoSpazio}>
+							<Text style={styles.paragrafo0Text}>
+								Vai alla sezione <Text style={styles.boldText}>ALLENATI</Text>
+							</Text>
+							<Text style={styles.paragrafo0Text}>
+								e inizia a muoverti!
+							</Text> 
+						</View>		
+				</TouchableOpacity>				
+			</View>
 		</ScrollView>
     </SafeAreaView>
   );
@@ -109,42 +127,51 @@ const styles = StyleSheet.create({
 	flex: 1,
   },
   titoloText: {
-	marginHorizontal: 10,
+	marginHorizontal: 30,
+	color: '#560CCE',
+    fontSize: 40,
+	fontFamily: 'AcuminVariableConcept-WideUltraBlack',
+	alignSelf: "auto",
+  },
+  lavoro: {
+  	marginHorizontal: 30,
 	color: '#560CCE',
     fontSize: 30,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
-	alignSelf: "center",
+	fontFamily: 'AcuminVariableConcept-WideUltraBlack',
+	alignSelf: 'center',
   },
   sottotitoloText: {
-	marginHorizontal: 10,
+	marginHorizontal: 30,
 	color: '#560CCE',
-    fontSize: 25,
-	fontFamily: 'roboto-flex-regular',
+    fontSize: 23,
+	fontFamily: 'RobotoFlex',
 	marginTop: 20,
-	fontWeight: 'bold',
-	alignSelf: "center",
+  },
+  sottotitoloText2: {
+	color: '#560CCE',
+    fontSize: 22,
+	fontFamily: 'RobotoFlex',
+	alignSelf: 'center',
   },
   paragrafo0Text: {
-	marginHorizontal: 10,
 	color: '#560CCE',
-    fontSize: 25,
-	fontFamily: 'roboto-flex-regular',
-	marginTop: 50,
-	fontWeight: 'bold',
-	alignSelf: "center",
+    fontSize: 22,
+	fontFamily: 'RobotoFlex',
+	alignSelf: 'center',
+  },
+  paragrafoSpazio: {
+	marginTop: 40,
   },
    boldText: {
     color: '#560CCE',
-    fontSize: 30,
-    fontFamily: 'ultra-black-regular',
+    fontSize: 22,
+	fontFamily: 'UltraBlackRegular',
 	fontWeight: 'bold',
   },
   image: {
-    alignSelf: "center",
-	flex: 1,
-    height: 200,
-    width: 200,
+    alignSelf: 'center',
+    height: 300,
+    width: 300,
   },	
 });
 

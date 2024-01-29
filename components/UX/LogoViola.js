@@ -11,22 +11,17 @@ export default function LogoViola({navigation}) {
     </SafeAreaView>
   );
 }
-const windowWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexWrap: 'wrap',
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   imageContainer: {
-    height: 60,
-    width: windowWidth - 40,
-    borderWidth: 0,
-    borderColor: '#000',
-	marginBottom: 10,
-	marginTop: 50,
+    height: 30,
+    width: 200,
+	marginBottom: 20,
+	marginTop: 40,
   },
   image: {
     flex: 1,

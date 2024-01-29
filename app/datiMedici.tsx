@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Text, StyleSheet, TextInput, View, SafeAreaView, ScrollView, StatusBar, Image, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import Button from '../components/UX/Button'
 import Background from '../components/Background'
@@ -10,6 +10,10 @@ import { Stack, useRouter } from "expo-router";
 import client, { databases } from "./lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { useRef, useCallback } from "react";
+import { RadioButton } from 'react-native-paper';
+import {Slider} from '@miblanchard/react-native-slider';
+//import Slider from '@react-native-community/slider';
 
 export default function datiMedici() {
    const { signOut, user } = useAuth();
@@ -23,8 +27,7 @@ export default function datiMedici() {
    const [difficoltaVestirsi, setDifficoltaVestirsi] = React.useState('');   
    const [assunzioneFarmaci, setAssunzioneFarmaci] = React.useState('');    
    const [infiltrazioni, setInfiltrazioni] = React.useState(''); 
-   
-   const [loaded] = useFonts({
+   const [fontsLoaded, fontError] = useFonts({
 		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
 		"roboto-flex-variable": require('../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
@@ -32,9 +35,15 @@ export default function datiMedici() {
 		"ultra-black-regular": require('../assets/fonts/UltraBlackRegular.ttf'),
   });
 
-  if (!loaded) {
-    return null;
-  }
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded || fontError) {
+		  await SplashScreen.hideAsync();
+		}
+	  }, [fontsLoaded, fontError]);
+
+	  if (!fontsLoaded && !fontError) {
+		return null;
+	  }
   
 	const datiMedici = databases.getDocument('652e8e4607298ced5902', '6538c6af1ca5781c351b', user.$id)	
 			datiMedici.then(function (response) {
@@ -76,7 +85,19 @@ export default function datiMedici() {
 			console.log(error); // Failure
 		});
 	}
+
+    const marks = [
+    { value: 0, label: '0' },
+    { value: 10, label: '10' },
+	];
   
+  const renderMarks = () => {
+    return marks.map((mark) => (
+      <View key={mark.value} style={styles.markContainer}>
+        <Text style={styles.markLabel}>{mark.label}</Text>
+      </View>
+    ));
+  };
   return (
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
@@ -91,20 +112,29 @@ export default function datiMedici() {
 			<View style={{flexDirection: 'row', alignItems: 'center'}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
-				
+			
 			<View>
-				 <Text style={styles.titoloText}>
-					PROFILO
-				 </Text>
+				<View style={{ flexDirection: 'row',  }}>		
+						<View style={{ flex: 1 }}>
+							 <Text style={styles.titoloText}>
+								PROFILO
+							</Text>
+						</View>
+						<View>
+							<TouchableOpacity onPress={() => router.push('/PROFILO')}>
+								<Image style={{width:36, height: 36,  marginRight: 30,  marginTop: 5}} source={require('../assets/ICONE/PNG/CHIUDINEUTRO.png')} />
+							</TouchableOpacity>
+						</View>
+				</View>
 			</View>
-
+			
 			<View>
 				<Text style={styles.paragrafo1Text}>
 					DATI MEDICI
 				</Text>
 			</View>
 			
-			<View style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: 10,}}>
+			<View style={{flexDirection: 'row', alignItems: 'center', marginHorizontal: 30,}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 			
@@ -134,47 +164,59 @@ export default function datiMedici() {
 					/>
 				</View>	
 			</View>
-			
+				
 			<View>
 				<Text style={styles.paragrafo2Text}>
 					Valuta da 0 a 10 il dolore che provi al ginocchio*
 				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
+				<View style={{marginHorizontal: 30,}}>
+					<Slider style={styles.Slider} 
+						maximumValue={10} minimumValue={0} step="1"
 						onChangeText={intensitaDolore => setIntensitaDolore(intensitaDolore)}
-						value={intensitaDolore.toString()}
-						placeholder=" "
-						keyboardType="phone-pad"
+						value={intensitaDolore}
+						minimumTrackTintColor="#560CCE"
+						maximumTrackTintColor="grey"
+						trackStyle={customStyles7.track}
+						thumbStyle={customStyles7.thumb}
 					/>
-				</View>	
+					<View style={styles.marksContainer}>{renderMarks()}</View>
+				</View>					
 			</View>
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
 					Da 0 a 10, provi una sensazione di rigidità?*
 				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
+				<View style={{marginHorizontal: 30,}}>
+					<Slider style={styles.Slider} 
+						maximumValue={10} minimumValue={0} step="1"
+						value={sensazioneRigidita}
 						onChangeText={sensazioneRigidita => setSensazioneRigidita(sensazioneRigidita)}
-						value={sensazioneRigidita.toString()}
-						placeholder=" "
-						keyboardType="phone-pad"
+						minimumTrackTintColor="#560CCE"
+						maximumTrackTintColor="grey"
+						trackStyle={customStyles7.track}
+						thumbStyle={customStyles7.thumb}
 					/>
-				</View>	
+					<View style={styles.marksContainer}>{renderMarks()}</View>					
+				</View>					
 			</View>
 			
 			<View>
 				<Text style={styles.paragrafo2Text}>
 					Da 0 a 10, senti il ginocchio debole?*
 				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
+				<View style={{marginHorizontal: 30,}}>
+					<Slider style={styles.Slider} 
+						maximumValue={10} minimumValue={0} step="1"
 						onChangeText={sensazioneDebole => setSensazioneDebole(sensazioneDebole)}
-						value={sensazioneDebole.toString()}
-						placeholder=" "
-						keyboardType="phone-pad"
+						value={sensazioneDebole}
+						minimumTrackTintColor="#560CCE"
+						maximumTrackTintColor="grey"
+						trackStyle={customStyles7.track}
+						thumbStyle={customStyles7.thumb}
 					/>
-				</View>	
+					<View style={styles.marksContainer}>{renderMarks()}</View>
+				</View>
 			</View>
 			
 			<View>
@@ -189,70 +231,135 @@ export default function datiMedici() {
 				<Text style={styles.paragrafo2Text}>
 					Da 0 a 10, trovi difficoltà nel cammino?
 				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
+				<View style={{marginHorizontal: 30,}}>
+					<Slider style={styles.Slider} 
+						maximumValue={10} minimumValue={0} step="1"
 						onChangeText={difficoltaCammino => setDifficoltaCammino(difficoltaCammino)}
-						value={difficoltaCammino.toString()}
-						placeholder=" "
-						keyboardType="phone-pad"
+						value={difficoltaCammino}
+						minimumTrackTintColor="#560CCE"
+						maximumTrackTintColor="grey"
+						trackStyle={customStyles7.track}
+						thumbStyle={customStyles7.thumb}
 					/>
-				</View>	
+					<View style={styles.marksContainer}>{renderMarks()}</View>
+				</View>
 			</View>
 						
 			<View>
 				<Text style={styles.paragrafo2Text}>
 					Da 0 a 10, trovi difficoltà nel vestirti?
 				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
+				<View style={{marginHorizontal: 30,}}>
+					<Slider style={styles.Slider} 
+						maximumValue={10} minimumValue={0} step="1"
 						onChangeText={difficoltaVestirsi => setDifficoltaVestirsi(difficoltaVestirsi)}
-						value={difficoltaVestirsi.toString()}
-						placeholder=" "
-						keyboardType="phone-pad"
+						value={difficoltaVestirsi}
+						minimumTrackTintColor="#560CCE"
+						maximumTrackTintColor="grey"
+						trackStyle={customStyles7.track}
+						thumbStyle={customStyles7.thumb}
 					/>
-				</View>	
+					<View style={styles.marksContainer}>{renderMarks()}</View>					
+				</View>
 			</View>
 
-			<View>
+			<View style={styles.radioGroup}> 
 				<Text style={styles.paragrafo2Text}>
-					Hai mai assunto farmaci per il dolore al ginocchio? Se si quali?
+						Hai mai assunto farmaci per il dolore al ginocchio? Se si quali?
 				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
-						onChangeText={assunzioneFarmaci => setAssunzioneFarmaci(assunzioneFarmaci)}
-						value={assunzioneFarmaci}
-						placeholder=" "
-					/>
-				</View>	
-			</View>			
+                <View style={styles.radioButton}> 
+                    <RadioButton.Android 
+                        value={assunzioneFarmaci}
+                        status={assunzioneFarmaci === 'antifiammatori' ?  
+                                'checked' : 'unchecked'} 
+                        onPress={() => setAssunzioneFarmaci('antifiammatori')} 
+                    /> 
+					<View>
+						<Text style={styles.boldTextGrey}>antifiammatori non steroidei (diclofenac, ibuprofene)</Text>
+					</View>
+				</View> 
+  
+                <View style={styles.radioButton}> 
+                    <RadioButton.Android 
+                        value={assunzioneFarmaci}
+                        status={assunzioneFarmaci === 'analgesici' ?  
+                                 'checked' : 'unchecked'} 
+                        onPress={() => setAssunzioneFarmaci('analgesici')} 
+                    /> 
+					<View>
+						<Text style={styles.boldTextGrey}>analgesici (paracetamolo)</Text>
+					</View>               
+				</View> 
+  
+                <View style={styles.radioButton}> 
+                    <RadioButton.Android 
+                        value={assunzioneFarmaci}
+                        status={assunzioneFarmaci === 'cortisonici' ?  
+                                'checked' : 'unchecked'} 
+                        onPress={() => setAssunzioneFarmaci('cortisonici')} 
+                    /> 
+					<View>
+						<Text style={styles.boldTextGrey}>cortisonici</Text>
+					</View>
+                </View> 
+            </View>
 
-			<View>
+		<View style={styles.radioGroup}> 
 				<Text style={styles.paragrafo2Text}>
-					Hai mai praticato infiltrazioni al ginocchio? Se si, con:
+						Hai mai praticato infiltrazioni al ginocchio? Se si, con:
 				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
-						onChangeText={infiltrazioni => setInfiltrazioni(infiltrazioni)}
-						value={infiltrazioni}
-						placeholder=" "
-					/>
-				</View>	
-			</View>	
-			
+                <View style={styles.radioButton}> 
+                    <RadioButton.Android 
+                        value={assunzioneFarmaci}
+                        status={assunzioneFarmaci === 'cortisonici' ?  
+                                'checked' : 'unchecked'} 
+                        onPress={() => setInfiltrazioni('cortisonici')}                         
+                    /> 
+					<View>
+						<Text style={styles.boldTextGrey}>cortisonici</Text>
+					</View>
+                </View> 
+				 <View style={styles.radioButton}> 
+                    <RadioButton.Android 
+                        value={infiltrazioni}
+                        status={infiltrazioni === 'ialuronico' ? 'checked' : 'unchecked'} 
+                        onPress={() => setAssunzioneFarmaci('ialuronico')}                   
+				   /> 
+					<View>
+						<Text style={styles.boldTextGrey}>acido ialuronico</Text>
+					</View>
+				</View> 
+            </View>
+
 			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => handleSubmit()}>MODIFICA</Button>    
-			</View>
-			<View>
-				<Text style={styles.paragrafo2Text}>
-					* Tutti i dati richiesti sono obbligatori per modificare.
-				</Text>			
-			</View>	
+				<TouchableOpacity
+					activeOpacity={0.5}
+					onPress={() => handleSubmit()}>
+					<Text style={styles.buttonTextStyle}>MODIFICA</Text>
+				</TouchableOpacity>
+			</View>		
 	</View>
     </TouchableWithoutFeedback>
     </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
+
+var customStyles7 = StyleSheet.create({
+  track: {
+    height: 6,
+    backgroundColor: 'lightgrey',
+	borderRadius: 15,
+  },
+  thumb: {
+    width: 25,
+    height: 25,
+    backgroundColor: 'white',
+    borderColor: '#560CCE',
+    borderWidth: 6,
+    borderRadius: 15,
+  }
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -262,35 +369,35 @@ const styles = StyleSheet.create({
 	flex: 1,
   },
   titoloText: {
-	marginHorizontal: 10,
+	marginHorizontal: 30,
 	marginTop: 10,
 	color: '#560CCE',
-    fontSize: 48,
-	fontFamily: 'ultra-black-regular',
+    fontSize: 40,
+	fontFamily: 'AcuminVariableConcept-WideUltraBlack',
+ 
   },
   form: {
-    flex: 1,   
+   
+	marginTop: 10,
 	justifyContent: 'center',
-	flexDirection: 'row',    
+	flexDirection: 'row',  
+
   },
   paragrafo1Text: {
-	marginHorizontal: 10,
+	marginHorizontal: 30,
 	color: '#560CCE',
     fontSize: 25,
 	fontFamily: 'roboto-flex',
-	marginTop: 10,
+	marginTop: 4,
+	marginBottom: 4,
   },
   paragrafo2Text: {
-	marginHorizontal: 20,
+	marginHorizontal: 30,
     fontSize: 20,
-	color: '#48d1cc',
+	color: '#1786aa',
 	fontFamily: 'roboto-flex',
-	marginTop: 0,
-  },
-  buttonContainer: {
-	flex: 1,
-    flexDirection: 'row',    
-    justifyContent: 'center',
+	marginTop: 10,
+	marginBottom: 4,
   },
   image: {
     alignSelf: "center",
@@ -299,17 +406,105 @@ const styles = StyleSheet.create({
     width: 200,
   },
   input: {
-	marginHorizontal: 10,
+	marginHorizontal: 30,
     backgroundColor: "white",
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: "gray",
 	color: '#560CCE',
-    width: "90%",
-    borderRadius: 10,
+	fontWeight: 'bold',
+    borderRadius: 7,
     padding: 15, 
 	flex: 1,
     flexDirection: 'row',    
     justifyContent: 'center',
+	width: 200, 
   },
+  buttonContainer: {
+	marginHorizontal: 30,
+	borderRadius: 10,
+    marginVertical: 10,
+    paddingVertical: 2,
+	borderColor: '#560CCE',
+	borderWidth: 2,
+	justifyContent: 'center',
+  },
+  buttonTextStyle: {
+    paddingVertical: 10,
+	fontFamily: 'RobotoFlex',    
+    fontSize: 20,
+    lineHeight: 20,
+	color: '#560CCE',
+	justifyContent: 'center',
+	textAlign: 'center',
+  },
+   radioButton: { 
+        marginHorizontal: 30, 
+        marginVertical: 8, 
+        flexDirection: 'row', 
+        alignItems: 'center', 
+
+		color: '#560CCE',
+    },
+	boldTextViolet: {
+    	color: '#560CCE',
+		fontSize: 20,
+		fontFamily: 'ultra-black-regular',
+		fontWeight: 'bold',
+	},
+   Slider: {
+	marginTop: 30,
+    flexDirection: 'row',    
+    justifyContent: 'center',
+	},
+  marksContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  markContainer: {
+    alignItems: 'center',
+  },
+  mark: {
+    width: 30,
+    height: 30,
+    borderRadius: 10,
+    backgroundColor: 'gray',
+    marginVertical: 5,
+  },
+  markLabel: {
+    fontSize: 12,
+	fontFamily: 'RobotoFlex',    
+    fontSize: 20,
+    lineHeight: 20,
+	color: '#560CCE',
+	fontWeight: 'bold',
+  },
+  sliderValue: {
+    fontSize: 20,
+  },
+  trackMark: {
+    position: 'absolute',
+    bottom: -25,
+    alignItems: 'center',
+  },
+  circle: {
+    width: 10,
+    height: 10,
+    borderRadius: 10,
+    backgroundColor: 'lightgrey',
+  },
+  marksContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+  },
+  boldTextGrey: {
+    paddingVertical: 10,
+	fontFamily: 'RobotoFlex', 
+	fontWeight: 'bold',	
+    fontSize: 20,
+    lineHeight: 20,
+	color: 'grey',
+  }
 });
 

@@ -9,6 +9,8 @@ import { useFonts } from 'expo-font';
 import { Stack, useRouter } from "expo-router";
 import client, { databases } from "./lib/appwrite-service";
 import { Permission, Role,  ID, Query, } from "appwrite";
+import { useRef, useCallback } from "react";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default function registrazioneDatiPersonali() {
    const { user } = useAuth();
@@ -21,8 +23,7 @@ export default function registrazioneDatiPersonali() {
    const [attivitaLavorativa, setAttivitaLavorativa] = React.useState(''); 
    const [peso, setPeso] = React.useState('');   
    const [altezza, setAltezza] = React.useState(''); 
-   
-   const [loaded] = useFonts({
+   const [fontsLoaded, fontError] = useFonts({
 		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
 		"roboto-flex-variable": require('../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
@@ -30,10 +31,15 @@ export default function registrazioneDatiPersonali() {
 		"ultra-black-regular": require('../assets/fonts/UltraBlackRegular.ttf'),
   });
 
-  if (!loaded) {
-    return null;
-  }
-  
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded || fontError) {
+		  await SplashScreen.hideAsync();
+		}
+	  }, [fontsLoaded, fontError]);
+
+	  if (!fontsLoaded && !fontError) {
+		return null;
+	  }
 	function handleSubmit() {
 
 		const datiPersonali = databases.createDocument('652e8e4607298ced5902', '6538c5cc9690a2884b8d', user.$id,
@@ -188,9 +194,12 @@ export default function registrazioneDatiPersonali() {
 			</View>
 			
 			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => handleSubmit()}>PROSEGUI</Button>    
-			</View>
-
+				<TouchableOpacity
+					activeOpacity={0.5}
+					onPress={() => handleSubmit()}>
+					<Text style={styles.buttonTextStyle}>PROSEGUI</Text>
+				</TouchableOpacity>
+			</View>	
 			<View>
 				<Text style={styles.paragrafo2Text}>
 					* Tutti i dati richiesti sono obbligatori per proseguire.
@@ -206,7 +215,6 @@ export default function registrazioneDatiPersonali() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-	
   },
   form: {
     flex: 1,   
@@ -276,9 +284,22 @@ const styles = StyleSheet.create({
 	fontWeight: 'bold',
   },
   buttonContainer: {
-	flex: 1,
-    flexDirection: 'row',    
-    justifyContent: 'center',
+	marginHorizontal: 10,
+	borderRadius: 10,
+    marginVertical: 10,
+    paddingVertical: 2,
+	borderColor: '#560CCE',
+	borderWidth: 2,
+	justifyContent: 'center',
+  },
+  buttonTextStyle: {
+    paddingVertical: 10,
+	fontFamily: 'RobotoFlex',    
+    fontSize: 20,
+    lineHeight: 20,
+	color: '#560CCE',
+	justifyContent: 'center',
+	textAlign: 'center',
   },
   image: {
     alignSelf: "center",

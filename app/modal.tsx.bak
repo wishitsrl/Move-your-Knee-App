@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet, Image } from 'react-native';
+import { Platform, StyleSheet, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
 import Button from '../components/UX/Button'
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
@@ -12,21 +12,42 @@ export default function ModalScreen() {
   
   return (
 		<View style={styles.container}>
-			<Image style={styles.image} source={require('../assets/ICONE/PNG/CHIUDISELEZIONATO.png')} />
+			<Image style={styles.image} source={require('../assets/ICONE/PNG/CHIUDINEUTRO.png')} />
 
-			<Text style={styles.paragrafo1Text}>
-				SEI SICURO DI VOLER USCIRE?
-			</Text>		
-			
-			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => signOut()}>ESCI</Button>    
+			<View>
+				<Text style={styles.paragrafo1Text}>
+					SEI SICURO
+				</Text>		
+			</View>
+			<View>
+				<Text style={styles.paragrafo1Text}>
+					DI VOLER USCIRE?
+				</Text>		
 			</View>
 			
-			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => router.push('/PROFILO')}>RIPRENDI</Button>    
+			<View>
+				<TouchableHighlight 
+					style={styles.buttonContainer}
+					activeOpacity={0.5}
+					underlayColor="#560CCE"
+					onPress={() => signOut()}>
+					<Text style={styles.buttonTextStyle}>ESCI</Text>
+				</TouchableHighlight>
+			</View>
+			
+			<View>
+				<TouchableHighlight 
+					style={styles.buttonContainer}
+					activeOpacity={0.5}
+					underlayColor="#560CCE"
+					onPress={() => router.push('/PROFILO')}>
+					<Text style={styles.buttonTextStyle}>RIPRENDI</Text>
+				</TouchableHighlight>
 			</View>	
+			
+			
 		{/* Use a light status bar on iOS to account for the black space above the modal */}
-		<StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
+		<StatusBar style={Platform.OS === 'ios' ? 'light' : 'light'} />
 		</View>
   );
 }
@@ -34,17 +55,11 @@ export default function ModalScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
   },
   image: {
-	flex: 1,
-    width: 100,
-    height: 120,
+    alignSelf: 'center',
+    height: 300,
+    width: 300,
     resizeMode: 'contain',
   },
   paragrafo1Text: {
@@ -52,5 +67,24 @@ const styles = StyleSheet.create({
 	color: '#560CCE',
     fontSize: 25,
 	fontFamily: 'roboto-flex',
+	alignSelf: 'center',
+  },
+    buttonContainer: {
+	marginHorizontal: 10,
+	borderRadius: 10,
+    marginVertical: 10,
+    paddingVertical: 2,
+	borderColor: '#560CCE',
+	borderWidth: 2,
+	justifyContent: 'center',
+  },
+  buttonTextStyle: {
+    paddingVertical: 10,
+	fontFamily: 'RobotoFlex',    
+    fontSize: 20,
+    lineHeight: 20,
+	color: '#560CCE',
+	justifyContent: 'center',
+	textAlign: 'center',
   },
 });

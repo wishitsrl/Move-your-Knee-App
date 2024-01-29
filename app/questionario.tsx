@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, TextInput, View, SafeAreaView, ScrollView, StatusBar, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, } from 'react-native';
+import { StyleSheet, TextInput, View, SafeAreaView, ScrollView, StatusBar, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, TouchableHighlight, TouchableOpacity } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { RadioButton } from 'react-native-paper';
 import Button from '../components/UX/Button'
@@ -14,92 +14,146 @@ import client, { databases } from "./lib/appwrite-service";
 import { Permission, Role,  ID, } from "appwrite";
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { SelectList } from 'react-native-dropdown-select-list'
+import { useRef, useState, useCallback, useEffect } from "react";
 
 export default function Questionario() {
-    const day = [
+	const day = [
 	  {key:'1', value:'Nessuno'},
       {key:'1', value:'1 giorno'},
-      {key:'2', value:'2 giorno'},
-      {key:'3', value:'3 giorno'},
-      {key:'4', value:'4 giorno'},
-      {key:'5', value:'5 giorno'},
-      {key:'6', value:'6 giorno'},
-      {key:'7', value:'7 giorno'},
-  ]
-  const { user } = useAuth();
-  const router = useRouter();
-  const [domanda1, setDomanda1] = React.useState('');  
-  const [domanda2, setDomanda2] = React.useState('');
-  const [domanda3, setDomanda3] = React.useState('');
-  const [domanda4, setDomanda4] = React.useState('');
-  const [domanda5, setDomanda5] = React.useState('');
-  const [domanda6, setDomanda6] = React.useState('');
-  const [domanda7, setDomanda7] = React.useState('');
-  const [domanda8, setDomanda8] = React.useState('');
-  const [domanda9, setDomanda9] = React.useState('');
-  const [loaded] = useFonts({
-		"roboto-flex": require('../assets/fonts/RobotoFlex.ttf'),
-		"roboto-flex-regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
-		"roboto-flex-variable": require('../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
-		"ultra-black": require('../assets/fonts/ultrablackitalic.ttf'),
-		"ultra-black-regular": require('../assets/fonts/UltraBlackRegular.ttf'),
-  });
-
-  if (!loaded) {
-    return null;
-  }
-
-  function handleSubmit() {
-
-	//attivita intense comprendono le 2 attività (met unità di misura) 
-	attMetIntense = 8 * domanda2 * domanda1
-	attMetModerate = 4 * domanda3 * domanda4
-	let livello = 'Bradipo';
+      {key:'2', value:'2 giorni'},
+      {key:'3', value:'3 giorni'},
+      {key:'4', value:'4 giorni'},
+      {key:'5', value:'5 giorni'},
+      {key:'6', value:'6 giorni'},
+      {key:'7', value:'7 giorni'},
+	]
+	const { user } = useAuth();
+	const router = useRouter();
+	const [domanda1, setDomanda1] = useState('');  
+	const [domanda2, setDomanda2] = useState('');
+	const [domanda3, setDomanda3] = useState('');
+	const [domanda4, setDomanda4] = useState('');
+	const [domanda5, setDomanda5] = useState('');
+	const [domanda6, setDomanda6] = useState('');
+	const [domanda7, setDomanda7] = useState('');
+	const [domanda8, setDomanda8] = useState('1');
+	const [domanda9, setDomanda9] = useState('1');
+	const [isSwitchedOn, setIsSwitchedOn] = useState(false);	  
+	const [buttonColor, setButtonColor] = useState('transparent');
+	const [textColor, setTextColor] = useState('#560CCE');
+	const [fontsLoaded, fontError] = useFonts({
+		"RobotoFlex": require('../assets/fonts/RobotoFlex.ttf'),
+		"RobotoFlex-Regular": require('../assets/fonts/RobotoFlex-Regular.ttf'),
+		"Acumin-Variable-Concept": require('../assets/fonts/Acumin-Variable-Concept.ttf'),
+		"AcuminVariableConcept-WideUltraBlack": require('../assets/fonts/AcuminVariableConcept-WideUltraBlack.ttf'),
+		"ultrablackitalic": require('../assets/fonts/ultrablackitalic.ttf'),
+		"UltraBlackRegular": require('../assets/fonts/UltraBlackRegular.ttf'),
+		"AcuminProMedium": require('../assets/fonts/AcuminProMedium.otf'),
+		"AcuminProWideBold": require('../assets/fonts/AcuminProWideMedium.otf'),
+		"FontsFree-Net-Acumin-Pro-Medium-1": require('../assets/fonts/FontsFree-Net-Acumin-Pro-Medium-1.ttf'),
+	});
 	
+	  useEffect(() => {
+		if (isSwitchedOn) {
+		  console.log('Pulsante disabilitato');
+		} else {
+		  console.log('Pulsante abilitato');
+		}
+	  }, [isSwitchedOn]);
+	  
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded || fontError) {
+		  await SplashScreen.hideAsync();
+		}
+	  }, [fontsLoaded, fontError]);
+
+	  if (!fontsLoaded && !fontError) {
+		return null;
+	  }
+
+	function handlePress() {
+		
+		setIsSwitchedOn(true);
+		setButtonColor('#560CCE');
+		setTextColor('white');
+		setTimeout(() => {
+			setIsSwitchedOn(false);
+			setButtonColor('transparent');
+			setTextColor('#560CCE');
+			router.push('/punteggio')
+		}, 1000);
+  
+  //attivita intense comprendono le 2 attività (met unità di misura) 
+	let attMetCammino = 1	
+	let attMetIntense = 8 * domanda2 * domanda1
+	let attMetModerate = 4 * domanda3 * domanda4
+	let livello = 'Bradipo'
+	let indice = 0
+
 	if (domanda7 == 'Intenso')
 	{
-		console.log(domanda7); 
 		attMetCammino = domanda5 * domanda6 * 3.3
 	}
 	else if (domanda7 == 'Moderato')
 	{
-		console.log(domanda7); 
 		attMetCammino = domanda5 * domanda6 * 3	
 	}
 	else if (domanda7 == 'Lento')
-	{
-		console.log(domanda7); 
+	{ 
 		attMetCammino = domanda5 * domanda6 * 2.5	
 	}
 	
-	totAttMet = attMetIntense + attMetModerate + attMetCammino
+	let totAttMet = attMetIntense + attMetModerate + attMetCammino
 	
-	if(totAttMet<450)
+	//*******************
+	// -> minore di 450 il tuo grado è "bradipo" visualizza TARTARUGA  
+	// -> 450 a 700 il tuo grado è "tartaruga" visualizza TORO 
+	// -> 700 a 900 il tuo grado è "toro" visualizza TIGRE
+	// -> 900 a 1200 il tuo grado è "tigre" visualizza FALCO 
+	// -> 1200 a 1800 il tuo grado è "falco" visualizza SUPER FALCO 
+	//*******************
+	
+	if(totAttMet<450) {
 		livello = 'Bradipo'
-	else if(totAttMet==450)
+		indice = 0
+	}
+	else if(totAttMet>=450 && totAttMet<700) {
 		livello = 'Tartaruga'
-	else if(totAttMet>=450 && totAttMet<900)
+		indice = 1
+	}
+	else if(totAttMet>=700 && totAttMet<900) {
 		livello = 'Toro'
-	else if(totAttMet>=900 && totAttMet<1800)
+		indice = 2
+	}
+	else if(totAttMet>=900 && totAttMet<1200) {
 		livello = 'Tigre'
-	else if(totAttMet>=1800)
+		indice = 3
+	}
+	else if(totAttMet>=1200 && totAttMet<1800) {
 		livello = 'Falco'
-	
-	console.log("Totale: " + totAttMet + " Met"); 
-	const putPunteggio = databases.createDocument('652e8e4607298ced5902', '652e8e563085d6a5aad0', ID.unique(),
+		indice = 4
+	}
+	else if(totAttMet>=1800) {
+		livello = 'Super Falco'
+		indice = 5
+	}
+	//console.log("####Totale: " + totAttMet + " Met");	
+	//console.log("###Livello: " + livello + "Indice: " + indice ); 
+	const putPunteggio = databases.createDocument('652e8e4607298ced5902', '656f2a8e31adc68dc82d', ID.unique(),
 		{
-			'idPaziente': user.$id, 
-			'punteggio': totAttMet, 
+			'idPaziente': user.$id, 			 
 			'tempoSedutoLavorativo': domanda8,
 			'tempoSedutoFestivo': domanda9,
 			'livello': livello,
+			'punteggio': totAttMet,
+			'idLivello': indice,
 		},
         [Permission.update(Role.any())],				
 	  );	
 	  
 		putPunteggio.then(function (response) {
 			console.log(response); // Success
-			router.push('/punteggio');   	
+			router.replace('/punteggio');   	
 		}, function (error) {
 			console.log(error); // Failure
 		});
@@ -109,7 +163,7 @@ export default function Questionario() {
     <SafeAreaView style={styles.container}>
 	    <StatusBar hidden={true} />
 		<KeyboardAwareScrollView>
-		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+		<TouchableWithoutFeedback>
 		<View style={styles.inner}>
 			
 			<View style={styles.container}>
@@ -122,19 +176,17 @@ export default function Questionario() {
 				
 			<View>
 				 <Text style={styles.titoloText}>
-					ATTIVITA' INTENSE
+					ATTIVITÀ INTENSE
 				</Text> 
 			</View>
 
-			<View style={styles.container}>	
-				
 				<View>
 					<Text style={styles.domande}>
 						DOMANDA 1
 					</Text>
 				</View>
 			
-				<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
+				<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 30,}}>
 					<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 				</View>
 
@@ -150,6 +202,8 @@ export default function Questionario() {
 						o un giro in bicicletta a velocità sostenuta?)
 					</Text>
 				</View>
+			
+				<View style={{alignItems: 'center', marginTop: 20}}></View>
 
 				<View>
 					<Text style={styles.paragrafo1Text}>
@@ -158,12 +212,12 @@ export default function Questionario() {
 					<Text style={styles.paragrafo0Text}>
 						(nemmeno 1? Vai alla sezione successiva)					
 					</Text>
-					<View style={styles.pickerStyles}>
+					<View style={{backgroundColor: "white", width: 200, marginHorizontal: 30, color: '#560CCE', borderRadius: 5, borderWidth: 0,  borderColor: "lightgray", overflow: 'hidden'}}>
 						<SelectList
 						setSelected={(value, index) => setDomanda1(value)}
 						data={day} 
 						search={false} 
-						boxStyles={{borderRadius:0}}
+						boxStyles={{borderRadius:5, color:'#560CCE' }}
 						defaultOption={{ key:'1', value:'Nessuno' }}
 						/>
 					</View>
@@ -175,7 +229,7 @@ export default function Questionario() {
 				</Text>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
+			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 30,}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 			
@@ -184,6 +238,8 @@ export default function Questionario() {
 					Quanto tempo in totale dedichi normalmente ad un'attività fisica <Text style={styles.boldText}>intensa</Text> in uno di questi giorni?
 				</Text>
 			</View>
+				
+			<View style={{alignItems: 'center', marginTop: 20}}></View>
 
 			<View>
 				<Text style={styles.paragrafo1Text}>
@@ -191,16 +247,15 @@ export default function Questionario() {
 				</Text>
 				<TextInput
 					style={styles.input}
+					placeholder=""
 					onChangeText={Domanda2 => setDomanda2(Domanda2)}
-					value={domanda2}
-					placeholder=" "
 					keyboardType="phone-pad"
 				/>
 			</View>	
 
 			<View>
 				 <Text style={styles.titoloText}>
-					ATTIVITA' MODERATE
+					ATTIVITÀ MODERATE
 				</Text> 
 			</View>
 
@@ -210,10 +265,10 @@ export default function Questionario() {
 				</Text>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
+			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 30,}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
-
+				
 			<View>
 				<Text style={styles.sottotitoloText}>
 					Negli ultimi 7 giorni, per quanti giorni hai compiuto attività fisiche <Text style={styles.boldText}>moderate</Text>
@@ -229,7 +284,9 @@ export default function Questionario() {
 					ATTENZIONE: non considerare le camminate.
 				</Text>
 			</View>
-				
+			
+			<View style={{alignItems: 'center', marginTop: 20}}></View>
+
 			<View>
 				<Text style={styles.paragrafo1Text}>
 					Giorni alla settimana
@@ -237,12 +294,12 @@ export default function Questionario() {
 			<Text style={styles.paragrafo0Text}>
 				(nemmeno 1? Vai alla sezione successiva)					
 			</Text>
-			<View style={styles.pickerStyles}>
+					<View style={{backgroundColor: "white", width: 200, marginHorizontal: 30, borderRadius: 5, borderWidth: 0,  borderColor: "gray", overflow: 'hidden'}}>
 						<SelectList
 						setSelected={(value, index) => setDomanda3(value)}
 						data={day} 
 						search={false} 
-						boxStyles={{borderRadius:0}}
+						boxStyles={{borderRadius:5, color:'#560CCE' }}
 						defaultOption={{ key:'1', value:'Nessuno' }}
 						/>
 					</View>
@@ -254,7 +311,7 @@ export default function Questionario() {
 				</Text>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
+			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 30,}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
@@ -263,6 +320,8 @@ export default function Questionario() {
 					Quanto tempo in totale hai trascorso normalmente compiendo attività fisiche <Text style={styles.boldText}>moderate</Text> in uno di questi giorni?
 				</Text>
 			</View>
+				
+			<View style={{alignItems: 'center', marginTop: 20}}></View>
 
 			<View>
 				<Text style={styles.paragrafo1Text}>
@@ -289,7 +348,7 @@ export default function Questionario() {
 				</Text>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
+			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 30,}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
@@ -304,6 +363,8 @@ export default function Questionario() {
 					(ad esempio per andare da casa a lavoro, per spostarti da un posto all' altro, o qualsiasi altra camminata fatta per piacere, esercizi o sport).
 				</Text>
 			</View>
+				
+			<View style={{alignItems: 'center', marginTop: 20}}></View>
 
 			<View>
 				<Text style={styles.paragrafo1Text}>
@@ -312,12 +373,12 @@ export default function Questionario() {
 			<Text style={styles.paragrafo0Text}>
 					(nemmeno 1? Vai alla sezione successiva)					
 			</Text>
-				<View style={styles.pickerStyles}>
+					<View style={{backgroundColor: "white", width: 200, marginHorizontal: 30, borderRadius: 5, borderWidth: 0,  borderColor: "gray", overflow: 'hidden'}}>
 						<SelectList
 						setSelected={(value, index) => setDomanda5(value)}
 						data={day} 
 						search={false} 
-						boxStyles={{borderRadius:0}}
+						boxStyles={{borderRadius:5, color:'#560CCE' }}
 						defaultOption={{ key:'1', value:'Nessuno' }}
 						/>
 				</View>
@@ -329,7 +390,7 @@ export default function Questionario() {
 				</Text>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
+			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 30,}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
@@ -338,6 +399,8 @@ export default function Questionario() {
 					Normalmente, per quanto tempo in totale hai camminato uno di questi giorni?
 				</Text>
 			</View>
+				
+			<View style={{alignItems: 'center', marginTop: 20}}></View>
 
 			<View>
 				<Text style={styles.paragrafo1Text}>
@@ -358,7 +421,7 @@ export default function Questionario() {
 				</Text>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
+			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 30,}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
@@ -368,7 +431,6 @@ export default function Questionario() {
 				</Text>
 			</View>
 
-			<View> 
 			<View style={styles.radioGroup}> 
                 <View style={styles.radioButton}> 
                     <RadioButton.Android 
@@ -376,14 +438,13 @@ export default function Questionario() {
                         status={domanda7 === 'Intenso' ?  
                                 'checked' : 'unchecked'} 
                         onPress={() => setDomanda7('Intenso')} 
-                        color="#007BFF"
+                        color="#560CCE"
                     /> 
-                    <View>
-						<Text style={styles.boldTextViolet}>INTENSO</Text>
-						<Text style={styles.paragrafo0Text}>Ritmo del respiro molto più elevato del normale</Text>
+					<View>
+						<Text style={styles.boldTextGrey}>Intenso</Text>
+						<Text style={styles.boldSottoTextGrey}>Ritmo del respiro molto più elevato del normale</Text>
 					</View>
-                </View> 
-  
+				</View> 
   
                 <View style={styles.radioButton}> 
                     <RadioButton.Android 
@@ -391,13 +452,13 @@ export default function Questionario() {
                         status={domanda7 === 'Moderato' ?  
                                  'checked' : 'unchecked'} 
                         onPress={() => setDomanda7('Moderato')} 
-                        color="#007BFF"
+                        color="#560CCE"
                     /> 
-                    <View>
-						<Text style={styles.boldTextViolet}>MODERATO</Text>
-						<Text style={styles.paragrafo0Text}>Ritmo del respiro mormalmente più elevato del normale</Text>
-					</View>
-                </View> 
+					<View>
+						<Text style={styles.boldTextGrey}>Moderato</Text>
+						<Text style={styles.boldSottoTextGrey}>Ritmo del respiro mormalmente più elevato del normale</Text> 
+					</View>               
+				</View> 
   
                 <View style={styles.radioButton}> 
                     <RadioButton.Android 
@@ -405,19 +466,18 @@ export default function Questionario() {
                         status={domanda7 === 'Lento' ?  
                                 'checked' : 'unchecked'} 
                         onPress={() => setDomanda7('Lento')} 
-                        color="#007BFF"
+                        color="#560CCE"
                     /> 
-                    <View>
-						<Text style={styles.boldTextViolet}>LENTO</Text>
-						<Text style={styles.paragrafo0Text}>Ritmo del respiro normale</Text>
-					</View>					
+					<View>
+						<Text style={styles.boldTextGrey}>Lento</Text>
+						<Text style={styles.boldSottoTextGrey}>Ritmo del respiro normale</Text> 
+					</View>
                 </View> 
-            </View> 				
-			</View>
-
+            </View> 
+			
 			<View>
 				 <Text style={styles.titoloText}>
-					ATTIVITA' DA SEDUTO
+					ATTIVITÀ DA SEDUTO
 				</Text> 
 			</View>
 
@@ -427,7 +487,7 @@ export default function Questionario() {
 				</Text>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
+			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 30,}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
@@ -444,6 +504,8 @@ export default function Questionario() {
 				</Text>
 			</View>
 
+			<View style={{alignItems: 'center', marginTop: 20}}></View>
+
 			<View>
 				<Text style={styles.paragrafo1Text}>
 					Minuti 					
@@ -451,7 +513,6 @@ export default function Questionario() {
 			<TextInput
 					style={styles.input}
 					onChangeText={domanda8 => setDomanda8(domanda8)}
-					value={domanda8}
 					placeholder=" "
     				keyboardType="phone-pad"
 			/>
@@ -463,7 +524,7 @@ export default function Questionario() {
 				</Text>
 			</View>
 
-			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 10,}}>
+			<View style={{flexDirection: 'row', alignItems: 'center', marginTop: 0, marginHorizontal: 30,}}>
 				<View style={{flex: 1, height: 2, backgroundColor: '#560CCE'}} />
 			</View>
 
@@ -473,6 +534,8 @@ export default function Questionario() {
 				</Text>
 			</View>
 
+			<View style={{alignItems: 'center', marginTop: 20}}></View>
+
 			<View>
 			<Text style={styles.paragrafo1Text}>
 					Minuti 					
@@ -480,19 +543,20 @@ export default function Questionario() {
 			<TextInput
 					style={styles.input}
 					onChangeText={domanda9 => setDomanda9(domanda9)}
-					value={domanda9}
 					placeholder=" "
 					keyboardType="phone-pad"
 			/>
 			</View>
-
-			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={() => handleSubmit()}>CONCLUDI</Button>    
-			</View>
 			
+			<View>				
+				<TouchableOpacity 
+					style={[styles.buttonContainer, { backgroundColor: isSwitchedOn ? '#560CCE' : buttonColor}]} 
+					onPress={!isSwitchedOn ? handlePress : null}
+					disabled={isSwitchedOn}>
+					<Text style={[styles.buttonTextStyle, { color: textColor }]}>CONCLUDI</Text>					
+				</TouchableOpacity>
 			</View>	
-
-	</View>
+		</View>	
     </TouchableWithoutFeedback>
     </KeyboardAwareScrollView>	
     </SafeAreaView>
@@ -507,102 +571,118 @@ const styles = StyleSheet.create({
 	flex: 1,
   },
   titoloText: {
-	marginHorizontal: 10,
+	marginHorizontal: 30,
 	marginTop: 10,
 	color: '#560CCE',
-    fontSize: 48,
-	fontFamily: 'ultra-black-regular',
+    fontSize: 35,
+	fontFamily: 'AcuminVariableConcept-WideUltraBlack',
   },
   sottotitoloText: {
-	marginHorizontal: 10,
+	marginHorizontal: 30,
 	color: '#560CCE',
-    fontSize: 20,
+    fontSize: 23,
 	fontFamily: 'roboto-flex-regular',
-	marginTop: 20,
-	fontWeight: 'bold'
+	marginTop: 15,
+	marginBottom: 4,
   },
   domande: {
-  	marginHorizontal: 10,
+  	marginHorizontal: 30,
 	color: '#560CCE',
     fontSize: 25,
 	fontFamily: 'roboto-flex',
 	marginTop: 20,
+	marginBottom: 10,
 	alignItems: 'center',
   },
   paragrafo0Text: {
     fontSize: 18,
+	color: 'grey',
 	fontFamily: 'roboto-flex',
-	marginHorizontal: 10,
+	marginHorizontal: 30,
 	marginTop: 0,
-	marginBottom: 30,
+	marginBottom: 5,
   },
   paragrafo1Text: {
-    fontSize: 20,
-	color: '#48d1cc',
-	fontFamily: 'roboto-flex',
-	marginHorizontal: 10,
+	marginHorizontal: 30,
+	color: '#1786aa',
+    fontSize: 23,
+	fontFamily: 'RobotoFlex',
 	marginTop: 0,
+	marginBottom: 0,
   },
   attenzione: {
-	fontSize: 15,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold',
-	marginHorizontal: 10,
-	marginTop: 15,
-	marginBottom: 15,
+	fontSize: 18,
+    fontFamily: 'UltraBlackRegular',
+	color: 'grey',
+	marginHorizontal: 30,
 	textDecorationLine: 'underline',
   },
    boldText: {
     color: '#560CCE',
-    fontSize: 20,
+    fontSize: 23,
     fontFamily: 'ultra-black-regular',
 	fontWeight: 'bold',
   },
-  buttonContainer: {
-	flex: 1,
-    flexDirection: 'row',    
-    justifyContent: 'center',
-  },
   pickerStyles: {
-    flex: 1,
-    marginHorizontal: 10,
+    marginHorizontal: 30,
 	flexDirection: 'row',    
     justifyContent: 'center',
   },
    input: {
-	marginHorizontal: 10,
+	marginHorizontal: 30,
     backgroundColor: "white",
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: "gray",
 	color: '#560CCE',
-    borderRadius: 10,
+    borderRadius: 5,
     padding: 15, 
 	flex: 1,
     flexDirection: 'row',    
     justifyContent: 'center',
+	width: 200, 
   },
    radioButton: { 
-		marginHorizontal: 10,
-        paddingVertical: 12, 
-        paddingHorizontal: 16, 
-        borderRadius: 8, 
-        marginVertical: 8, 
+		marginHorizontal: 30,
+        marginVertical: 10, 
         borderWidth: 0, 
         flexDirection: 'row', 
         alignItems: 'center', 
-        justifyContent: 'space-between', 
-        width: 300,  
+		color: 'grey',		
     }, 
     radioLabel: { 
         marginLeft: 8, 
         fontSize: 16, 
         color: '#333', 
     }, 
-	boldTextViolet: {
-    	color: '#560CCE',
-		fontSize: 20,
-		fontFamily: 'ultra-black-regular',
-		fontWeight: 'bold',
-  },	
+	boldTextGrey: {
+    	color: 'grey',
+		fontSize: 25,
+		fontFamily: 'FontsFree-Net-Acumin-Pro-Medium-1',
+	},
+	boldSottoTextGrey: {
+    	color: 'grey',
+		fontSize: 18,
+		fontFamily: 'FontsFree-Net-Acumin-Pro-Medium-1',
+	},
+    buttonContainer: {
+		marginHorizontal: 50,
+		borderRadius: 5,
+		marginVertical: 10,
+		paddingVertical: 2,
+		borderColor: '#560CCE',
+		borderWidth: 1,
+		alignItems: 'center',
+		marginTop: 40,
+		marginBottom: 40,
+		justifyContent: 'center',
+	},
+  buttonTextStyle: {
+    paddingVertical: 10,
+	fontFamily: 'RobotoFlex',    
+    fontSize: 20,
+    lineHeight: 20,
+	justifyContent: 'center',
+	textAlign: 'center',
+  },    
 });
 

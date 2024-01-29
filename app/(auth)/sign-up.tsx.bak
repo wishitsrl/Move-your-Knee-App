@@ -1,4 +1,3 @@
-import * as React from 'react';
 import {
   Text,
   TextInput,
@@ -8,193 +7,218 @@ import {
   SafeAreaView,
   StatusBar,
   ScrollView,
-  Alert
+  Alert,
+  Button,
 } from "react-native";
-import {Picker} from '@react-native-picker/picker';
 import { useAuth } from "../context/auth";
 import Logo from '../../components/UX/Logo'
 import Background from '../../components/UX/Background'
 import { Stack, useRouter } from "expo-router";
-import { useRef } from "react";
-import Button from '../../components/UX/Button'
+import { useRef, useState, useCallback } from "react";
 import { useFonts } from 'expo-font';
+import Spinner from 'react-native-loading-spinner-overlay';
 import { SelectList } from 'react-native-dropdown-select-list'
 
-export default function SignUp() {
-  const { signUp } = useAuth();
-  const router = useRouter();
-  
-  const emailRef = useRef("");
-  const passwordRef = useRef("");
-  const userNameRef = useRef("");
+export default function signUp() {
+	
+	const { signUp } = useAuth();
+	const router = useRouter();
+	const tipo = [{key:'Dottore', value:'Dottore'}, {key:'Paziente', value:'Paziente'}]
+	const userNameRef = useRef("");
+	const emailRef = useRef("");
+	const passwordRef = useRef("");
+	const confermaPasswordRef = useRef("");
+	const [loading, setLoading] = useState(false);
+	const [errortext, setErrortext] = useState('');
+	const [fontsLoaded, fontError] = useFonts({
+		"RobotoFlex": require('../../assets/fonts/RobotoFlex.ttf')});
+	
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded || fontError) {
+		  await SplashScreen.hideAsync();
+		}
+	  }, [fontsLoaded, fontError]);
 
-  const [loaded] = useFonts({
-		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
-		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
-		"roboto-flex-variable": require('../../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
-		"ultra-black": require('../../assets/fonts/ultrablackitalic.ttf'),
-		"ultra-black-regular": require('../../assets/fonts/UltraBlackRegular.ttf'),
-  });
-  if (!loaded) {
-    return null;
-  }
-  return (
-  <Background>
-	<SafeAreaView style={styles.container}>
-		<StatusBar hidden={true} />  
-		<ScrollView style={styles.scrollView}>     	
-			<View style={styles.container}>
-				<Logo/>
-			</View>
-			
-		<View style={styles.containerCenter}>		
-			<View>
-				<Text style={styles.paragrafo2Text}>
-					Paziente o dottore
-				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
-						placeholder="Paziente o dottore"
-						autoCapitalize="none"
-						nativeID="userName"
-						onChangeText={(text) => {
-						userNameRef.current = text;}}
-					/>
-				</View>
- 		    </View>	
-			
-			<View>
-				<Text style={styles.paragrafo2Text}>
-					Email
-				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
-						placeholder="Email"
-						autoCapitalize="none"
-						nativeID="email"
-						onChangeText={(text) => {
-						emailRef.current = text;}}
-					/>
-				</View>
- 		    </View>
-			
-			<View>
-				<Text style={styles.paragrafo2Text}>
-					Password
-				</Text>
-				<View style={styles.form}>
-					<TextInput style={styles.input}
-						placeholder="Password"
-						secureTextEntry={true}
-						nativeID="password"
-						onChangeText={(text) => {
-						passwordRef.current = text;}}
-					/>
-				</View>
-			</View>
-
-			<View style={styles.buttonContainer}>
-				<Button mode="contained" onPress={async () => {
-					const { data, error } = await signUp(emailRef.current, passwordRef.current, userNameRef.current);
-					if (data) {
+	  if (!fontsLoaded && !fontError) {
+		return null;
+	  }
+ 
+	const onSignInPress = async () => {
+		try {
+			if (!emailRef.current) {
+				setErrortext("Inserire una mail!");
+			return;
+			}
+			if (!passwordRef.current) {
+				setErrortext("Inserire una password!");
+			return;
+			}
+			if(passwordRef.current!=confermaPasswordRef.current) {
+				setErrortext("Le password non coincidono!");
+			}
+			else {	
+				const { data, error } = await signUp(userNameRef.current, emailRef.current, passwordRef.current);
+				setLoading(true);
+					if (data) {		
 						router.replace("/registrazioneDatiPersonali");
 					} else {
 						console.log(error);
-						Alert.alert("Dati non corretti!");
+						setErrortext("Qualcosa è andato storto nella mail o nella password!");
 					}
-					}}>REGISTRATI</Button>    
-			</View>
+			}
+		} catch (err: any) {
+			alert(err.errors[0].message);
+			setErrortext("Qualcosa è andato storto!");
+			setLoading(false);
+		} finally {
+			setLoading(false);
+		}
+	};
 
-		  </View>   
-		</ScrollView>
-	</SafeAreaView>
+	return (
+	<Background>
+		<SafeAreaView style={styles.container}>
+			<StatusBar hidden={true} />  
+			<ScrollView style={styles.scrollView}>     	
+				<View style={styles.container}>
+					<Logo/>
+				</View>
+				
+				<View style={styles.container}>
+					<View>
+						<Spinner visible={loading} />
+					</View>
+									
+					<View>
+						<Text style={styles.paragrafo2Text}>
+							Paziente o dottore
+						</Text>
+						<View style={{backgroundColor: "white", marginHorizontal: 10, marginVertical: 10, borderRadius: 10, borderWidth: 1, borderColor: "gray", overflow: 'hidden'}}>
+							<SelectList
+							setSelected={(value, index) => {
+							userNameRef.current = value;}}
+							data={tipo} 
+							search={false} 
+							boxStyles={{borderRadius:0}}
+							defaultOption={{ key:'Paziente', value:'Paziente' }}
+							/>
+						</View>
+					</View>	
+					
+					<View>
+						<Text style={styles.paragrafo2Text}>
+							Email
+						</Text>				
+					</View>
+					
+					<View>
+						<TextInput style={styles.inputField}
+							autoCapitalize="none"
+							placeholder="Email"
+							onChangeText={(text) => {
+							emailRef.current = text;}}
+						/>
+					</View>
+					
+					<View>
+						<Text style={styles.paragrafo2Text}>
+							Password
+						</Text>
+					</View>
+					
+					<View>
+						<TextInput style={styles.inputField}
+							placeholder="Password"
+							secureTextEntry={true}
+							onChangeText={(text) => {
+							passwordRef.current = text;}}
+						/>	
+					</View>		
+
+					<View>
+						<Text style={styles.paragrafo2Text}>
+							Conferma password
+						</Text>
+					</View>				
+		
+					<View>
+						<TextInput style={styles.inputField}
+							placeholder="Conferma password"
+							secureTextEntry={true}
+							onChangeText={(text) => {
+							confermaPasswordRef.current = text;}}
+						/>	
+					</View>	
+		
+					<View style={styles.buttonContainer}>
+						<TouchableOpacity
+							activeOpacity={0.5}
+							onPress={onSignInPress}>
+							<Text style={styles.buttonTextStyle}>REGISTRATI</Text>
+						</TouchableOpacity>
+					</View>
+					
+					<View style={styles.container}>
+						 {errortext != '' ? (
+						  <Text style={styles.errorTextStyle}>
+							{errortext}
+						  </Text>
+						) : null}
+					</View>
+			</View>   
+			</ScrollView>
+		</SafeAreaView>
 	</Background>
-  );
+	);
 }
+
 const styles = StyleSheet.create({
  container: {
-    flex: 1,
-	alignItems: 'center',
-    justifyContent: 'center',
+	flex: 1,
   },
-  containerCenter: {
-    flex: 1,
-    marginTop: 60,
-  },
-  input: {
+  inputField: {
 	marginHorizontal: 10,
+	marginVertical: 10,
     backgroundColor: "white",
     borderWidth: 2,
     borderColor: "gray",
-    width: "100%",
     borderRadius: 10,
     padding: 15, 
 	flex: 1,
     flexDirection: 'row',    
     justifyContent: 'center',
   },
-  buttonText: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 16,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
    scrollView: {
 	flex: 1,
   },
-  text: {
-    fontSize: 42,
-  },
-  row: {
-    flexDirection: 'row',
-    marginTop: 4,
-  },
-  titoloText: {
-	marginHorizontal: 10,
-	color: '#560CCE',
-    fontSize: 50,
-	fontFamily: 'ultra-black-regular',
-	fontWeight: 'bold'
-
-  },
-  sottotitoloText: {
-	marginHorizontal: 10,
-	color: '#560CCE',
-    fontSize: 30,
-	fontFamily: 'roboto-flex-regular',
-	marginTop: 50,
-	fontWeight: 'bold'
-  },
-  boldText: {
-	fontWeight: 'bold',
-  },
   buttonContainer: {
-	flex: 1,
-    flexDirection: 'row',    
-    justifyContent: 'center',
+	marginHorizontal: 10,
+	borderRadius: 10,
+    marginVertical: 10,
+    paddingVertical: 2,
+	borderColor: '#560CCE',
+	borderWidth: 2,
+	justifyContent: 'center',
   },
   paragrafo2Text: {
 	marginHorizontal: 20,
     fontSize: 20,
 	color: '#48d1cc',
-	fontFamily: 'roboto-flex',
+	fontFamily: 'RobotoFlex',
 	marginTop: 0,
   },
-  form: {
-    flex: 1,   
-	marginHorizontal: 10,
+   buttonTextStyle: {
+    paddingVertical: 10,
+	fontFamily: 'RobotoFlex',    
+    fontSize: 20,
+    lineHeight: 20,
+	color: '#560CCE',
 	justifyContent: 'center',
-	flexDirection: 'row',    
+	textAlign: 'center',
   },
-  pickerStyles: {
-    marginHorizontal: 10,
-    marginVertical: 30,
-    width: 300,
-    padding: 10,
-    borderWidth: 2,
-    borderColor: "#666",
+    errorTextStyle: {
+    color: 'red',
+    textAlign: 'center',
+    fontSize: 14,
   },
 });

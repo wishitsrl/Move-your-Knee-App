@@ -12,6 +12,8 @@ import { Permission, Role,  ID, Query, } from "appwrite";
 import * as scale from 'd3-scale'
 //import { BarChart } from 'react-native-chart-kit';
 import { BarChart } from "react-native-gifted-charts";
+import { useRef, useState, useCallback } from "react";
+
 export default function DATI() {
 	
 	const data = [
@@ -48,19 +50,27 @@ export default function DATI() {
 	const router = useRouter();
 	const [livelloAttuale, setLivelloAttuale] = React.useState('');  
 	const [livelloImg, setLivelloImg] = React.useState(require("../../assets/ICONE/PNG/BRADIPONEUTRO_1.png"));  
-	const [loaded] = useFonts({
+	const [fontsLoaded, fontError] = useFonts({
 		"roboto-flex": require('../../assets/fonts/RobotoFlex.ttf'),
 		"roboto-flex-regular": require('../../assets/fonts/RobotoFlex-Regular.ttf'),
 		"roboto-flex-variable": require('../../assets/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf'),		
+		"Acumin-Variable-Concept": require('../../assets/fonts/Acumin-Variable-Concept.ttf'),
+		"AcuminVariableConcept-WideUltraBlack": require('../../assets/fonts/AcuminVariableConcept-WideUltraBlack.ttf'),
 		"ultra-black": require('../../assets/fonts/ultrablackitalic.ttf'),
 		"ultra-black-regular": require('../../assets/fonts/UltraBlackRegular.ttf'),
-	});
+  });
 
-	if (!loaded) {
+	const onLayoutRootView = useCallback(async () => {
+		if (fontsLoaded || fontError) {
+		  await SplashScreen.hideAsync();
+		}
+	  }, [fontsLoaded, fontError]);
+
+	  if (!fontsLoaded && !fontError) {
 		return null;
-	}
+	  } 
 	
-	const promise = databases.listDocuments('652e8e4607298ced5902', '652e8e563085d6a5aad0',   
+	const promise = databases.listDocuments('652e8e4607298ced5902', '656f2a8e31adc68dc82d',   
 	[
         Query.equal('idPaziente', user.$id)
     ]);
@@ -120,6 +130,8 @@ export default function DATI() {
 				</Text>
 			</View>
 
+			<View style={{alignItems: 'center', marginTop: 30}}></View>
+
 			<View>
 				 <Text style={styles.sottotitoloText}>
 					LIVELLO ATTUALE
@@ -140,6 +152,8 @@ export default function DATI() {
 				<Image source={livelloImg} style={styles.image} />
 			</View>	
 			
+			<View style={{alignItems: 'center', marginTop: 30}}></View>
+
 			<View>
 				<Text style={styles.avanzamento}>
 					Avanzamento livello
@@ -152,23 +166,7 @@ export default function DATI() {
 				</Text>
 			</View>
 			
-			<View style={{ flex: 1, padding: 10, alignItems: 'center', marginLeft: 8, marginBottom: 20 }}>
-				 <BarChart 
-					barWidth={22}
-					hideDataPoints={false}
-					noOfSections={3}
-					barBorderRadius={10}
-					frontColor="#560CCE"
-					data={data}
-					xAxisTextStyle={{color: '#560CCE'}}
-					yAxisThickness={0}
-					xAxisThickness={0}
-                    gridMin={0}
-					xAxisLabelTextStyle={{color: '#560CCE', textAlign: 'center'}}
-					xAxisColor={'#560CCE'}
-					yAxisTextStyle={{color: '#560CCE'}}
-				/>
-            </View>
+		
 
 			<View>
 				<Text style={styles.sottotitoloText}>
@@ -230,41 +228,41 @@ const styles = StyleSheet.create({
   row: {
 	alignItems: 'center',
     flexDirection: 'row',
-	marginHorizontal: 10,
+	marginHorizontal: 30,
   },
   image: {
     alignSelf: "center",
-	width: 200,
-    height: 200,
+	width: 300,
+    height: 300,
   },
   titoloText: {
-	marginHorizontal: 10,
+	marginHorizontal: 30,
 	marginTop: 10,
 	color: '#560CCE',
-    fontSize: 48,
-	fontFamily: 'ultra-black-regular',
+    fontSize: 40,
+	fontFamily: 'AcuminVariableConcept-WideUltraBlack',
   },
   sottotitoloText: {
-	marginHorizontal: 10,
+	marginHorizontal: 30,
 	color: '#560CCE',
     fontSize: 25,
 	fontFamily: 'roboto-flex-regular',
-	marginBottom: 10,
-	fontWeight: 'bold'
+	marginBottom: 0,
   },
   boldText: {
+    marginHorizontal: 30,
     color: '#560CCE',
-    fontSize: 22,
-	marginHorizontal: 10,
-	fontFamily: 'ultra-black-regular',
+    fontSize: 25,
+	fontFamily: 'AcuminVariableConcept-WideUltraBlack',
 	fontWeight: 'bold',
   },
   avanzamento: {
-    fontSize: 20,
-	color: '#48d1cc',
-	fontFamily: 'roboto-flex',
-	marginHorizontal: 10,
+	marginHorizontal: 30,
+	color: '#00B3AD',
+    fontSize: 23,
+	fontFamily: 'RobotoFlex',
 	marginTop: 0,
+	marginBottom: 0,
   },
 });
 
